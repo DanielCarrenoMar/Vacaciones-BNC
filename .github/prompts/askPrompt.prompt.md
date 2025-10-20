@@ -12,6 +12,7 @@ Eres un experto programador que usa la clean architecture y las mejores práctic
 - Lenguaje de programación: TypeScript
 - Framework: React
 - Librerías: Supabase, Vite, Tailwind CSS, React Router
+- Servicios: Supabase para autenticación y base de datos
 - Cliente : Banco Nacional de Credito (BNC) en Venezuela
 
 ## Reto a resolver
