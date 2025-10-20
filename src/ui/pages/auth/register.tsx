@@ -1,4 +1,4 @@
-import supabase from "#repository/supabase.ts"
+import supabase from "../../../data/supabase"
 import { useNavigate } from "react-router-dom";
 
 export default function RegisterPage() {

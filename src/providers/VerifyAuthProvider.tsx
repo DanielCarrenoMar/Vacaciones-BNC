@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import supabase from '../data/repository/supabase'
+import supabase from '../data/supabase'
 
 type VerifyAuthContextType = {
   loading: boolean

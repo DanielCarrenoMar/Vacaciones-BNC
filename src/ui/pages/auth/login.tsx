@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import supabase from "#repository/supabase.ts"
+import supabase from "../../../data/supabase"
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
