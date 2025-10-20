@@ -1,4 +1,4 @@
-import type { Peticion, User, Vacation } from '#domain/models.ts';
+import type { Request, User, Vacation } from '#domain/models.ts';
 import supabase from '../supabase'
 type SupabaseResult<T> = Promise<{ data: T | null; error: any }>
 
@@ -91,22 +91,22 @@ export const vacationRepo = {
   }
 }
 
-// Peticion CRUD
-export const peticionRepo = {
-  getAll: async (): SupabaseResult<Peticion[]> => {
-    return from<Peticion[]>("peticion", (t: any) => t.select('*'))
+// Request CRUD
+export const requestRepo = {
+  getAll: async (): SupabaseResult<Request[]> => {
+    return from<Request[]>("request", (t: any) => t.select('*'))
   },
-  getById: async (id: number): SupabaseResult<Peticion> => {
-    return from<Peticion>("peticion", (t: any) => t.select('*').eq('id', id).single())
+  getById: async (id: number): SupabaseResult<Request> => {
+    return from<Request>("request", (t: any) => t.select('*').eq('id', id).single())
   },
-  create: async (payload: Omit<Peticion, 'id' | 'created_at' | 'update_at'>): SupabaseResult<Peticion> => {
-    return from<Peticion>("peticion", (t: any) => t.insert(payload).select().single())
+  create: async (payload: Omit<Request, 'id' | 'created_at' | 'update_at'>): SupabaseResult<Request> => {
+    return from<Request>("request", (t: any) => t.insert(payload).select().single())
   },
-  update: async (id: number, payload: Partial<Peticion>): SupabaseResult<Peticion> => {
-    return from<Peticion>("peticion", (t: any) => t.update(payload).eq('id', id).select().single())
+  update: async (id: number, payload: Partial<Request>): SupabaseResult<Request> => {
+    return from<Request>("request", (t: any) => t.update(payload).eq('id', id).select().single())
   },
   remove: async (id: number): SupabaseResult<null> => {
-    return from<null>("peticion", (t: any) => t.delete().eq('id', id))
+    return from<null>("request", (t: any) => t.delete().eq('id', id))
   }
 }
 
@@ -114,5 +114,5 @@ export const peticionRepo = {
 export default {
   userRepo,
   vacationRepo,
-  peticionRepo
+  requestRepo
 }

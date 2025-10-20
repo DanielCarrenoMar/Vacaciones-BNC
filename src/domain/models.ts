@@ -17,7 +17,7 @@ export interface Vacation {
   employedID: number
 }
 
-export interface Peticion {
+export interface Request {
   id: number
   created_at: string
   update_at: string
