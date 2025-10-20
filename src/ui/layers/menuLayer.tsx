@@ -41,7 +41,6 @@ export default function MenuLayer() {
                 else return "colaborador"
             })()
         } />
-        {userLevel}
         <main className="flex-1 p-6">
             <Outlet />
         </main>
