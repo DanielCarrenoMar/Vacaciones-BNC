@@ -1,5 +1,5 @@
 import type { Peticion, User, Vacation } from '#domain/models.ts';
-import supabase from '../../supabase'
+import supabase from '../supabase'
 type SupabaseResult<T> = Promise<{ data: T | null; error: any }>
 
 // Helpers genéricos
