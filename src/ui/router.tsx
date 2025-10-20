@@ -14,10 +14,9 @@ export const router = createBrowserRouter([
             </VerifyAuthProvider>
         ),
         children: [
-            { index: true, element: <div>Home</div> },
+            { index: true, element: <div>Dashboard</div> },
             { path: "/auth/register", element: <Register /> },
             { path: "/auth/login", element: <Login /> },
-            { path: "/dashboard", element: <div>Dashboard</div> },
         ],
     },
 ])
