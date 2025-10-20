@@ -1,6 +1,5 @@
+import type { Role } from '#domain/models.ts';
 import MenuItem from './MenuItem'
-
-export type Role = 'colaborador' | 'nivel2' | 'nivel1' | 'gestionHumana'
 
 type LateralMenuProps = {
   role: Role

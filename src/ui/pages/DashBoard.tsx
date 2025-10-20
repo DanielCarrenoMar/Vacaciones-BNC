@@ -1,7 +1,9 @@
-import LateralMenu from "#ui/components/LateralMenu.tsx";
+import MenuLayer from "#ui/layers/menuLayer.tsx";
 
 export default function DashBoard(){
-    return <>
-        <LateralMenu role="colaborador" />
-    </>
+    return (
+        <MenuLayer role="colaborador">
+            <div className="p-4">Bienvenido al dashboard</div>
+        </MenuLayer>
+    )
 }

@@ -1,21 +1,27 @@
+export type Role = 'colaborador' | 'nivel2' | 'nivel1' | 'gestionHumana'
+
 export interface User {
-  employedID: string
-  nombre?: string
-  area?: string
-  cargo?: string
-  email?: string
-  fecha_ingreso?: string // ISO date
+  employedID: number
+  name: string
+  area: string
+  position: string
+  email: string
+  entryDate: string
+  reportTo?: number | null
 }
 
 export interface Vacation {
-  id?: number
-  aprovated_at?: string | null
+  id: number
+  aprovated_at: string
   days: number
-  employedID: string
+  employedID: number
 }
 
 export interface Peticion {
-  id?: number
-  created_at?: string
-  update_at?: string
+  id: number
+  created_at: string
+  update_at: string
+  status: string
+  senderID: number
+  receiverID: number
 }
