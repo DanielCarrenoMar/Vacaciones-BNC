@@ -1,6 +1,8 @@
-import supabase from "#repository/Auth/AuthRepository.ts"
+import supabase from "#repository/supabase.ts"
+import { useNavigate } from "react-router-dom";
 
 export default function RegisterPage() {
+    const navigate = useNavigate();
 
     async function handleSubmit(e: any) {
         e.preventDefault();
@@ -24,8 +26,9 @@ export default function RegisterPage() {
                 alert('Error: ' + (error.message ?? String(error)));
             } else {
                 // success - in many setups an email confirmation is sent
-                alert('Registro enviado. Revisa tu correo para confirmar tu cuenta.');
+                alert('Registro enviado. Inicia sesión.');
                 form.reset();
+                navigate('/auth/login');
             }
         } catch (err: any) {
             alert('Error de conexión: ' + (err?.message ?? String(err)));

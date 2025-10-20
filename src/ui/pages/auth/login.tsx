@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import supabase from "#repository/Auth/AuthRepository.ts"
+import supabase from "#repository/supabase.ts"
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
