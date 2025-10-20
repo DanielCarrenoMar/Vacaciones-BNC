@@ -11,10 +11,7 @@ export default function RegisterPage() {
     useEffect(() => {
         const fetchUsers = async () => {
             const { data, error } = await userRepo.getAll();
-            if (data) {
-                console.log("Usuarios registrados:", data);
-                setUsers(data)
-            }
+            if (data) setUsers(data)
             if (error) console.error(error);
         };
         fetchUsers();
@@ -60,7 +57,7 @@ export default function RegisterPage() {
                 <div>
                     <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">Crear cuenta</h2>
                     <p className="mt-2 text-center text-sm text-gray-600">
-                        Usa tu correo para registrarte o inicia con Google
+                        Usa tu correo para registrarte
                     </p>
                 </div>
 
