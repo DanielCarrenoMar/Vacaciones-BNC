@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import AuthRepository from "#repository/Auth/AuthRepository.ts"
+import supabase from "#repository/Auth/AuthRepository.ts"
 
-export default function SignIn() {
+export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -12,7 +12,10 @@ export default function SignIn() {
 
   const handleSignIn = async (e) => {
     e.preventDefault();
-    const { data, error } = await AuthRepository.signInUser(email, password); // Use your signIn function
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
 
     if (error) {
       setError(error.message); // Set the error message if sign-in fails
