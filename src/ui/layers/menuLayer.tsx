@@ -1,15 +1,11 @@
-import { useEffect, useState, type ReactNode } from 'react'
+import { useEffect, useState } from 'react'
 import LateralMenu from '../components/LateralMenu'
-import type { Role, User } from '#domain/models.ts'
+import type { User } from '#domain/models.ts'
 import { userRepo } from '#repository/databaseRepositoryImpl.tsx'
 import supabase from '../../data/supabase'
+import { Outlet } from 'react-router-dom'
 
-type MenuLayerProps = {
-  role?: Role
-  children: ReactNode
-}
-
-export default function MenuLayer({ children }: MenuLayerProps) {
+export default function MenuLayer() {
     const [user, setUser] = useState<User>();
     const [userLevel, setUserLevel] = useState<number>();
     useEffect(() => {
@@ -47,7 +43,7 @@ export default function MenuLayer({ children }: MenuLayerProps) {
         } />
         {userLevel}
         <main className="flex-1 p-6">
-        {children}
+            <Outlet />
         </main>
     </div>
     )

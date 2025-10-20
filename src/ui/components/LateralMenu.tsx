@@ -7,23 +7,22 @@ type LateralMenuProps = {
 
 const itemsByRole: Record<Role, Array<{ label: string; path: string }>> = {
   colaborador: [
-    { label: 'DashBoard', path: '/dashboard' },
-    { label: 'Asistente', path: '/asistente' },
+    { label: 'DashBoard', path: '/' },
+    { label: 'Asistente', path: '/assistant' },
     { label: 'Mis Peticiones', path: '/peticiones' },
     { label: 'Calendario', path: '/calendario' }
   ],
   nivel2: [
-    { label: 'DashBoard', path: '/dashboard' },
+    { label: 'DashBoard', path: '/' },
     { label: 'Revisión', path: '/revision' },
     { label: 'Reportes', path: '/reportes' }
   ],
   nivel1: [
-    { label: 'DashBoard', path: '/dashboard' },
-    { label: 'Aprobaciones', path: '/aprobaciones' },
-    { label: 'Gestión', path: '/gestion' }
+    { label: 'DashBoard', path: '/' },
+    { label: 'Asistente', path: '/assistant' },
   ],
   gestionHumana: [
-    { label: 'DashBoard', path: '/dashboard' },
+    { label: 'DashBoard', path: '/' },
     { label: 'Configuración', path: '/config' },
     { label: 'Usuarios', path: '/usuarios' }
   ]
