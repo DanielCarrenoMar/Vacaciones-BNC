@@ -24,4 +24,5 @@ export interface Peticion {
   status: string
   senderID: number
   receiverID: number
+  message?: string | null
 }
