@@ -50,6 +50,12 @@ export const userRepo = {
     const modelData = (data || []).map((u: any) => toUserModel(u))
     return { data: modelData, error: null }
   },
+  getUsersBelow: async (employedID: number): SupabaseResult<User[]> => {
+    const { data, error } = await userDao.getUsersBelow(employedID)
+    if (error) return { data: null, error }
+    const modelData = (data || []).map((u: any) => toUserModel(u))
+    return { data: modelData, error: null }
+  },
   getLevelsBelow: async (employedID: number): SupabaseResult<{ levelsBelow: number; totalSubordinates: number }> => {
     return await userDao.getLevelsBelow(employedID)
   },

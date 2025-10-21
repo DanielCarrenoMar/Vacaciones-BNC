@@ -30,6 +30,23 @@ export const userDao = {
   getDirectReports: async (employedID: string): SupabaseResult<UserDAO[]> => {
     return from<UserDAO[]>("user", (t: any) => t.select('*').eq('reportTo', employedID))
   },
+  getUsersBelow: async (employedID: number): SupabaseResult<UserDAO[]> => {
+    try {
+      let usersBelow: UserDAO[] = []
+      let currentLevelIds: Array<number> = [employedID]
+      while (currentLevelIds.length > 0) {
+        const { data, error } = await supabase.from('user').select('*').in('reportTo', currentLevelIds)
+        if (error) return { data: null, error }
+        if (!data || data.length === 0) break
+        usersBelow = usersBelow.concat(data)
+        const ids = data.map((r: any) => r.employedID)
+        currentLevelIds = ids
+      }
+      return { data: usersBelow, error: null }
+    } catch (err) {
+      return { data: null, error: err }
+    }
+  },
   getLevelsBelow: async (employedID: number): SupabaseResult<{ levelsBelow: number; totalSubordinates: number }> => {
     try {
       let levels = 0
