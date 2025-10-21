@@ -1,7 +1,7 @@
 import type { RequestDAO, RequestRangeDAO, UserDAO, VacationDAO } from "#data/dao/dao.ts"
-import { requestRangeRepo } from "#repository/databaseRepositoryImpl.tsx"
 
 export type Role = 'colaborador' | 'nivel2' | 'nivel1' | 'gestionHumana'
+export type Status = 'waiting' | 'approved' | 'rejected'
 
 export interface User {
   employedID: number
@@ -62,7 +62,7 @@ export interface Request {
   requestID: number
   created_at: string
   update_at: string
-  status: string
+  status: Status
   senderID: number
   receiverID: number
   message?: string | null
@@ -73,7 +73,7 @@ export function toRequestModel(dao: RequestDAO, days: number): Request {
     requestID: dao.requestID,
     created_at: dao.created_at,
     update_at: dao.update_at,
-    status: dao.status,
+    status: dao.status as Status,
     senderID: dao.senderID,
     receiverID: dao.receiverID,
     message: dao.message,
