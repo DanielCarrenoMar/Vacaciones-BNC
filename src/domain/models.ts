@@ -60,7 +60,7 @@ export function toVacationDao(model: Vacation): VacationDAO {
 
 export interface Request {
   requestID: number
-  created_at: string
+  created_at: Date
   update_at: string
   status: Status
   senderID: number
@@ -71,7 +71,7 @@ export interface Request {
 export function toRequestModel(dao: RequestDAO, days: number): Request {
   return {
     requestID: dao.requestID,
-    created_at: dao.created_at,
+    created_at: new Date(dao.created_at),
     update_at: dao.update_at,
     status: dao.status as Status,
     senderID: dao.senderID,

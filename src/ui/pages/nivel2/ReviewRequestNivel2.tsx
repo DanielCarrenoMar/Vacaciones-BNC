@@ -1,15 +1,52 @@
+import type { Request, User } from '#domain/models.ts';
+import { useVerifyAuth } from '#providers/VerifyAuthProvider.tsx';
+import { requestRepo, userRepo } from '#repository/databaseRepositoryImpl.tsx';
 import { Calendar } from 'lucide-react'
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom'
 
-export default function ReviewRequestNivel2(){
-    // Datos de ejemplo - estos deberían venir de una API
-    const peticiones = [
-        { id: 1, emisor: 'Pedrito', fecha: '05/02/2025', diasUsados: 5 },
-        { id: 2, emisor: 'Pedrito', fecha: '05/02/2025', diasUsados: 5 },
-        { id: 3, emisor: 'Pedrito', fecha: '05/02/2025', diasUsados: 5 },
-    ]
+interface RequestWithSender extends Request {
+    senderName: string;
+    senderEmail: string;
+}
 
-    const faltantes = 1
+export default function ReviewRequestNivel2(){
+    const { user } = useVerifyAuth()
+    const [pendingReviewRequests, setPendingReviewRequests] = useState<RequestWithSender[]>([])
+
+    useEffect(() => {
+        async function fetchData() {
+            if (!user) return;
+
+            // 1. Obtener las peticiones pendientes
+            const { data: requests, error: reqError } = await requestRepo.getByReceiverId(user.employedID);
+            if (reqError) {
+                console.error(reqError);
+                return;
+            }
+            if (!requests) return;
+
+            const pending = requests.filter(req => req.status === 'waiting');
+
+            // 2. Para cada petición, obtener la información del emisor
+            const requestsWithSenders = await Promise.all(
+                pending.map(async (request) => {
+                    const { data: sender, error: userError } = await userRepo.getById(request.senderID);
+                    if (userError) {
+                        console.error(userError);
+                        // Devolver la petición original si no se encuentra el emisor
+                        return { ...request, senderName: 'Usuario no encontrado', senderEmail: '' };
+                    }
+                    // Combinar la información
+                    return { ...request, senderName: sender?.name || 'Desconocido', senderEmail: sender?.email || '' };
+                })
+            );
+            
+            setPendingReviewRequests(requestsWithSenders);
+        }
+
+        fetchData();
+    }, [user])
 
     return (
         <div className="p-6" style={{ fontFamily: 'Poppins, sans-serif' }}>
@@ -27,7 +64,7 @@ export default function ReviewRequestNivel2(){
                 {/* Header de la tabla */}
                 <div className="flex justify-between items-center mb-6">
                     <h2 className="text-lg font-semibold text-onsurface">Peticiones por Revisar</h2>
-                    <div className="text-sm text-gray-600">Faltantes: {faltantes}</div>
+                    <div className="text-sm text-gray-600">Faltantes: {pendingReviewRequests.length}</div>
                 </div>
 
                 {/* Encabezados de columnas */}
@@ -54,22 +91,22 @@ export default function ReviewRequestNivel2(){
 
                 {/* Lista de peticiones */}
                 <div className="space-y-3">
-                    {peticiones.map((peticion) => (
+                    {pendingReviewRequests.map((request) => (
                         <Link
-                            key={peticion.id}
-                            to={`/nivel2/review/${peticion.id}`}
+                            key={request.requestID}
+                            to={`/nivel2/review/${request.requestID}`}
                             className="grid grid-cols-3 gap-4 py-4 px-3 hover:bg-gray-50 rounded-lg transition-colors border border-gray-200"
                         >
                             <div className="flex flex-col">
                                 <span className="text-xs text-gray-500 mb-1">Realizada por</span>
-                                <span className="text-sm font-medium text-onsurface">{peticion.emisor}</span>
+                                <span className="text-sm font-medium text-onsurface">{request.senderName}</span>
                             </div>
                             <div className="flex items-center justify-center text-sm text-gray-600">
-                                {peticion.fecha}
+                                {request.created_at.toLocaleDateString()}
                             </div>
                             <div className="flex items-center justify-end gap-2 text-sm text-primary">
                                 <Calendar size={16} />
-                                <span className="font-medium">{peticion.diasUsados} días</span>
+                                <span className="font-medium">{request.days} días</span>
                             </div>
                         </Link>
                     ))}
