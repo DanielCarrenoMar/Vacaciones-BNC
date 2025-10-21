@@ -1,8 +1,11 @@
 import { useVerifyAuth } from '#providers/VerifyAuthProvider.tsx'
-import { userRepo } from '#repository/databaseRepositoryImpl.tsx'
+import { requestRepo, userRepo } from '#repository/databaseRepositoryImpl.tsx'
 import { ArrowLeft, ChevronLeft, ChevronRight, Calendar as CalendarIcon } from 'lucide-react'
+import { pino } from 'pino'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+
+const logger = pino()
 
 export default function CreateRequest(){
     const { user } = useVerifyAuth()
@@ -89,9 +92,17 @@ export default function CreateRequest(){
         navigate('/my-requests')
     }
 
-    const handleCreate = () => {
-        // Aquí iría la lógica para crear la petición
-        console.log('Crear petición con días:', selectedDates)
+    const handleCreate = async () => {
+        const {error} = await requestRepo.create({
+            senderID: user!.employedID,
+            receiverID: user!.reportTo,
+            status: 'pending',
+            message: `Solicitud de vacaciones desde el día ${startDate} hasta el día ${endDate}`,
+        })
+        if (error) {
+            logger.error('Error creating request:', error)
+            return
+        }
         navigate('/my-requests')
     }
 

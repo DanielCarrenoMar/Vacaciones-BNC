@@ -7,7 +7,7 @@ export interface UserDAO {
   position: string
   email: string
   entryDate: string
-  reportTo?: number | null
+  reportTo: number
 }
 
 export interface VacationDAO {
