@@ -27,6 +27,7 @@ export interface RequestDAO {
   senderID: number
   receiverID: number
   message?: string | null
+  finalApprove: boolean
 }
 
 export interface RequestRangeDAO {

@@ -103,16 +103,19 @@ export const vacationDao = {
 
 export const requestDao = {
   getAll: async (): SupabaseResult<RequestDAO[]> => {
-    return from<RequestDAO[]>("request", (t: any) => t.select('*'))
+    return from<RequestDAO[]>("request", (t: any) => t.select('*').eq("finalApprove", false))
+  },
+  getFinalApproved: async (): SupabaseResult<RequestDAO[]> => {
+    return from<RequestDAO[]>("request", (t: any) => t.select('*').eq("finalApprove", true))
   },
   getById: async (id: number): SupabaseResult<RequestDAO> => {
     return from<RequestDAO>("request", (t: any) => t.select('*').eq('requestID', id).single())
   },
   getBySenderId: async (employedID: number): SupabaseResult<RequestDAO[]> => {
-    return from<RequestDAO[]>("request", (t: any) => t.select('*').eq('senderID', employedID))
+    return from<RequestDAO[]>("request", (t: any) => t.select('*').eq('senderID', employedID).eq("finalApprove", false))
   },
   getByReceiverId: async (employedID: number): SupabaseResult<RequestDAO[]> => {
-    return from<RequestDAO[]>("request", (t: any) => t.select('*').eq('receiverID', employedID))
+    return from<RequestDAO[]>("request", (t: any) => t.select('*').eq('receiverID', employedID).eq("finalApprove", false))
   },
   create: async (payload: Omit<RequestDAO, 'requestID' | 'created_at' | 'update_at'>): SupabaseResult<RequestDAO> => {
     return from<RequestDAO>("request", (t: any) => t.insert(payload).select().single())

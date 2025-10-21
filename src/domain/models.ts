@@ -66,6 +66,7 @@ export interface Request {
   senderID: number
   receiverID: number
   message?: string | null
+  finalApprove: boolean
   days: number
 }
 export function toRequestModel(dao: RequestDAO, days: number): Request {
@@ -77,18 +78,20 @@ export function toRequestModel(dao: RequestDAO, days: number): Request {
     senderID: dao.senderID,
     receiverID: dao.receiverID,
     message: dao.message,
+    finalApprove: dao.finalApprove,
     days: days
   }
 }
 export function toRequestDao(model: Request): RequestDAO {
   return {
     requestID: model.requestID,
-    created_at: model.created_at,
+    created_at: model.created_at.toDateString(),
     update_at: model.update_at,
     status: model.status,
     senderID: model.senderID,
     receiverID: model.receiverID,
-    message: model.message
+    message: model.message,
+    finalApprove: model.finalApprove
   }
 }
 

@@ -217,6 +217,16 @@ export const requestRepo = {
     
     return { data: modelData, error: null }
   },
+  getFinalApproved: async (): SupabaseResult<Request[]> => {
+    const { data, error } = await requestDao.getFinalApproved()
+    if (error) return { data: null, error } 
+    const modelData = await Promise.all((data || []).map(async r => {
+      const { data: daysData, error: daysError } = await requestRangeDao.getPrimaryDays(r.requestID)
+      if (daysError) throw daysError
+      return toRequestModel(r, daysData!!)
+    }))
+    return { data: modelData, error: null }
+  },
   getById: async (id: number): SupabaseResult<Request> => {
     const { data, error } = await requestDao.getById(id)
     if (error) return { data: null, error }
