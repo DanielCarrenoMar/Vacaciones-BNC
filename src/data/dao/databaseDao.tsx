@@ -36,14 +36,11 @@ export const userDao = {
       let total = 0
       let currentLevelIds: Array<number> = [employedID]
 
-      // Iteramos por niveles descendentes usando la columna `reportTo`.
-      while (true) {
-        // Buscar reportes cuyo reportTo está en currentLevelIds
+      while (currentLevelIds.length > 0) {
         const { data, error } = await supabase.from('user').select('employedID').in('reportTo', currentLevelIds)
         if (error) return { data: null, error }
         if (!data || data.length === 0) break
 
-        // Extraer ids para el siguiente nivel
         const ids = data.map((r: any) => r.employedID)
         total += ids.length
         levels += 1
