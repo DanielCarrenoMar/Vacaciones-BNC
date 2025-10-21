@@ -22,7 +22,7 @@ export default function MyRequestsSectionItem({ request }: MyRequestsItemProps) 
         )}
         {request.status === 'rejected' && (
           <>
-            <XCircle size={20} className="text-gray-400" />
+            <XCircle size={20} className="text-error" />
             <span className="text-sm text-error">Rechazada</span>
           </>
         )}
