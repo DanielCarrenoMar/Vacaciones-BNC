@@ -86,6 +86,7 @@ export const VerifyAuthProvider: React.FC<{ children: React.ReactNode }> = ({ ch
     const { data: subscription } = supabase.auth.onAuthStateChange((_event, session) => {
       if (!mounted) return
       setSession(session ?? null)
+      setLoading(false)
     })
 
     return () => {
@@ -102,13 +103,14 @@ export const VerifyAuthProvider: React.FC<{ children: React.ReactNode }> = ({ ch
   }, [])
 
   useEffect(() => {
+    if (loading) return
     if (!session && !isAuthRoute(location.pathname)) {
       navigate('/auth/login', { replace: true })
     }
     if (!loading && user && userRole) {
       redirectProtedRoute(location.pathname, userRole)
     }
-  }, [loading, user, userRole, location.pathname])
+  }, [loading])
 
   return (
     <VerifyAuthContext.Provider value={{ loading, session, user, userRole }}>
