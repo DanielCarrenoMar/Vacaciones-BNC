@@ -27,7 +27,7 @@ export const userDao = {
     return from<null>("user", (t: any) => t.delete().eq('employedID', employedID))
   },
   // Devuelve los reportes directos (usuarios cuyo reportTo === employedID)
-  getDirectReports: async (employedID: string): SupabaseResult<UserDAO[]> => {
+  getDirectReports: async (employedID: number): SupabaseResult<UserDAO[]> => {
     return from<UserDAO[]>("user", (t: any) => t.select('*').eq('reportTo', employedID))
   },
   getUsersBelow: async (employedID: number): SupabaseResult<UserDAO[]> => {
