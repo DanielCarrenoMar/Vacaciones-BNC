@@ -1,5 +1,4 @@
 import type { Request, User, Vacation } from '#domain/models.ts';
-import { get } from 'http';
 import supabase from '../supabase'
 type SupabaseResult<T> = Promise<{ data: T | null; error: any }>
 
