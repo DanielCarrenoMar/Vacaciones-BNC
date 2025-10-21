@@ -44,7 +44,7 @@ export default function ReviewRequestDetail(){
             <div className="flex justify-between items-center mb-6">
                 <button 
                     onClick={() => navigate('/nivel1/review')}
-                    className="flex items-center gap-2 bg-[#4A90E2] text-white px-4 py-2 rounded-lg hover:bg-[#3A7BC8] transition-colors"
+                    className="flex items-center gap-2 bg-primary text-white px-4 py-2 rounded-lg hover:bg-[#3A7BC8] transition-colors"
                 >
                     <ArrowLeft size={20} />
                     <span className="text-sm">Revisar peticiones</span>
@@ -116,7 +116,7 @@ export default function ReviewRequestDetail(){
                                 <div
                                     key={day}
                                     className={`aspect-square flex items-center justify-center rounded-lg text-sm font-medium transition-colors
-                                        ${isSelected ? 'bg-[#2ECC71] text-white' : ''}
+                                        ${isSelected ? 'bg-success text-white' : ''}
                                         ${isToday && !isSelected ? 'bg-gray-700 text-white' : ''}
                                         ${!isSelected && !isToday ? 'text-[#212121] hover:bg-gray-100' : ''}
                                     `}
@@ -134,10 +134,10 @@ export default function ReviewRequestDetail(){
                 <button className="flex items-center gap-2 px-2 hover:bg-gray-100 rounded-lg transition-colors">
                     <ChevronLeft size={24} className="text-[#212121]" />
                 </button>
-                <button className="bg-[#E74C3C] text-white px-12 py-3 rounded-lg hover:bg-[#C0392B] transition-colors font-medium">
+                <button className="bg-error text-white px-12 py-3 rounded-lg hover:bg-[#C0392B] transition-colors font-medium">
                     Denegar
                 </button>
-                <button className="bg-[#2ECC71] text-white px-12 py-3 rounded-lg hover:bg-[#27AE60] transition-colors font-medium">
+                <button className="bg-success text-white px-12 py-3 rounded-lg hover:bg-[#27AE60] transition-colors font-medium">
                     Aprobar
                 </button>
                 <button className="flex items-center gap-2 px-2 hover:bg-gray-100 rounded-lg transition-colors">

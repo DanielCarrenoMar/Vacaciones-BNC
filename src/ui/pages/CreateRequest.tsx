@@ -123,7 +123,7 @@ export default function CreateRequest(){
             <div className="flex justify-between items-center mb-6">
                 <button 
                     onClick={() => navigate('/my-requests')}
-                    className="flex items-center gap-2 bg-[#4A90E2] text-white px-4 py-2 rounded-lg hover:bg-[#3A7BC8] transition-colors"
+                    className="flex items-center gap-2 bg-primary text-white px-4 py-2 rounded-lg hover:bg-[#3A7BC8] transition-colors"
                 >
                     <ArrowLeft size={20} />
                     <span className="text-sm">Mis peticiones</span>
@@ -132,7 +132,7 @@ export default function CreateRequest(){
 
             <div className="max-w-2xl mx-auto">
                 {/* Días Disponibles */}
-                <div className="bg-[#4A90E2] rounded-lg p-4 mb-4 text-white inline-block">
+                <div className="bg-primary rounded-lg p-4 mb-4 text-white inline-block">
                     <div className="text-xs mb-1">Días Disponibles</div>
                     <div className="text-4xl font-bold">{vacationDays}</div>
                 </div>
@@ -184,7 +184,7 @@ export default function CreateRequest(){
                                     className={`aspect-square flex items-center justify-center rounded-lg text-sm font-medium transition-all
                                         ${isStart ? 'bg-[#2C5AA0] text-white shadow-md' : ''}
                                         ${isEnd ? 'bg-[#1E3A5F] text-white shadow-md' : ''}
-                                        ${isMiddle ? 'bg-[#4A90E2] text-white' : ''}
+                                        ${isMiddle ? 'bg-primary text-white' : ''}
                                         ${!isSelected ? 'text-[#212121] hover:bg-gray-100' : ''}
                                     `}
                                 >
@@ -201,7 +201,7 @@ export default function CreateRequest(){
                             <span>Inicial</span>
                         </div>
                         <div className="flex items-center gap-1.5">
-                            <div className="w-3 h-3 rounded bg-[#4A90E2]"></div>
+                            <div className="w-3 h-3 rounded bg-primary"></div>
                             <span>Intermedio</span>
                         </div>
                         <div className="flex items-center gap-1.5">
@@ -224,7 +224,7 @@ export default function CreateRequest(){
                         disabled={selectedDates.length === 0}
                         className={`flex-1 px-6 py-3 rounded-lg transition-colors font-medium flex items-center justify-center gap-2
                             ${selectedDates.length > 0 
-                                ? 'bg-[#4A90E2] text-white hover:bg-[#3A7BC8]' 
+                                ? 'bg-primary text-white hover:bg-[#3A7BC8]' 
                                 : 'bg-gray-300 text-gray-500 cursor-not-allowed'
                             }`}
                     >

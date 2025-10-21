@@ -49,7 +49,7 @@ export default function DashBoardNivel2() {
             {/* Grid de secciones principales */}
             <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-6">
                 {/* Tarjeta de Días Disponibles */}
-                <div className="bg-[#4A90E2] text-white rounded-lg p-6">
+                <div className="bg-primary text-white rounded-lg p-6">
                     <div className="text-sm mb-2">Días Disponibles</div>
                     <div className="text-5xl font-bold">{vacationDays}</div>
                 </div>
@@ -60,7 +60,7 @@ export default function DashBoardNivel2() {
                     className={`${
                         pendingReviewRequests > 0 
                             ? 'bg-[#FF6B6B] hover:bg-[#EE5A5A]' 
-                            : 'bg-[#2ECC71] hover:bg-[#27AE60]'
+                            : 'bg-success hover:bg-[#27AE60]'
                     } text-white rounded-lg p-6 shadow-sm transition-colors cursor-pointer`}
                 >
                     <div className="text-sm mb-2">Peticiones Pendientes</div>
@@ -85,7 +85,7 @@ export default function DashBoardNivel2() {
                 {/* Botón de Solicitar Vacaciones */}
                 <Link
                     to="/create-request"
-                    className="bg-[#4A90E2] text-white rounded-lg p-6 shadow-sm hover:bg-[#3A7BC8] transition-colors flex items-center justify-center cursor-pointer"
+                    className="bg-primary text-white rounded-lg p-6 shadow-sm hover:bg-[#3A7BC8] transition-colors flex items-center justify-center cursor-pointer"
                 >
                     <span className="text-lg font-semibold">Solicitar vacaciones</span>
                 </Link>

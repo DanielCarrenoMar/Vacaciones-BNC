@@ -95,8 +95,8 @@ export function toRequestDao(model: Request): RequestDAO {
 export interface RequestRange {
   requestRangeID: number
   requestID: number
-  start_date: Date
-  end_date: Date
+  startDate: Date
+  endDate: Date
   days: number
   isPrimary: boolean
 }
@@ -105,8 +105,8 @@ export function toRequestRangeModel(dao: RequestRangeDAO): RequestRange {
   return {
     requestRangeID: dao.requestRangeID,
     requestID: dao.requestID,
-    start_date: new Date(dao.startDate),
-    end_date: new Date(dao.endDate),
+    startDate: new Date(dao.startDate),
+    endDate: new Date(dao.endDate),
     days: Math.floor((new Date(dao.endDate).getTime() - new Date(dao.startDate).getTime()) / (1000 * 60 * 60 * 24)) + 1,
     isPrimary: dao.isPrimary
   }
@@ -116,8 +116,8 @@ export function toRequestRangeDao(model: RequestRange): RequestRangeDAO {
   return {
     requestRangeID: model.requestRangeID,
     requestID: model.requestID,
-    startDate: model.start_date.toDateString(),
-    endDate: model.end_date.toDateString(),
+    startDate: model.startDate.toDateString(),
+    endDate: model.endDate.toDateString(),
     isPrimary: model.isPrimary
   }
 }

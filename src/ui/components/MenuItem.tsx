@@ -34,7 +34,7 @@ export default function MenuItem({ icon, label, href, isCollapsed = false, onCli
         onClick={onClick}
         className={`flex items-center justify-center p-2 w-10 h-10 rounded-lg transition-colors ${
           isActive 
-            ? 'bg-[#4A90E2] text-white' 
+            ? 'bg-primary text-white' 
             : 'text-[#212121] hover:bg-[#F5F5F7]'
         }`}
         title={label}
@@ -49,7 +49,7 @@ export default function MenuItem({ icon, label, href, isCollapsed = false, onCli
       to={href} 
       className={`flex items-center gap-3 px-3 py-3 w-full text-left rounded-lg transition-colors ${
         isActive 
-          ? 'bg-[#4A90E2] text-white' 
+          ? 'bg-primary text-white' 
           : 'text-[#212121] hover:bg-white'
       }`}
     >

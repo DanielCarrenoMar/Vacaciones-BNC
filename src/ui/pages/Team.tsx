@@ -240,14 +240,14 @@ export default function Team() {
                 <div className="lg:col-span-2 bg-white rounded-lg shadow-sm p-6">
                     <div className="flex items-center justify-between mb-6">
                         <div className="flex items-center gap-3">
-                            <CalendarIcon size={24} className="text-[#4A90E2]" />
+                            <CalendarIcon size={24} className="text-primary" />
                             <h2 className="text-xl font-semibold text-[#212121]">{monthNames[month]} {year}</h2>
                         </div>
                         <div className="flex gap-2">
                             <button onClick={prevMonth} className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
                                 <ChevronLeft size={20} />
                             </button>
-                            <button onClick={() => setCurrentDate(new Date())} className="px-4 py-2 text-sm font-medium text-[#4A90E2] hover:bg-blue-50 rounded-lg">
+                            <button onClick={() => setCurrentDate(new Date())} className="px-4 py-2 text-sm font-medium text-primary hover:bg-blue-50 rounded-lg">
                                 Hoy
                             </button>
                             <button onClick={nextMonth} className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
@@ -297,11 +297,11 @@ export default function Team() {
                                         key={index}
                                         className={`min-h-20 p-1 border rounded transition-colors ${
                                             dayInfo.isCurrentMonth ? 'bg-white border-gray-200' : 'bg-gray-50 border-gray-100'
-                                        } ${isToday ? 'ring-2 ring-[#4A90E2]' : ''} ${conflict ? 'bg-red-50' : ''}`}
+                                        } ${isToday ? 'ring-2 ring-primary' : ''} ${conflict ? 'bg-red-50' : ''}`}
                                     >
                                         <div className={`text-xs font-medium mb-1 ${
                                             dayInfo.isCurrentMonth ? 'text-[#212121]' : 'text-gray-400'
-                                        } ${isToday ? 'text-[#4A90E2] font-bold' : ''}`}>
+                                        } ${isToday ? 'text-primary font-bold' : ''}`}>
                                             {dayInfo.day}
                                         </div>
                                         <div className="space-y-0.5">
@@ -401,7 +401,7 @@ export default function Team() {
                                     <tr key={member.user.employedID} className="border-b hover:bg-gray-50 transition-colors">
                                         <td className="py-4 px-4">
                                             <div className="flex items-center gap-3">
-                                                <div className="w-10 h-10 bg-[#4A90E2] rounded-full flex items-center justify-center text-white font-semibold">
+                                                <div className="w-10 h-10 bg-primary rounded-full flex items-center justify-center text-white font-semibold">
                                                     {member.user.name.split(' ').map(n => n[0]).join('').slice(0, 2)}
                                                 </div>
                                                 <div>

@@ -28,12 +28,12 @@ export default function MyRequestsSectionItem({ request }: MyRequestsItemProps) 
         )}
         {request.status === 'approved' && (
           <>
-            <CheckCircle size={20} className="text-[#2ECC71]" />
+            <CheckCircle size={20} className="text-success" />
             <span className="text-sm text-[#212121]">Aprobada</span>
           </>
         )}
       </div>
-      <div className="flex items-center gap-2 text-sm text-[#4A90E2]">
+      <div className="flex items-center gap-2 text-sm text-primary">
         <Calendar size={16} />
         <span>{request.days} días</span>
       </div>

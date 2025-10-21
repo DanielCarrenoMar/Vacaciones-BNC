@@ -12,22 +12,22 @@ const getStatusConfig = (status: Status) => {
             return {
                 icon: <CheckCircle size={20} />,
                 text: 'Aprobada',
-                color: 'text-[#2ECC71]',
-                borderColor: 'border-[#2ECC71]/30'
+                color: 'text-success',
+                borderColor: 'border-success/30'
             };
         case 'waiting':
             return {
                 icon: <Clock size={20} />,
                 text: 'En espera',
-                color: 'text-[#F39C12]',
-                borderColor: 'border-[#F39C12]/30'
+                color: 'text-warning',
+                borderColor: 'border-warning/30'
             };
         case 'rejected':
             return {
                 icon: <XCircle size={20} />,
                 text: 'Rechazada',
-                color: 'text-[#E74C3C]',
-                borderColor: 'border-[#E74C3C]/30'
+                color: 'text-error',
+                borderColor: 'border-error/30'
             };
     }
 }
@@ -49,7 +49,7 @@ export default function MyRequestItem({ request }: RequestItemProps) {
                     {statusConfig.text}
                 </span>
             </div>
-            <div className="flex items-center gap-2 text-[#4A90E2]">
+            <div className="flex items-center gap-2 text-primary">
                 <Calendar size={16} />
                 <span className="font-medium">{request.days} días</span>
             </div>

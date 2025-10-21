@@ -15,7 +15,7 @@ export default function ReviewRequestNivel1(){
         <div className="p-6" style={{ fontFamily: 'Poppins, sans-serif' }}>
             {/* Header con información del usuario */}
             <div className="flex justify-between items-center mb-6">
-                <h1 className="text-2xl font-semibold text-[#4A90E2]">Revisar Peticiones</h1>
+                <h1 className="text-2xl font-semibold text-primary">Revisar Peticiones</h1>
                 <div className="text-right">
                     <div className="text-sm font-medium text-[#212121]">Agustín (Líder Nivel 2)</div>
                     <div className="text-xs text-gray-500">agustin.25@correo.com</div>
@@ -67,7 +67,7 @@ export default function ReviewRequestNivel1(){
                             <div className="flex items-center justify-center text-sm text-gray-600">
                                 {peticion.fecha}
                             </div>
-                            <div className="flex items-center justify-end gap-2 text-sm text-[#4A90E2]">
+                            <div className="flex items-center justify-end gap-2 text-sm text-primary">
                                 <Calendar size={16} />
                                 <span className="font-medium">{peticion.diasUsados} días</span>
                             </div>

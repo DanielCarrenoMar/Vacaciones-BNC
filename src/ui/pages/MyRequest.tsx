@@ -29,7 +29,7 @@ export default function MyRequest() {
                 <h1 className="text-2xl font-semibold text-[#212121]">Mis Peticiones</h1>
                 <button
                     onClick={() => navigate('/create-request')}
-                    className="bg-[#4A90E2] text-white px-6 py-2 rounded-lg hover:bg-[#3A7BC8] transition-colors font-medium"
+                    className="bg-primary text-white px-6 py-2 rounded-lg hover:bg-[#3A7BC8] transition-colors font-medium"
                 >
                     Crear Nueva
                 </button>

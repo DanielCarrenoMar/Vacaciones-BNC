@@ -174,7 +174,7 @@ export default function Calendar() {
                 {/* Controles del calendario */}
                 <div className="flex items-center justify-between mb-6">
                     <div className="flex items-center gap-3">
-                        <CalendarIcon size={24} className="text-[#4A90E2]" />
+                        <CalendarIcon size={24} className="text-primary" />
                         <h2 className="text-xl font-semibold text-[#212121]">{monthName} {year}</h2>
                     </div>
                     <div className="flex gap-2">
@@ -186,7 +186,7 @@ export default function Calendar() {
                         </button>
                         <button
                             onClick={() => setCurrentDate(new Date())}
-                            className="px-4 py-2 text-sm font-medium text-[#4A90E2] hover:bg-blue-50 rounded-lg transition-colors"
+                            className="px-4 py-2 text-sm font-medium text-primary hover:bg-blue-50 rounded-lg transition-colors"
                         >
                             Hoy
                         </button>
@@ -247,13 +247,13 @@ export default function Calendar() {
                                     key={index}
                                     className={`min-h-24 p-2 border rounded-lg transition-colors ${
                                         dayInfo.isCurrentMonth
-                                            ? 'bg-white border-gray-200 hover:border-[#4A90E2]'
+                                            ? 'bg-white border-gray-200 hover:border-primary'
                                             : 'bg-gray-50 border-gray-100'
-                                    } ${isToday ? 'ring-2 ring-[#4A90E2]' : ''}`}
+                                    } ${isToday ? 'ring-2 ring-primary' : ''}`}
                                 >
                                     <div className={`text-sm font-medium mb-1 ${
                                         dayInfo.isCurrentMonth ? 'text-[#212121]' : 'text-gray-400'
-                                    } ${isToday ? 'text-[#4A90E2] font-bold' : ''}`}>
+                                    } ${isToday ? 'text-primary font-bold' : ''}`}>
                                         {dayInfo.day}
                                     </div>
                                     

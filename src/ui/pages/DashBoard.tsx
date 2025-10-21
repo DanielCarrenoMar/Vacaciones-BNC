@@ -35,7 +35,7 @@ export default function DashBoard() {
             {/* Grid de secciones principales */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
                 {/* Tarjeta de Días Disponibles */}
-                <div className="bg-[#4A90E2] text-white rounded-lg p-6">
+                <div className="bg-primary text-white rounded-lg p-6">
                     <div className="text-sm mb-2">Días Disponibles</div>
                     <div className="text-5xl font-bold">{vacationDays}</div>
                 </div>
@@ -58,7 +58,7 @@ export default function DashBoard() {
                 {/* Botón de Solicitar Vacaciones */}
                 <Link
                     to="/create-request"
-                    className="bg-[#4A90E2] text-white rounded-lg p-6 shadow-sm hover:bg-[#3A7BC8] transition-colors flex items-center justify-center cursor-pointer"
+                    className="bg-primary text-white rounded-lg p-6 shadow-sm hover:bg-[#3A7BC8] transition-colors flex items-center justify-center cursor-pointer"
                 >
                     <span className="text-lg font-semibold">Solicitar vacaciones</span>
                 </Link>
@@ -110,12 +110,12 @@ export default function DashBoard() {
                                     )}
                                     {request.status === 'Aprobada' && (
                                         <>
-                                            <CheckCircle size={20} className="text-[#2ECC71]" />
+                                            <CheckCircle size={20} className="text-success" />
                                             <span className="text-sm text-[#212121]">{request.status}</span>
                                         </>
                                     )}
                                 </div>
-                                <div className="flex items-center gap-2 text-sm text-[#4A90E2]">
+                                <div className="flex items-center gap-2 text-sm text-primary">
                                     <Calendar size={16} />
                                     <span>5 días</span>
                                 </div>
@@ -135,11 +135,11 @@ export default function DashBoard() {
 
                     <Link
                         to="/assistant"
-                        className="flex items-center justify-center h-64 border-2 border-dashed border-gray-300 rounded-lg hover:border-[#4A90E2] hover:bg-blue-50 transition-all cursor-pointer group"
+                        className="flex items-center justify-center h-64 border-2 border-dashed border-gray-300 rounded-lg hover:border-primary hover:bg-blue-50 transition-all cursor-pointer group"
                     >
                         <div className="text-center">
-                            <Rocket size={48} className="mx-auto mb-3 text-gray-400 group-hover:text-[#4A90E2] transition-colors" />
-                            <p className="text-gray-500 group-hover:text-[#4A90E2] transition-colors">Click para abrir el asistente</p>
+                            <Rocket size={48} className="mx-auto mb-3 text-gray-400 group-hover:text-primary transition-colors" />
+                            <p className="text-gray-500 group-hover:text-primary transition-colors">Click para abrir el asistente</p>
                         </div>
                     </Link>
                 </div>
