@@ -9,8 +9,7 @@ import CreateRequest from "#ui/pages/CreateRequest.tsx";
 import MyRequest from "#ui/pages/MyRequest.tsx";
 import Request from "#ui/pages/Request.tsx";
 import ApproveRequest from "#ui/pages/gestion/ApproveRequest.tsx";
-import ReviewRequestNivel1 from "#ui/pages/nivel1/ReviewRequestNivel1.tsx";
-import ReviewRequestDetail from "#ui/pages/nivel1/ReviewRequestDetail.tsx";
+import ReviewRequestDetail from "#ui/pages/nivel1/ReviewRequestDetailNivel1.tsx";
 import ReviewRequestNivel2 from "#ui/pages/nivel2/ReviewRequestNivel2.tsx";
 import ReviewRequestDetailNivel2 from "#ui/pages/nivel2/ReviewRequestDetailNivel2.tsx";
 import Assistant from "#ui/pages/Assistant.tsx";
@@ -49,7 +48,6 @@ export const router = createBrowserRouter([
                     { path: "/request", element: <MyRequest /> },
                     { path: "/team", element: <Team /> },
                     { path: "/gestion/approve", element: <ApproveRequest /> },
-                    { path: "/nivel1/review", element: <ReviewRequestNivel1 /> },
                     { path: "/nivel1/review/:id", element: <ReviewRequestDetail /> },
                     { path: "/nivel2/dashboard", element: <DashBoardNivel2 /> },
                     { path: "/nivel2/review", element: <ReviewRequestNivel2 /> },

@@ -2,7 +2,7 @@ import { ArrowLeft, ChevronLeft, ChevronRight } from 'lucide-react'
 import { useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 
-export default function ReviewRequestDetail(){
+export default function ReviewRequestDetailNivel1(){
     const navigate = useNavigate()
     const { id } = useParams()
     const [currentMonth, setCurrentMonth] = useState(new Date(2021, 3)) // Abril 2021
