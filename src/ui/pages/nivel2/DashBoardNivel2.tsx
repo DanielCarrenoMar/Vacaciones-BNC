@@ -34,14 +34,6 @@ export default function DashBoardNivel2() {
 
     return (
         <div className="p-6 bg-[#F5F5F7] min-h-screen" style={{ fontFamily: 'Poppins, sans-serif' }}>
-            {/* Header con información del usuario */}
-            <div className="flex justify-end mb-6">
-                <div className="text-right">
-                    <div className="text-sm font-medium text-[#212121]">Pedrito (Programador Frontend)</div>
-                    <div className="text-xs text-gray-500">pedrito.24@correo.com</div>
-                </div>
-            </div>
-
             {/* Grid de secciones principales */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
                 {/* Tarjeta de Días Disponibles */}
