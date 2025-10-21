@@ -1,8 +1,10 @@
 import type { Role } from '#domain/models.ts';
 import supabase from '../../data/supabase';
 import MenuItem from './MenuItem'
+import ConfirmModal from './ConfirmModal'
 import { LayoutDashboard, RefreshCw, FileText, Users, Calendar, Settings, LogOut, ChevronLeft, ChevronRight, TrendingUp, Rocket } from 'lucide-react'
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 type LateralMenuProps = {
     role: Role
@@ -59,10 +61,21 @@ const itemsByRole: Record<Role, Array<MenuItem>> = {
 
 export default function LateralMenu({ role }: LateralMenuProps) {
     const items = itemsByRole[role]
-    const [isCollapsed, setIsCollapsed] = useState(false)
-
+    const [isCollapsed, setIsCollapsed] = useState(true)
+    const [showLogoutModal, setShowLogoutModal] = useState(false)
+    const navigate = useNavigate()
+    
     const principalItems = items.filter(item => item.section === 'principal')
     const sistemaItems = items.filter(item => item.section === 'sistema')
+
+    const handleLogoutClick = () => {
+        setShowLogoutModal(true)
+    }
+
+    const handleLogoutConfirm = () => {
+        setShowLogoutModal(false)
+        navigate('/auth/logout')
+    }
 
     return (
         <div className="flex h-full" style={{ fontFamily: 'Poppins, sans-serif' }}>
@@ -101,12 +114,12 @@ export default function LateralMenu({ role }: LateralMenuProps) {
                         />
                     ))}
                     <MenuItem
-                        key={`icon-logout`}
-                        label="Cerrar sesión"
-                        href="/auth/logout"
-                        icon={<LogOut size={20} />}
-                        isCollapsed={true}
-                        onClick={() => { supabase.auth.signOut() }}
+                            key={`icon-logout`}
+                            label="Cerrar sesión"
+                            href="#"
+                            icon={<LogOut size={20} />}
+                            isCollapsed={true}
+                            onClick={handleLogoutClick}
                     />
                 </div>
             </aside>
@@ -153,14 +166,25 @@ export default function LateralMenu({ role }: LateralMenuProps) {
                         <MenuItem
                             key={`icon-logout`}
                             label="Cerrar sesión"
-                            href="/auth/logout"
+                            href="#"
                             icon={<LogOut size={20} />}
                             isCollapsed={false}
-                            onClick={() => { supabase.auth.signOut() }}
+                            onClick={handleLogoutClick}
                         />
                     </nav>
                 </div>
             </aside>
+
+            {/* Modal de confirmación de logout */}
+            <ConfirmModal
+                isOpen={showLogoutModal}
+                onClose={() => setShowLogoutModal(false)}
+                onConfirm={handleLogoutConfirm}
+                title="Cerrar sesión"
+                message="¿Estás seguro de que deseas cerrar sesión?"
+                confirmText="Sí, cerrar sesión"
+                cancelText="Cancelar"
+            />
         </div>
     )
 }

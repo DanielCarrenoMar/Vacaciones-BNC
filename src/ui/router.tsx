@@ -1,6 +1,7 @@
 import {createBrowserRouter, Outlet} from "react-router-dom";
 import Register from "#ui/pages/auth/register.tsx"
 import Login from "#ui/pages/auth/login.tsx";
+import Logout from "#ui/pages/auth/logout.tsx";
 import VerifyAuthProvider from "#providers/VerifyAuthProvider.tsx"
 import DashBoard from "#ui/pages/DashBoard.tsx";
 import Calendar from "#ui/pages/Calendar.tsx";
