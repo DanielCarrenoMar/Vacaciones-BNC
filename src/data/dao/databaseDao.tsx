@@ -1,56 +1,36 @@
-import { toRequestDao, toRequestModel, toUserDao, toUserModel, toVacationDao, toVacationModel, type Request, type User, type Vacation } from '#domain/models.ts';
-import type { RequestDAO, SupabaseResult, UserDAO, VacationDAO } from '#data/dao/dao.ts';
-import { userDao, vacationDao, requestDao } from '#data/dao/databaseDao.tsx';
-import supabase from '#data/supabase.ts'
+import type { Request, User, Vacation } from '#domain/models.ts';
+import supabase from '../supabase'
+type SupabaseResult<T> = Promise<{ data: T | null; error: any }>
 
+// Helpers genéricos
+async function from<T>(table: string, query: (q: any) => any): SupabaseResult<T> {
+  const { data, error } = await query(supabase.from(table))
+  return { data: data as T | null, error }
+}
 
 // User CRUD
-export const userRepo = {
+export const userDao = {
   getAll: async (): SupabaseResult<User[]> => {
-    const { data, error } = await userDao.getAll()
-    if (error) return { data, error }
-    const modelData = data!!.map(u => toUserModel(u))
-    return { data: modelData, error }
+    return from<User[]>("user", (t: any) => t.select('*'))
   },
   getById: async (employedID: number): SupabaseResult<User> => {
-    const { data, error } = await userDao.getById(employedID)
-    if (error) return { data: null, error }
-    if (!data) return { data: null, error: null }
-    const modelData = toUserModel(data)
-    return { data: modelData, error: null }
+    return from<User>("user", (t: any) => t.select('*').eq('employedID', employedID).single())
   },
   getByEmail: async (email: string): SupabaseResult<User> => {
-    const { data, error } = await userDao.getByEmail(email)
-    if (error) return { data: null, error }
-    if (!data) return { data: null, error: null }
-    const modelData = toUserModel(data)
-    return { data: modelData, error: null }
+    return from<User>("user", (t: any) => t.select('*').eq('email', email).single())
   },
-  create: async (payload: UserDAO): SupabaseResult<User> => {
-    const { data, error } = await userDao.create(payload)
-    if (error) return { data: null, error }
-    if (!data) return { data: null, error: null }
-    const modelData = toUserModel(data)
-    return { data: modelData, error: null }
+  create: async (payload: User): SupabaseResult<User> => {
+    return from<User>("user", (t: any) => t.insert(payload).select().single())
   },
   update: async (employedID: string, payload: Partial<User>): SupabaseResult<User> => {
-    const { data, error } = await userDao.update(employedID, payload)
-    if (error) return { data: null, error }
-    if (!data) return { data: null, error: null }
-    const modelData = toUserModel(data)
-    return { data: modelData, error: null }
+    return from<User>("user", (t: any) => t.update(payload).eq('employedID', employedID).select().single())
   },
   remove: async (employedID: number): SupabaseResult<null> => {
-    const { data, error } = await userDao.remove(employedID)
-    if (error) return { data: null, error }
-    return { data: data ?? null, error: null }
+    return from<null>("user", (t: any) => t.delete().eq('employedID', employedID))
   },
   // Devuelve los reportes directos (usuarios cuyo reportTo === employedID)
   getDirectReports: async (employedID: string): SupabaseResult<User[]> => {
-    const { data, error } = await userDao.getDirectReports(employedID)
-    if (error) return { data: null, error }
-    const modelData = (data || []).map((u: any) => toUserModel(u))
-    return { data: modelData, error: null }
+    return from<User[]>("user", (t: any) => t.select('*').eq('reportTo', employedID))
   },
   getLevelsBelow: async (employedID: number): SupabaseResult<{ levelsBelow: number; totalSubordinates: number }> => {
     try {
@@ -79,10 +59,10 @@ export const userRepo = {
   },
   getLevelsBelowWithEmail: async (email: string): SupabaseResult<{ levelsBelow: number; totalSubordinates: number }> => {
     try {
-      const { data: user, error: userError } = await userRepo.getByEmail(email);
+      const { data: user, error: userError } = await userDao.getByEmail(email);
       if (userError) return { data: null, error: userError };
       if (!user) return { data: null, error: 'User not found' };
-      return userRepo.getLevelsBelow(user.employedID);
+      return userDao.getLevelsBelow(user.employedID);
     } catch (err) {
       return { data: null, error: err }
     }
@@ -99,7 +79,7 @@ export const userRepo = {
       const today = todayParam ? new Date(todayParam) : new Date()
 
       // obtener usuario
-      const { data: user, error: userError } = await userRepo.getById(employedID)
+      const { data: user, error: userError } = await userDao.getById(employedID)
       if (userError) return { data: null, error: userError }
       if (!user) return { data: null, error: 'User not found' }
 
@@ -201,86 +181,49 @@ export const userRepo = {
 }
 
 // Vacation CRUD
-export const vacationRepo = {
+export const vacationDao = {
   getAll: async (): SupabaseResult<Vacation[]> => {
-    const { data, error } = await vacationDao.getAll()
-    if (error) return { data: null, error }
-    const modelData = (data || []).map(v => toVacationModel(v))
-    return { data: modelData, error: null }
+    return from<Vacation[]>("vacation", (t: any) => t.select('*'))
   },
   getById: async (id: number): SupabaseResult<Vacation> => {
-    const { data, error } = await vacationDao.getById(id)
-    if (error) return { data: null, error }
-    if (!data) return { data: null, error: null }
-    const modelData = toVacationModel(data)
-    return { data: modelData, error: null }
+    return from<Vacation>("vacation", (t: any) => t.select('*').eq('id', id).single())
   },
-  create: async (payload: Omit<VacationDAO, 'id'>): SupabaseResult<Vacation> => {
-    const { data, error } = await vacationDao.create(payload)
-    if (error) return { data: null, error }
-    if (!data) return { data: null, error: null }
-    const modelData = toVacationModel(data)
-    return { data: modelData, error: null }
+  create: async (payload: Omit<Vacation, 'id'>): SupabaseResult<Vacation> => {
+    return from<Vacation>("vacation", (t: any) => t.insert(payload).select().single())
   },
   update: async (id: number, payload: Partial<Vacation>): SupabaseResult<Vacation> => {
-    const { data, error } = await vacationDao.update(id, payload)
-    if (error) return { data: null, error }
-    if (!data) return { data: null, error: null }
-    const modelData = toVacationModel(data)
-    return { data: modelData, error: null }
+    return from<Vacation>("vacation", (t: any) => t.update(payload).eq('id', id).select().single())
   },
   remove: async (id: number): SupabaseResult<null> => {
-    const { data, error } = await vacationDao.remove(id)
-    if (error) return { data: null, error }
-    return { data: data ?? null, error: null }
+    return from<null>("vacation", (t: any) => t.delete().eq('id', id))
   },
 }
 
 // Request CRUD
-export const requestRepo = {
+export const requestDao = {
   getAll: async (): SupabaseResult<Request[]> => {
-    const { data, error } = await requestDao.getAll()
-    if (error) return { data: null, error }
-    const modelData = (data || []).map(r => toRequestModel(r))
-    return { data: modelData, error: null }
+    return from<Request[]>("request", (t: any) => t.select('*'))
   },
   getById: async (id: number): SupabaseResult<Request> => {
-    const { data, error } = await requestDao.getById(id)
-    if (error) return { data: null, error }
-    if (!data) return { data: null, error: null }
-    const modelData = toRequestModel(data)
-    return { data: modelData, error: null }
+    return from<Request>("request", (t: any) => t.select('*').eq('id', id).single())
   },
   getByUserId: async (employedID: number): SupabaseResult<Request[]> => {
-    const { data, error } = await requestDao.getByUserId(employedID)
-    if (error) return { data: null, error }
-    const modelData = (data || []).map(r => toRequestModel(r))
-    return { data: modelData, error: null }
+    return from<Request[]>("request", (t: any) => t.select('*').eq('employedID', employedID))
   },
-  create: async (payload: Omit<RequestDAO, 'id' | 'created_at' | 'update_at'>): SupabaseResult<Request> => {
-    const { data, error } = await requestDao.create(payload)
-    if (error) return { data: null, error }
-    if (!data) return { data: null, error: null }
-    const modelData = toRequestModel(data)
-    return { data: modelData, error: null }
+  create: async (payload: Omit<Request, 'id' | 'created_at' | 'update_at'>): SupabaseResult<Request> => {
+    return from<Request>("request", (t: any) => t.insert(payload).select().single())
   },
   update: async (id: number, payload: Partial<Request>): SupabaseResult<Request> => {
-    const { data, error } = await requestDao.update(id, payload)
-    if (error) return { data: null, error }
-    if (!data) return { data: null, error: null }
-    const modelData = toRequestModel(data)
-    return { data: modelData, error: null }
+    return from<Request>("request", (t: any) => t.update(payload).eq('id', id).select().single())
   },
   remove: async (id: number): SupabaseResult<null> => {
-    const { data, error } = await requestDao.remove(id)
-    if (error) return { data: null, error }
-    return { data: data ?? null, error: null }
+    return from<null>("request", (t: any) => t.delete().eq('id', id))
   }
 }
 
 // Ejemplo de uso exportado por conveniencia
 export default {
-  userRepo,
-  vacationRepo,
-  requestRepo
+  userDao,
+  vacationDao,
+  requestDao
 }

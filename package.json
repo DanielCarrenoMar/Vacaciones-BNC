@@ -9,7 +9,8 @@
     "#components/*": "./src/ui/components/*",
     "#pages/*": "./src/ui/pages/*",
     "#providers/*": "./src/providers/*",
-    "#domain/*": "./src/domain/*"
+    "#domain/*": "./src/domain/*",
+    "#data/*": "./src/data/*"
   },
   "scripts": {
     "dev": "vite",
