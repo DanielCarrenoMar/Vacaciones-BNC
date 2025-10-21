@@ -6,9 +6,9 @@ import supabase from '#data/supabase.ts'
 export const userRepo = {
   getAll: async (): SupabaseResult<User[]> => {
     const { data, error } = await userDao.getAll()
-    if (error) return { data, error }
+    if (error) return { data: null, error }
     const modelData = data!!.map(u => toUserModel(u))
-    return { data: modelData, error }
+    return { data: modelData, error: null }
   },
   getById: async (employedID: number): SupabaseResult<User> => {
     const { data, error } = await userDao.getById(employedID)
@@ -31,7 +31,7 @@ export const userRepo = {
     const modelData = toUserModel(data)
     return { data: modelData, error: null }
   },
-  update: async (employedID: string, payload: Partial<User>): SupabaseResult<User> => {
+  update: async (employedID: string, payload: Partial<UserDAO>): SupabaseResult<User> => {
     const { data, error } = await userDao.update(employedID, payload)
     if (error) return { data: null, error }
     if (!data) return { data: null, error: null }
@@ -219,7 +219,7 @@ export const vacationRepo = {
     const modelData = toVacationModel(data)
     return { data: modelData, error: null }
   },
-  update: async (id: number, payload: Partial<Vacation>): SupabaseResult<Vacation> => {
+  update: async (id: number, payload: Partial<VacationDAO>): SupabaseResult<Vacation> => {
     const { data, error } = await vacationDao.update(id, payload)
     if (error) return { data: null, error }
     if (!data) return { data: null, error: null }
@@ -260,7 +260,7 @@ export const requestRepo = {
     const modelData = toRequestModel(data)
     return { data: modelData, error: null }
   },
-  update: async (id: number, payload: Partial<Request>): SupabaseResult<Request> => {
+  update: async (id: number, payload: Partial<RequestDAO>): SupabaseResult<Request> => {
     const { data, error } = await requestDao.update(id, payload)
     if (error) return { data: null, error }
     if (!data) return { data: null, error: null }
