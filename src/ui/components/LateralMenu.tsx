@@ -1,4 +1,5 @@
 import type { Role } from '#domain/models.ts';
+import supabase from '../../data/supabase';
 import MenuItem from './MenuItem'
 
 type LateralMenuProps = {
@@ -51,7 +52,7 @@ export default function LateralMenu({ role }: LateralMenuProps) {
                 {items.map((it) => (
                     <MenuItem key={it.path} label={it.label} href={it.path} />
                 ))}
-                <MenuItem label="Cerrar sesión" href="/auth/logout" />
+                <MenuItem label="Cerrar sesión" href="/auth/logout" onClick={() => supabase.auth.signOut()} />
             </nav>
         </aside>
     )

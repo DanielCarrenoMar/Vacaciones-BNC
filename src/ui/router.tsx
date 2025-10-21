@@ -13,6 +13,7 @@ import ReviewRequestNivel1 from "#ui/pages/nivel1/ReviewRequestNivel1.tsx";
 import ReviewRequestNivel2 from "#ui/pages/nivel2/ReviewRequestNivel2.tsx";
 import Assistant from "./pages/Assistant";
 import MenuLayer from "./layers/menuLayer";
+import Logout from "./pages/auth/logout";
 
 // Root routes: wrap all routes with VerifyAuthProvider so that
 // the provider can use react-router hooks (useNavigate/useLocation).
@@ -27,6 +28,7 @@ export const router = createBrowserRouter([
         children: [
             { path: "/auth/register", element: <Register /> },
             { path: "/auth/login", element: <Login /> },
+            { path: "/auth/logout", element: <Logout /> },
             {
                 element: <MenuLayer />,
                 children: [
