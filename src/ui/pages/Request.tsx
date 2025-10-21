@@ -37,7 +37,7 @@ export default function Request() {
             if (!receiverData) return
             setReceiverUser(receiverData)
 
-            // 4. Fetch Receiver Level
+            // 4. Fetch Receiver Level (niveles debajo del receptor actual)
             const { data: levelData, error: levelError } = await userRepo.getLevelsBelow(receiverData.employedID)
             if (levelError) throw levelError
             if (levelData) setReceiverLevel(levelData.levelsBelow)
@@ -45,31 +45,106 @@ export default function Request() {
         fetchData()
     }, [requestID])
 
+    // Determinar el estado de cada paso del stepper
+    const getStepStatus = () => {
+        // Paso 1: Solicitud creada - siempre completado
+        const step1Complete = true
+
+        // Determinar si necesita aprobación de Gestión Humana (finalApprove = true)
+        const needsGestionHumana = request?.finalApprove === true
+
+        // Paso 2: Aprobación Nivel 2 (supervisor directo)
+        let step2Complete = false
+        let step2Pending = false
+        let step2Approver = receiverUser?.name
+
+        // Paso 3: Aprobación Nivel 1 (gerente)
+        let step3Complete = false
+        let step3Pending = false
+        let step3Approver = ''
+
+        // Paso 4: Aprobación Gestión Humana
+        let step4Complete = false
+        let step4Pending = false
+
+        if (needsGestionHumana) {
+            // Flujo completo: Nivel 2 -> Nivel 1 -> Gestión Humana
+            if (request?.status === 'approved') {
+                // Todo aprobado
+                step2Complete = true
+                step3Complete = true
+                step4Complete = true
+            } else if (request?.status === 'waiting') {
+                // Determinar en qué paso está
+                if (receiverLevel === 2) {
+                    // Esperando aprobación de Nivel 2
+                    step2Pending = true
+                } else if (receiverLevel === 1) {
+                    // Nivel 2 aprobó, esperando Nivel 1
+                    step2Complete = true
+                    step3Pending = true
+                    step3Approver = receiverUser?.name || ''
+                } else if (receiverUser?.area === 'Gestión Humana') {
+                    // Nivel 1 aprobó, esperando Gestión Humana
+                    step2Complete = true
+                    step3Complete = true
+                    step4Pending = true
+                }
+            }
+        } else {
+            // Flujo simple: Solo Nivel 2
+            if (request?.status === 'approved') {
+                step2Complete = true
+            } else if (request?.status === 'waiting') {
+                step2Pending = true
+            }
+        }
+
+        return {
+            step1Complete,
+            step2Complete,
+            step2Pending,
+            step2Approver,
+            step3Complete,
+            step3Pending,
+            step3Approver,
+            step4Complete,
+            step4Pending,
+            needsGestionHumana,
+            isRejected: request?.status === 'rejected'
+        }
+    }
+
+    const stepStatus = getStepStatus()
+
     return (
-        <div className="p-6 bg-background min-h-screen" style={{ fontFamily: 'Poppins, sans-serif' }}>
+        <div className="p-4 md:p-6 bg-background min-h-screen pt-16 md:pt-6" style={{ fontFamily: 'Poppins, sans-serif' }}>
             {/* Header con botón de regresar y usuario */}
-            <div className="flex justify-between items-center mb-6">
+            <div className="flex justify-between items-center mb-4 md:mb-6">
                 <button
                     onClick={() => navigate('/my-requests')}
-                    className="flex items-center gap-2 bg-primary text-white px-4 py-2 rounded-lg hover:bg-primaryVar transition-colors"
+                    className="flex items-center gap-2 bg-primary text-white px-3 md:px-4 py-2 rounded-lg hover:bg-primaryVar transition-colors text-sm"
                 >
-                    <ArrowLeft size={20} />
-                    <span className="text-sm">Mis peticiones</span>
+                    <ArrowLeft size={18} />
+                    <span className="hidden sm:inline">Mis peticiones</span>
+                    <span className="sm:hidden">Atrás</span>
                 </button>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
                 {/* Columna izquierda: Seguimiento */}
-                <div className="space-y-6">
+                <div className="space-y-4 md:space-y-6">
                     {/* Seguimiento de solicitud */}
-                    <div className="bg-white rounded-lg shadow-lg p-6">
-                        <h2 className="text-lg font-semibold text-onsurface mb-6">Seguimiento de solicitud</h2>
+                    <div className="bg-white rounded-lg shadow-lg p-4 md:p-6">
+                        <h2 className="text-base md:text-lg font-semibold text-onsurface mb-4 md:mb-6">Seguimiento de solicitud</h2>
 
                         <div className="space-y-4">
+                            {/* Paso 1: Solicitud creada */}
                             <div className="flex gap-4">
                                 <div className="flex flex-col items-center">
                                     <CheckCircle size={20} className="text-success" />
-                                    <div className={`w-0.5 h-10 mt-2 ${receiverLevel == 2 ? 'bg-warning' : request?.status === 'rejected' ? 'bg-error' : 'bg-success'}`} />
+                                    {!stepStatus.isRejected && <div className={`w-0.5 h-10 mt-2 ${stepStatus.step2Complete || stepStatus.step2Pending ? 'bg-success' : 'bg-gray-300'}`} />}
+                                    {stepStatus.isRejected && <div className="w-0.5 h-10 mt-2 bg-error" />}
                                 </div>
                                 <div className="flex-1 pb-2">
                                     <h3 className="font-medium text-onsurface">Solicitud creada con éxito</h3>
@@ -77,62 +152,94 @@ export default function Request() {
                                 </div>
                             </div>
 
+                            {/* Paso 2: Aprobación Nivel 2 (Supervisor directo) */}
                             <div className="flex gap-4">
                                 <div className="flex flex-col items-center">
-                                    {
-                                        receiverLevel == 1 ? (
-                                            <Clock size={20} className="text-warning" />
-                                        ) : (
-                                            <CheckCircle size={20} className="text-success" />
-                                        )
-                                    }
-                                    <div className={`w-0.5 h-10 mt-2 ${receiverLevel == 2 ? 'bg-warning' : request?.status === 'rejected' ? 'bg-error' : 'bg-success'}`} />
+                                    {stepStatus.step2Complete && <CheckCircle size={20} className="text-success" />}
+                                    {stepStatus.step2Pending && <Clock size={20} className="text-warning" />}
+                                    {!stepStatus.step2Complete && !stepStatus.step2Pending && !stepStatus.isRejected && <div className="w-5 h-5 rounded-full border-2 border-gray-300" />}
+                                    {stepStatus.isRejected && <XCircle size={20} className="text-error" />}
+                                    {stepStatus.needsGestionHumana && !stepStatus.isRejected && (
+                                        <div className={`w-0.5 h-10 mt-2 ${
+                                            stepStatus.step2Complete ? 'bg-success' : 
+                                            stepStatus.step2Pending ? 'bg-warning' : 
+                                            'bg-gray-300'
+                                        }`} />
+                                    )}
                                 </div>
                                 <div className="flex-1 pb-2">
-                                    <h3 className="font-medium text-onsurface">Aprobacion nivel 2</h3>
-                                    <p className="text-sm text-gray-600 mt-1">Tu solicitud está pendiente de revisión por: {receiverUser?.name}</p>
+                                    <h3 className="font-medium text-onsurface">Aprobación nivel 2</h3>
+                                    {stepStatus.step2Complete && <p className="text-sm text-success mt-1">✓ Aprobada por: {stepStatus.step2Approver}</p>}
+                                    {stepStatus.step2Pending && <p className="text-sm text-warning mt-1">Tu solicitud está pendiente de revisión por: {stepStatus.step2Approver}</p>}
+                                    {!stepStatus.step2Complete && !stepStatus.step2Pending && !stepStatus.isRejected && <p className="text-sm text-gray-500 mt-1">Pendiente</p>}
+                                    {stepStatus.isRejected && <p className="text-sm text-error mt-1">Rechazada por: {stepStatus.step2Approver}</p>}
                                 </div>
                             </div>
 
-                            <div className="flex gap-4">
-                                <div className="flex flex-col items-center">
-                                    {
-                                        receiverLevel == 2 ? (
-                                            <Clock size={20} className="text-warning" />
-                                        ) : (
-                                            <CheckCircle size={20} className="text-success" />
-                                        )
-                                    }
-                                    <div className={`w-0.5 h-10 mt-2 ${(receiverLevel == 2 && receiverUser?.area == "Gestión Humana") ? 'bg-warning' : request?.status === 'rejected' ? 'bg-error' : 'bg-success'}`} />
+                            {/* Paso 3: Aprobación Nivel 1 (Gerente) - Solo si necesita Gestión Humana */}
+                            {stepStatus.needsGestionHumana && (
+                                <div className="flex gap-4">
+                                    <div className="flex flex-col items-center">
+                                        {stepStatus.step3Complete && <CheckCircle size={20} className="text-success" />}
+                                        {stepStatus.step3Pending && <Clock size={20} className="text-warning" />}
+                                        {!stepStatus.step3Complete && !stepStatus.step3Pending && !stepStatus.isRejected && <div className="w-5 h-5 rounded-full border-2 border-gray-300" />}
+                                        {stepStatus.isRejected && <div className="w-5 h-5 rounded-full border-2 border-gray-300" />}
+                                        {!stepStatus.isRejected && (
+                                            <div className={`w-0.5 h-10 mt-2 ${
+                                                stepStatus.step3Complete ? 'bg-success' : 
+                                                stepStatus.step3Pending ? 'bg-warning' : 
+                                                'bg-gray-300'
+                                            }`} />
+                                        )}
+                                    </div>
+                                    <div className="flex-1 pb-2">
+                                        <h3 className="font-medium text-onsurface">Aprobación nivel 1</h3>
+                                        {stepStatus.step3Complete && <p className="text-sm text-success mt-1">✓ Aprobada por: {stepStatus.step3Approver}</p>}
+                                        {stepStatus.step3Pending && <p className="text-sm text-warning mt-1">Pendiente de revisión por: {stepStatus.step3Approver}</p>}
+                                        {!stepStatus.step3Complete && !stepStatus.step3Pending && <p className="text-sm text-gray-500 mt-1">Pendiente</p>}
+                                    </div>
                                 </div>
-                                <div className="flex-1 pb-2">
-                                    <h3 className="font-medium text-onsurface">Aprobacion nivel 1</h3>
-                                    <p className="text-sm text-gray-600 mt-1">Tu solicitud está pendiente de revisión por: {receiverUser?.name}</p>
-                                </div>
-                            </div>
+                            )}
 
-                            {/* Aprobada */}
+                            {/* Paso 4: Aprobación Gestión Humana - Solo si necesita */}
+                            {stepStatus.needsGestionHumana && (
+                                <div className="flex gap-4">
+                                    <div className="flex flex-col items-center">
+                                        {stepStatus.step4Complete && <CheckCircle size={20} className="text-success" />}
+                                        {stepStatus.step4Pending && <Clock size={20} className="text-warning" />}
+                                        {!stepStatus.step4Complete && !stepStatus.step4Pending && <div className="w-5 h-5 rounded-full border-2 border-gray-300" />}
+                                    </div>
+                                    <div className="flex-1 pb-2">
+                                        <h3 className="font-medium text-onsurface">Aprobación Gestión Humana</h3>
+                                        {stepStatus.step4Complete && <p className="text-sm text-success mt-1">✓ Aprobada por Gestión Humana</p>}
+                                        {stepStatus.step4Pending && <p className="text-sm text-warning mt-1">Pendiente de revisión por Gestión Humana</p>}
+                                        {!stepStatus.step4Complete && !stepStatus.step4Pending && <p className="text-sm text-gray-500 mt-1">Pendiente</p>}
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* Estado final: Aprobada */}
                             {request?.status === 'approved' && (
                                 <div className="flex gap-4">
                                     <div className="flex flex-col items-center">
                                         <CheckCircle size={20} className="text-success" />
                                     </div>
                                     <div className="flex-1 pb-2">
-                                        <h3 className="font-medium text-onsurface">Solicitud Aprobada</h3>
-                                        <p className="text-sm text-gray-600 mt-1">Tu solicitud ha sido aprobada por: {receiverUser?.name}</p>
+                                        <h3 className="font-medium text-success">Solicitud Aprobada</h3>
+                                        <p className="text-sm text-gray-600 mt-1">¡Tu solicitud ha sido aprobada completamente!</p>
                                     </div>
                                 </div>
                             )}
 
-                            {/* Rechazada */}
+                            {/* Estado final: Rechazada */}
                             {request?.status === 'rejected' && (
                                 <div className="flex gap-4">
                                     <div className="flex flex-col items-center">
                                         <XCircle size={20} className="text-error" />
                                     </div>
                                     <div className="flex-1 pb-2">
-                                        <h3 className="font-medium text-onsurface">Solicitud Rechazada</h3>
-                                        <p className="text-sm text-gray-600 mt-1">El supervisor {receiverUser?.name} ha decidido rechazar la petición.</p>
+                                        <h3 className="font-medium text-error">Solicitud Rechazada</h3>
+                                        <p className="text-sm text-gray-600 mt-1">Tu solicitud ha sido rechazada.</p>
                                         {request.message && <p className="text-sm text-gray-500 mt-1">Motivo: {request.message}</p>}
                                     </div>
                                 </div>
@@ -141,17 +248,17 @@ export default function Request() {
                     </div>
 
                     {/* Botón Ver petición */}
-                    <button className="w-full bg-primary text-white py-3 rounded-lg hover:bg-primaryVar transition-colors font-medium flex items-center justify-center gap-2">
-                        <CalendarIcon size={20} />
+                    <button className="w-full bg-primary text-white py-2.5 md:py-3 rounded-lg hover:bg-primaryVar transition-colors font-medium flex items-center justify-center gap-2 text-sm md:text-base">
+                        <CalendarIcon size={18} />
                         Ver peticion
                     </button>
                 </div>
 
                 {/* Columna derecha: Estado y Detalles */}
-                <div className="space-y-6">
+                <div className="space-y-4 md:space-y-6">
                     {/* Estado de solicitud */}
-                    <div className={`bg-white rounded-lg shadow-lg p-6 border-2 ${request?.status === 'approved' ? 'border-success' : request?.status === 'waiting' ? 'border-warning' : 'border-error'}`}>
-                        <h2 className="text-lg font-semibold text-onsurface mb-4">Estado de solicitud</h2>
+                    <div className={`bg-white rounded-lg shadow-lg p-4 md:p-6 border-2 ${request?.status === 'approved' ? 'border-success' : request?.status === 'waiting' ? 'border-warning' : 'border-error'}`}>
+                        <h2 className="text-base md:text-lg font-semibold text-onsurface mb-4">Estado de solicitud</h2>
 
                         <div className={`flex items-center gap-2 mb-4 ${request?.status === 'approved' ? 'text-success' : request?.status === 'waiting' ? 'text-warning' : 'text-error'}`}>
                             {request?.status === 'approved' && <CheckCircle size={20} />}
@@ -179,8 +286,8 @@ export default function Request() {
                     </div>
 
                     {/* Detalles Solicitud */}
-                    <div className="bg-white rounded-lg shadow-lg p-6">
-                        <h2 className="text-lg font-semibold text-onsurface mb-4">Detalles Solicitud</h2>
+                    <div className="bg-white rounded-lg shadow-lg p-4 md:p-6">
+                        <h2 className="text-base md:text-lg font-semibold text-onsurface mb-4">Detalles Solicitud</h2>
 
                         <div className="space-y-3">
                             <div className="flex justify-between text-sm">
@@ -203,8 +310,8 @@ export default function Request() {
                     </div>
 
                     {/* Información Colaborador */}
-                    <div className="bg-white rounded-lg shadow-lg p-6">
-                        <h2 className="text-lg font-semibold text-onsurface mb-4">Informacion Colaborador</h2>
+                    <div className="bg-white rounded-lg shadow-lg p-4 md:p-6">
+                        <h2 className="text-base md:text-lg font-semibold text-onsurface mb-4">Informacion Colaborador</h2>
 
                         <div className="space-y-3">
                             <div className="flex justify-between text-sm">
