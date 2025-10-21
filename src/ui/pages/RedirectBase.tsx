@@ -6,6 +6,7 @@ export default function RedirectBase(){
     const { userRole } = useVerifyAuth()
     const navigate = useNavigate ()
     useEffect(() => {
+        if (!userRole) return
         if (userRole === 'nivel2') navigate('/nivel2/dashboard', { replace: true })
         else if (userRole === 'nivel1') navigate('/nivel2/dashboard', { replace: true })
         else if (userRole === 'gestionHumana') navigate('/gestion/dashboard', { replace: true })

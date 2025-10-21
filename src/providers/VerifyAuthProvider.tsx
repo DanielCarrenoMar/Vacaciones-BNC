@@ -11,7 +11,7 @@ type VerifyAuthContextType = {
   loading: boolean
   session: any | null
   user: User | null
-  userRole: Role
+  userRole: Role | null
 }
 
 const VerifyAuthContext = createContext<VerifyAuthContextType>({ loading: true, session: null, user: null, userRole: "colaborador" })
@@ -24,7 +24,7 @@ export const VerifyAuthProvider: React.FC<{ children: React.ReactNode }> = ({ ch
   const [loading, setLoading] = useState(true)
   const [session, setSession] = useState<any | null>(null)
   const [user, setUser] = useState<User | null>(null)
-  const [userRole, setUserRole] = useState<Role>("colaborador")
+  const [userRole, setUserRole] = useState<Role | null>(null)
   const navigate = useNavigate()
   const location = useLocation()
 
