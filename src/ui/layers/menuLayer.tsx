@@ -3,11 +3,8 @@ import { Outlet } from 'react-router-dom'
 import { useVerifyAuth } from '#providers/VerifyAuthProvider.tsx'
 
 export default function MenuLayer() {
-    const { user, userRole, loading } = useVerifyAuth()
+    const { user, userRole } = useVerifyAuth()
 
-    if (loading) {
-        return <div>Loading...</div>
-    }
     return (
     <div className="h-screen flex bg-[#F5F5F7] overflow-hidden">
         <LateralMenu role={userRole} />
