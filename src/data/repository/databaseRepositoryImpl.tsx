@@ -75,19 +75,6 @@ export const userRepo = {
       return { data: null, error: err }
     }
   },
-  getLevelsBelowWithEmail: async (email: string): SupabaseResult<{ levelsBelow: number; totalSubordinates: number }> => {
-    try {
-      const { data: user, error: userError } = await userRepo.getByEmail(email);
-      if (userError) return { data: null, error: userError };
-      if (!user) return { data: null, error: 'User not found' };
-      return userRepo.getLevelsBelow(user.employedID);
-    } catch (err) {
-      return { data: null, error: err }
-    }
-  },
-  // Calcula balance por política dividiendo en 2 periodos (periodo anterior y periodo actual)
-  // - Usa la fecha de ingreso (`user.entryDate`) para prorratear el primer periodo si aplica
-  // - Resta sólo las vacaciones aprobadas (campo `aprovated_at`) que cayeron dentro de cada periodo
   getVacationBalance: async (employedID: number, todayParam?: string): SupabaseResult<{
     previous: { entitlement: number; taken: number; balance: number; start: string; end: string }
     current: { entitlement: number; taken: number; balance: number; start: string; end: string }
@@ -247,8 +234,14 @@ export const requestRepo = {
     const modelData = toRequestModel(data)
     return { data: modelData, error: null }
   },
-  getByUserId: async (employedID: number): SupabaseResult<Request[]> => {
-    const { data, error } = await requestDao.getByUserId(employedID)
+  getBySenderId: async (employedID: number): SupabaseResult<Request[]> => {
+    const { data, error } = await requestDao.getBySenderId(employedID)
+    if (error) return { data: null, error }
+    const modelData = (data || []).map(r => toRequestModel(r))
+    return { data: modelData, error: null }
+  },
+  getByReceiverId: async (employedID: number): SupabaseResult<Request[]> => {
+    const { data, error } = await requestDao.getByReceiverId(employedID)
     if (error) return { data: null, error }
     const modelData = (data || []).map(r => toRequestModel(r))
     return { data: modelData, error: null }

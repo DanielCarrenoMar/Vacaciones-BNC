@@ -1,9 +1,8 @@
 import { useEffect, useState } from 'react';
-import { createChat } from '@n8n/chat';
 import '@n8n/chat/style.css';
 import { useVerifyAuth } from '#providers/VerifyAuthProvider.tsx';
 import { requestRepo, userRepo } from '#repository/databaseRepositoryImpl.tsx';
-import { Clock, CheckCircle, TrendingUp, Rocket, ChevronDown, Maximize2, Calendar } from 'lucide-react'
+import { Clock, CheckCircle, Rocket, ChevronDown, Maximize2, Calendar } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import type { Request } from '#domain/models.ts';
 
@@ -21,7 +20,7 @@ export default function DashBoardNivel2() {
         }
         async function fetchUserRequests() {
             if (!user) return;
-            const { data, error } = await requestRepo.getByUserId(user.employedID)
+            const { data, error } = await requestRepo.getBySenderId(user.employedID)
             if (error) throw error
             if (data) setUserRequests(data)
         }
@@ -39,7 +38,7 @@ export default function DashBoardNivel2() {
                 {/* Tarjeta de Días Disponibles */}
                 <div className="bg-[#4A90E2] text-white rounded-lg p-6">
                     <div className="text-sm mb-2">Días Disponibles</div>
-                    <div className="text-5xl font-bold">diasDisponibles</div>
+                    <div className="text-5xl font-bold">{vacationDays}</div>
                 </div>
 
                 {/* Tarjeta de Antigüedad */}

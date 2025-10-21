@@ -1,15 +1,29 @@
+import { useVerifyAuth } from '#providers/VerifyAuthProvider.tsx'
+import { userRepo } from '#repository/databaseRepositoryImpl.tsx'
 import { ArrowLeft, ChevronLeft, ChevronRight, Calendar as CalendarIcon } from 'lucide-react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 export default function CreateRequest(){
+    const { user } = useVerifyAuth()
     const navigate = useNavigate()
     const [currentMonth, setCurrentMonth] = useState(new Date(2025, 5)) // Junio 2025
     const [selectedDates, setSelectedDates] = useState<number[]>([])
     const [startDate, setStartDate] = useState<number | null>(null)
     const [endDate, setEndDate] = useState<number | null>(null)
-    
-    const diasDisponibles = 20
+    const [vacationDays, setVacationDays] = useState<number>(0)
+
+    useEffect(() => {
+            async function fetchVacationDays() {
+                if (!user) return;
+                const { data, error } = await userRepo.getVacationBalance(user.employedID)
+                if (error) throw error
+                if (data) setVacationDays(data.totalAvailable)
+            }
+            async function fetchData() {
+                await fetchVacationDays()
+            } fetchData()
+        }, [])
 
     const getDaysInMonth = (date: Date) => {
         const year = date.getFullYear()
@@ -98,7 +112,7 @@ export default function CreateRequest(){
                 {/* Días Disponibles */}
                 <div className="bg-[#4A90E2] rounded-lg p-4 mb-4 text-white inline-block">
                     <div className="text-xs mb-1">Días Disponibles</div>
-                    <div className="text-4xl font-bold">{diasDisponibles}</div>
+                    <div className="text-4xl font-bold">{vacationDays}</div>
                 </div>
 
                 {/* Calendario */}
