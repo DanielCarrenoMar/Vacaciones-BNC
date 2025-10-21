@@ -55,7 +55,7 @@ export const VerifyAuthProvider: React.FC<{ children: React.ReactNode }> = ({ ch
         const { data: levelData, error: levelError } = await userRepo.getLevelsBelow(userData.employedID)
         if (levelError) throw levelError
         if (!levelData) return
-        console.log('Level data:', levelData)
+
         setUserRole((() => {
           if (levelData.levelsBelow === 3) return 'gestionHumana'
           else if (levelData.levelsBelow === 2) return 'nivel1'
