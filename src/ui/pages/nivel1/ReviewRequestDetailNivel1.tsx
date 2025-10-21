@@ -1,23 +1,46 @@
+import type { Request, RequestRange, User } from '#domain/models.ts'
+import { requestRangeRepo, requestRepo, userRepo } from '#repository/databaseRepositoryImpl.tsx'
 import { ArrowLeft, ChevronLeft, ChevronRight } from 'lucide-react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
+import { pino } from 'pino'
+import { useVerifyAuth } from '#providers/VerifyAuthProvider.tsx'
 
-export default function ReviewRequestDetailNivel1(){
-    const navigate = useNavigate()
+const logger = pino()
+
+export default function ReviewRequestDetailNivel1() {
     const { id } = useParams()
-    const [currentMonth, setCurrentMonth] = useState(new Date(2021, 3)) // Abril 2021
-    
-    // Datos de ejemplo de la petición
-    const peticion = {
-        nombre: 'Pedrito',
-        cedula: '32.231.123',
-        departamento: 'Frontend',
-        cargo: 'Programador Frontend',
-        fechaEnvio: '23/05/2025'
-    }
+    const { user } = useVerifyAuth()
+    const requestID = Number(id)
+    const [currentMonth, setCurrentMonth] = useState(new Date())
+    const [request, setRequest] = useState<Request>()
+    const [requestPrimaryRange, setRequestPrimaryRange] = useState<RequestRange>()
+    const [senderUser, setSenderUser] = useState<User>()
+    const navigate = useNavigate()
 
-    // Días seleccionados (ejemplo)
-    const diasSeleccionados = [1, 14, 22, 23, 24]
+    useEffect(() => {
+        async function fetchData() {
+            // 1. Fetch Request
+            const { data: requestData, error: requestError } = await requestRepo.getById(requestID)
+            if (requestError) throw requestError
+            if (!requestData) return
+            setRequest(requestData)
+
+            // 2. Fetch Primary Range
+            const { data: primaryRangeData, error: primaryRangeError } = await requestRangeRepo.getPrimaryByRequestId(requestID)
+            if (primaryRangeError) throw primaryRangeError
+            if (primaryRangeData) {
+                setRequestPrimaryRange(primaryRangeData)
+                setCurrentMonth(new Date(primaryRangeData.startDate))
+            }
+
+            // 3. Fetch Users
+            const { data: senderData, error: senderError } = await userRepo.getById(requestData.senderID)
+            if (senderError) throw senderError
+            if (senderData) setSenderUser(senderData)
+        }
+        fetchData()
+    }, [requestID])
 
     const getDaysInMonth = (date: Date) => {
         const year = date.getFullYear()
@@ -38,44 +61,67 @@ export default function ReviewRequestDetailNivel1(){
         setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1))
     }
 
+    function onApprove() {
+        requestRepo.update(requestID, {
+            requestID: requestID,
+            receiverID: user?.reportTo,
+        }).then(({error}) => {
+            if (error) logger.error(error)
+            else navigate('/nivel2/review')
+        })
+    }
+    function onDeny() {
+        requestRepo.update(requestID, {
+            requestID: requestID,
+            status: 'rejected'
+        }).then(({error}) => {
+            if (error) logger.error(error)
+            else navigate('/nivel2/review')
+        })
+    }
+
     return (
         <div className="p-6" style={{ fontFamily: 'Poppins, sans-serif' }}>
             {/* Header con botón de regresar y usuario */}
             <div className="flex justify-between items-center mb-6">
-                <button 
-                    onClick={() => navigate('/nivel1/review')}
+                <button
+                    onClick={() => navigate('/nivel2/review')}
                     className="flex items-center gap-2 bg-primary text-white px-4 py-2 rounded-lg hover:bg-primaryVar transition-colors"
                 >
                     <ArrowLeft size={20} />
                     <span className="text-sm">Revisar peticiones</span>
                 </button>
-                <div className="text-right">
-                    <div className="text-sm font-medium text-onsurface">Agustín (Líder Nivel 2)</div>
-                    <div className="text-xs text-gray-500">agustin.25@correo.com</div>
-                </div>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 {/* Información de la petición */}
                 <div className="bg-white rounded-lg shadow-sm p-6">
-                    <h1 className="text-3xl font-bold text-onsurface mb-6">{peticion.nombre}</h1>
-                    
+                    <h1 className="text-3xl font-bold text-onsurface mb-6">{senderUser?.name}</h1>
+
                     <div className="space-y-4">
                         <div className="flex justify-between py-2 border-b">
-                            <span className="text-gray-600">Cédula:</span>
-                            <span className="font-medium text-onsurface">{peticion.cedula}</span>
+                            <span className="text-gray-600">Id de empleado:</span>
+                            <span className="font-medium text-onsurface">{senderUser?.employedID}</span>
                         </div>
                         <div className="flex justify-between py-2 border-b">
                             <span className="text-gray-600">Departamento:</span>
-                            <span className="font-medium text-onsurface">{peticion.departamento}</span>
+                            <span className="font-medium text-onsurface">{senderUser?.area}</span>
                         </div>
                         <div className="flex justify-between py-2 border-b">
                             <span className="text-gray-600">Cargo:</span>
-                            <span className="font-medium text-onsurface">{peticion.cargo}</span>
+                            <span className="font-medium text-onsurface">{senderUser?.position}</span>
                         </div>
                         <div className="flex justify-between py-2 border-b">
                             <span className="text-gray-600">Fecha de envío:</span>
-                            <span className="font-medium text-onsurface">{peticion.fechaEnvio}</span>
+                            <span className="font-medium text-onsurface">{request?.created_at.toLocaleDateString('es-ES')}</span>
+                        </div>
+                        <div className="flex justify-between py-2 border-b">
+                            <span className="text-gray-600">Inicio vacaciones:</span>
+                            <span className="font-medium text-onsurface">{requestPrimaryRange?.startDate.toLocaleDateString('es-ES')}</span>
+                        </div>
+                        <div className="flex justify-between py-2 border-b">
+                            <span className="text-gray-600">Fin vacaciones:</span>
+                            <span className="font-medium text-onsurface">{requestPrimaryRange?.endDate.toLocaleDateString('es-ES')}</span>
                         </div>
                     </div>
                 </div>
@@ -109,9 +155,13 @@ export default function ReviewRequestDetailNivel1(){
                         ))}
                         {Array.from({ length: daysInMonth }).map((_, i) => {
                             const day = i + 1
-                            const isSelected = diasSeleccionados.includes(day)
-                            const isToday = day === 2 // Día de ejemplo como "hoy"
-                            
+                            const currentDate = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), day)
+                            const isSelected =
+                                requestPrimaryRange &&
+                                currentDate >= new Date(requestPrimaryRange.startDate) &&
+                                currentDate <= new Date(requestPrimaryRange.endDate)
+                            const isToday = currentDate.toDateString() === new Date().toDateString()
+
                             return (
                                 <div
                                     key={day}
@@ -134,10 +184,10 @@ export default function ReviewRequestDetailNivel1(){
                 <button className="flex items-center gap-2 px-2 hover:bg-gray-100 rounded-lg transition-colors">
                     <ChevronLeft size={24} className="text-onsurface" />
                 </button>
-                <button className="bg-error text-white px-12 py-3 rounded-lg hover:bg-[#C0392B] transition-colors font-medium">
+                <button onClick={onDeny} className="bg-error text-white px-12 py-3 rounded-lg hover:bg-error transition-colors font-medium">
                     Denegar
                 </button>
-                <button className="bg-success text-white px-12 py-3 rounded-lg hover:bg-[#27AE60] transition-colors font-medium">
+                <button onClick={onApprove} className="bg-success text-white px-12 py-3 rounded-lg hover:bg-success transition-colors font-medium">
                     Aprobar
                 </button>
                 <button className="flex items-center gap-2 px-2 hover:bg-gray-100 rounded-lg transition-colors">

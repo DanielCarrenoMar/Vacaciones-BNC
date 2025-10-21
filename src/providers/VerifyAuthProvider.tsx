@@ -86,7 +86,13 @@ export const VerifyAuthProvider: React.FC<{ children: React.ReactNode }> = ({ ch
     const { data: subscription } = supabase.auth.onAuthStateChange((_event, session) => {
       if (!mounted) return
       setSession(session ?? null)
-      fetchUserData(session).then(() => setLoading(false))
+      fetchUserData(session).then(() => {
+        setLoading(false)
+      }).catch((err) => {
+        logger.error('Error fetching user data on auth state change', err)
+        setUser(null)
+        setLoading(false)
+      })
     })
 
     return () => {
