@@ -118,10 +118,10 @@ export const requestDao = {
     return from<RequestDAO>("request", (t: any) => t.insert(payload).select().single())
   },
   update: async (id: number, payload: Partial<RequestDAO>): SupabaseResult<RequestDAO> => {
-    return from<RequestDAO>("request", (t: any) => t.update(payload).eq('id', id).select().single())
+    return from<RequestDAO>("request", (t: any) => t.update(payload).eq('requestID', id).select().single())
   },
   remove: async (id: number): SupabaseResult<null> => {
-    return from<null>("request", (t: any) => t.delete().eq('id', id))
+    return from<null>("request", (t: any) => t.delete().eq('requestID', id))
   }
 }
 
