@@ -25,7 +25,7 @@ export default function Configuration() {
     ]
 
     return (
-        <div className="h-full bg-[#F5F5F7] p-8" style={{ fontFamily: 'Poppins, sans-serif' }}>
+        <div className="h-full bg-background p-8" style={{ fontFamily: 'Poppins, sans-serif' }}>
             <div className="max-w-7xl mx-auto">
                 <h1 className="text-3xl font-bold text-[#212121] mb-8">Configuración</h1>
 

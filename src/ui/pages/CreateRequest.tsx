@@ -118,12 +118,12 @@ export default function CreateRequest(){
     }
 
     return (
-        <div className="p-6 bg-[#F5F5F7] min-h-screen" style={{ fontFamily: 'Poppins, sans-serif' }}>
+        <div className="p-6 bg-background min-h-screen" style={{ fontFamily: 'Poppins, sans-serif' }}>
             {/* Header */}
             <div className="flex justify-between items-center mb-6">
                 <button 
                     onClick={() => navigate('/my-requests')}
-                    className="flex items-center gap-2 bg-primary text-white px-4 py-2 rounded-lg hover:bg-[#3A7BC8] transition-colors"
+                    className="flex items-center gap-2 bg-primary text-white px-4 py-2 rounded-lg hover:bg-primaryVar transition-colors"
                 >
                     <ArrowLeft size={20} />
                     <span className="text-sm">Mis peticiones</span>
@@ -224,7 +224,7 @@ export default function CreateRequest(){
                         disabled={selectedDates.length === 0}
                         className={`flex-1 px-6 py-3 rounded-lg transition-colors font-medium flex items-center justify-center gap-2
                             ${selectedDates.length > 0 
-                                ? 'bg-primary text-white hover:bg-[#3A7BC8]' 
+                                ? 'bg-primary text-white hover:bg-primaryVar' 
                                 : 'bg-gray-300 text-gray-500 cursor-not-allowed'
                             }`}
                     >

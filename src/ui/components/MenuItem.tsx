@@ -35,7 +35,7 @@ export default function MenuItem({ icon, label, href, isCollapsed = false, onCli
         className={`flex items-center justify-center p-2 w-10 h-10 rounded-lg transition-colors ${
           isActive 
             ? 'bg-primary text-white' 
-            : 'text-[#212121] hover:bg-[#F5F5F7]'
+            : 'text-[#212121] hover:bg-background'
         }`}
         title={label}
       >

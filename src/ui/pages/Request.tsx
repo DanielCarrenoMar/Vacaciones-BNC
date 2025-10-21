@@ -98,12 +98,12 @@ export default function Request() {
     }
 
     return (
-        <div className="p-6 bg-[#F5F5F7] min-h-screen" style={{ fontFamily: 'Poppins, sans-serif' }}>
+        <div className="p-6 bg-background min-h-screen" style={{ fontFamily: 'Poppins, sans-serif' }}>
             {/* Header con botón de regresar y usuario */}
             <div className="flex justify-between items-center mb-6">
                 <button
                     onClick={() => navigate('/my-requests')}
-                    className="flex items-center gap-2 bg-primary text-white px-4 py-2 rounded-lg hover:bg-[#3A7BC8] transition-colors"
+                    className="flex items-center gap-2 bg-primary text-white px-4 py-2 rounded-lg hover:bg-primaryVar transition-colors"
                 >
                     <ArrowLeft size={20} />
                     <span className="text-sm">Mis peticiones</span>
@@ -157,7 +157,7 @@ export default function Request() {
                     </div>
 
                     {/* Botón Ver petición */}
-                    <button className="w-full bg-primary text-white py-3 rounded-lg hover:bg-[#3A7BC8] transition-colors font-medium flex items-center justify-center gap-2">
+                    <button className="w-full bg-primary text-white py-3 rounded-lg hover:bg-primaryVar transition-colors font-medium flex items-center justify-center gap-2">
                         <CalendarIcon size={20} />
                         Ver peticion
                     </button>

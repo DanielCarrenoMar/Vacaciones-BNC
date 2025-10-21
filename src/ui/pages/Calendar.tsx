@@ -163,7 +163,7 @@ export default function Calendar() {
     }
 
     return (
-        <div className="h-full bg-[#F5F5F7]" style={{ fontFamily: 'Poppins, sans-serif' }}>
+        <div className="h-full bg-background" style={{ fontFamily: 'Poppins, sans-serif' }}>
             {/* Header */}
             <div className="mb-6">
                 <h1 className="text-2xl font-semibold text-[#212121] mb-2">Calendario de Vacaciones</h1>

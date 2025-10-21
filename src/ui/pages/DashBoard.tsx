@@ -31,7 +31,7 @@ export default function DashBoard() {
     }, [])
 
     return (
-        <div className="p-6 bg-[#F5F5F7] min-h-screen" style={{ fontFamily: 'Poppins, sans-serif' }}>
+        <div className="p-6 bg-background min-h-screen" style={{ fontFamily: 'Poppins, sans-serif' }}>
             {/* Grid de secciones principales */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
                 {/* Tarjeta de Días Disponibles */}
@@ -58,7 +58,7 @@ export default function DashBoard() {
                 {/* Botón de Solicitar Vacaciones */}
                 <Link
                     to="/create-request"
-                    className="bg-primary text-white rounded-lg p-6 shadow-sm hover:bg-[#3A7BC8] transition-colors flex items-center justify-center cursor-pointer"
+                    className="bg-primary text-white rounded-lg p-6 shadow-sm hover:bg-primaryVar transition-colors flex items-center justify-center cursor-pointer"
                 >
                     <span className="text-lg font-semibold">Solicitar vacaciones</span>
                 </Link>

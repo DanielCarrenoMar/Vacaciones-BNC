@@ -31,7 +31,7 @@ export default function LogoutPage() {
   }, [navigate])
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#F5F5F7]" style={{ fontFamily: 'Poppins, sans-serif' }}>
+    <div className="min-h-screen flex items-center justify-center bg-background" style={{ fontFamily: 'Poppins, sans-serif' }}>
       <div className="text-center">
         {/* Header con avatar y nombre */}
         <div className="flex items-center justify-center gap-3 mb-8">

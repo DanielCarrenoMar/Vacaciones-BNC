@@ -89,7 +89,7 @@ export default function LateralMenu({ role }: LateralMenuProps) {
             <aside className="w-20 bg-white border-r border-gray-200 p-3 h-full flex flex-col items-center">
                 {/* Botón de toggle */}
                 <button
-                    className="flex items-center justify-center p-2 w-10 h-10 mb-4 hover:bg-[#F5F5F7] rounded-lg transition-colors text-[#212121]"
+                    className="flex items-center justify-center p-2 w-10 h-10 mb-4 hover:bg-background rounded-lg transition-colors text-[#212121]"
                     onClick={() => setIsCollapsed(!isCollapsed)}
                     title={isCollapsed ? "Expandir menú" : "Colapsar menú"}
                 >
@@ -132,7 +132,7 @@ export default function LateralMenu({ role }: LateralMenuProps) {
 
             {/* Panel principal expandido */}
             <aside
-                className={`${isCollapsed ? 'w-0 opacity-0' : 'w-80 opacity-100'} bg-[#F5F5F7] border-r border-gray-200 p-5 h-full transition-all duration-300 flex flex-col overflow-hidden`}
+                className={`${isCollapsed ? 'w-0 opacity-0' : 'w-80 opacity-100'} bg-background border-r border-gray-200 p-5 h-full transition-all duration-300 flex flex-col overflow-hidden`}
             >
                 {/* Header */}
                 <div className="mb-6 flex items-center gap-3">

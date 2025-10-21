@@ -44,7 +44,7 @@ export default function ReviewRequestDetail(){
             <div className="flex justify-between items-center mb-6">
                 <button 
                     onClick={() => navigate('/nivel1/review')}
-                    className="flex items-center gap-2 bg-primary text-white px-4 py-2 rounded-lg hover:bg-[#3A7BC8] transition-colors"
+                    className="flex items-center gap-2 bg-primary text-white px-4 py-2 rounded-lg hover:bg-primaryVar transition-colors"
                 >
                     <ArrowLeft size={20} />
                     <span className="text-sm">Revisar peticiones</span>

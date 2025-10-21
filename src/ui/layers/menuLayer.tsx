@@ -49,7 +49,7 @@ export default function MenuLayer() {
     }, [user]); // <-- Añadimos 'user' como dependencia
 
     return (
-    <div className="h-screen flex bg-[#F5F5F7] overflow-hidden">
+    <div className="h-screen flex bg-background overflow-hidden">
         <LateralMenu role={userRole ?? 'colaborador'} />
         <main className="flex-1 p-6 flex-col flex overflow-y-auto">
             <header className="mb-6">
