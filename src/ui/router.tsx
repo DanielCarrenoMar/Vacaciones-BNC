@@ -50,7 +50,7 @@ export const router = createBrowserRouter([
                     { path: "/request", element: <MyRequest /> },
                     { path: "/team", element: <Team /> },
                     { path: "/gestion/approve", element: <ApproveRequest /> },
-                    { path: "/gestion/approveDetail", element: <ApproveRequestDetail /> },
+                    { path: "/gestion/approve/:id", element: <ApproveRequestDetail /> },
                     { path: "/nivel1/review", element: <ReviewRequestNivel1 /> },
                     { path: "/nivel1/review/:id", element: <ReviewRequestDetailNivel1 /> },
                     { path: "/nivel2/dashboard", element: <DashBoardNivel2 /> },

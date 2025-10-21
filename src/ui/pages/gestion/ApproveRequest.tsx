@@ -1,4 +1,4 @@
-import type { Request, User } from '#domain/models.ts';
+import type { Request } from '#domain/models.ts';
 import { useVerifyAuth } from '#providers/VerifyAuthProvider.tsx';
 import { requestRepo, userRepo } from '#repository/databaseRepositoryImpl.tsx';
 import { Calendar } from 'lucide-react'
@@ -19,7 +19,7 @@ export default function ApproveRequest(){
             if (!user) return;
 
             // 1. Obtener las peticiones pendientes
-            const { data: requests, error: reqError } = await requestRepo.getByReceiverId(user.employedID);
+            const { data: requests, error: reqError } = await requestRepo.getFinalApproved();
             if (reqError) {
                 console.error(reqError);
                 return;
@@ -52,7 +52,7 @@ export default function ApproveRequest(){
         <div className="p-6" style={{ fontFamily: 'Poppins, sans-serif' }}>
             {/* Header con información del usuario */}
             <div className="flex justify-between items-center mb-6">
-                <h1 className="text-2xl font-semibold text-primary">Revisar Peticiones</h1>
+                <h1 className="text-2xl font-semibold text-primary">Aprobar Peticiones</h1>
             </div>
 
             {/* Contenedor principal */}
@@ -90,7 +90,7 @@ export default function ApproveRequest(){
                     {pendingReviewRequests.map((request) => (
                         <Link
                             key={request.requestID}
-                            to={`/nivel1/review/${request.requestID}`}
+                            to={`/gestion/approve/${request.requestID}`}
                             className="grid grid-cols-3 gap-4 py-4 px-3 hover:bg-gray-50 rounded-lg transition-colors border border-gray-200"
                         >
                             <div className="flex flex-col">

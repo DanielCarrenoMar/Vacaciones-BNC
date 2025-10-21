@@ -65,6 +65,7 @@ export default function ReviewRequestDetailNivel1() {
         requestRepo.update(requestID, {
             requestID: requestID,
             receiverID: user?.reportTo,
+            finalApprove: true,
         }).then(({error}) => {
             if (error) logger.error(error)
             else navigate('/nivel2/review')
