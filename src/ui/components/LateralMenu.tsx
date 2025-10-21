@@ -2,7 +2,7 @@ import type { Role } from '#domain/models.ts';
 import MenuItem from './MenuItem'
 import ConfirmModal from './ConfirmModal'
 import { LayoutDashboard, RefreshCw, FileText, Users, Calendar, Settings, LogOut, ChevronLeft, ChevronRight, TrendingUp, Rocket } from 'lucide-react'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 type LateralMenuProps = {
@@ -58,9 +58,18 @@ const itemsByRole: Record<Role, Array<MenuItem>> = {
 
 export default function LateralMenu({ role }: LateralMenuProps) {
     const items = itemsByRole[role]
-    const [isCollapsed, setIsCollapsed] = useState(true)
+    // Recuperar el estado del menú desde localStorage, por defecto colapsado
+    const [isCollapsed, setIsCollapsed] = useState(() => {
+        const saved = localStorage.getItem('menuCollapsed')
+        return saved !== null ? JSON.parse(saved) : true
+    })
     const [showLogoutModal, setShowLogoutModal] = useState(false)
     const navigate = useNavigate()
+    
+    // Guardar el estado del menú en localStorage cuando cambie
+    useEffect(() => {
+        localStorage.setItem('menuCollapsed', JSON.stringify(isCollapsed))
+    }, [isCollapsed])
     
     const principalItems = items.filter(item => item.section === 'principal')
     const sistemaItems = items.filter(item => item.section === 'sistema')

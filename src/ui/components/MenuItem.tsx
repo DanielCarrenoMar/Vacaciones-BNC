@@ -11,7 +11,21 @@ type MenuItemProps = {
 
 export default function MenuItem({ icon, label, href, isCollapsed = false, onClick }: MenuItemProps) {
   const location = useLocation()
-  const isActive = location.pathname === href
+  
+  // Mejorar la detección de ruta activa
+  let isActive = false
+  
+  // Si el href es '/' (dashboard), marcar como activo si estamos en la raíz o en cualquier ruta de dashboard
+  if (href === '/') {
+    isActive = location.pathname === '/' || 
+               location.pathname === '/dashboard' || 
+               location.pathname === '/nivel2/dashboard' || 
+               location.pathname === '/nivel1/dashboard' ||
+               location.pathname === '/gestion/dashboard'
+  } else {
+    // Para otras rutas, comparar exactamente o si es una subruta
+    isActive = location.pathname === href || location.pathname.startsWith(href + '/')
+  }
 
   if (isCollapsed) {
     return (
