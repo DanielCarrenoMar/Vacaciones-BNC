@@ -9,7 +9,7 @@ export interface User {
   position: string
   email: string
   entryDate: Date
-  reportTo?: number | null
+  reportTo: number
 }
 export function toUserModel(dao: UserDAO): User {
   return {
