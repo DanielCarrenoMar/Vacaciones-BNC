@@ -1,7 +1,7 @@
 import type { Role } from '#domain/models.ts';
 import MenuItem from './MenuItem'
 import ConfirmModal from './ConfirmModal'
-import { LayoutDashboard, RefreshCw, FileText, Users, Calendar, Settings, LogOut, ChevronLeft, ChevronRight, TrendingUp, Rocket } from 'lucide-react'
+import { LayoutDashboard, RefreshCw, FileText, Users, Calendar, Settings, LogOut, ChevronLeft, ChevronRight, TrendingUp, Rocket, CheckCircle } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 
@@ -20,6 +20,7 @@ const itemsByRole: Record<Role, Array<MenuItem>> = {
     gestionHumana: [
         { label: 'DashBoard', path: '/', icon: <LayoutDashboard size={20} />, section: 'principal' },
         { label: 'Revisar Peticiones', path: '/nivel1/review', icon: <RefreshCw size={20} />, section: 'principal' },
+        { label: 'Aprobar Peticiones', path: '/gestion/approve', icon: <CheckCircle size={20} />, section: 'principal' },
         { label: 'Mis Peticiones', path: '/my-requests', icon: <FileText size={20} />, section: 'principal' },
         { label: 'Estadísticas', path: '/statistics', icon: <TrendingUp size={20} />, section: 'principal' },
         { label: 'Asistente', path: '/assistant', icon: <Rocket size={20} />, section: 'principal' },

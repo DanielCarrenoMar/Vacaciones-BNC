@@ -20,6 +20,7 @@ import RedirectBase from "#ui/pages/RedirectBase.tsx";
 import DashBoard from "./pages/DashBoard";
 import ReviewRequestNivel1 from "./pages/nivel1/ReviewRequestNivel1";
 import ReviewRequestDetailNivel1 from "#ui/pages/nivel1/ReviewRequestDetailNivel1.tsx";
+import ApproveRequestDetail from "./pages/gestion/ApproveRequestDetail";
 
 // Root routes: wrap all routes with VerifyAuthProvider so that
 // the provider can use react-router hooks (useNavigate/useLocation).
@@ -49,6 +50,7 @@ export const router = createBrowserRouter([
                     { path: "/request", element: <MyRequest /> },
                     { path: "/team", element: <Team /> },
                     { path: "/gestion/approve", element: <ApproveRequest /> },
+                    { path: "/gestion/approveDetail", element: <ApproveRequestDetail /> },
                     { path: "/nivel1/review", element: <ReviewRequestNivel1 /> },
                     { path: "/nivel1/review/:id", element: <ReviewRequestDetailNivel1 /> },
                     { path: "/nivel2/dashboard", element: <DashBoardNivel2 /> },
