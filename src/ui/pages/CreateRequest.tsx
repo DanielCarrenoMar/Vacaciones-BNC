@@ -97,7 +97,7 @@ export default function CreateRequest(){
             senderID: user!.employedID,
             receiverID: user!.reportTo,
             status: 'waiting',
-            message: `Solicitud de vacaciones desde el día ${startDate} hasta el día ${endDate}`,
+            message: `Solicitud de vacaciones desde el día ${startDate} hasta el día ${endDate}`
         })
         if (requestError) {
             logger.error('Error creating request:', requestError)

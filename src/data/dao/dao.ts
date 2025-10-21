@@ -26,7 +26,7 @@ export interface RequestDAO {
   status: Status
   senderID: number
   receiverID: number
-  message?: string | null
+  message: string | null
   finalApprove: boolean
 }
 
