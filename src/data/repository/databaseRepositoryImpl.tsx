@@ -1,5 +1,5 @@
 import { toRequestModel, toRequestRangeModel, toUserModel, toVacationModel, type Request, type RequestRange, type User, type Vacation } from '#domain/models.ts';
-import type { RequestDAO, SupabaseResult, UserDAO, VacationDAO } from '#data/dao/dao.ts';
+import type { RequestDAO, RequestRangeDAO, SupabaseResult, UserDAO, VacationDAO } from '#data/dao/dao.ts';
 import { userDao, vacationDao, requestDao, requestRangeDao } from '#data/dao/databaseDao.tsx';
 import supabase from '#data/supabase.ts'
 
@@ -246,7 +246,7 @@ export const requestRepo = {
     const modelData = (data || []).map(r => toRequestModel(r))
     return { data: modelData, error: null }
   },
-  create: async (payload: Omit<RequestDAO, 'id' | 'created_at' | 'update_at'>): SupabaseResult<Request> => {
+  create: async (payload: Omit<RequestDAO, 'requestID' | 'created_at' | 'update_at'>): SupabaseResult<Request> => {
     const { data, error } = await requestDao.create(payload)
     if (error) return { data: null, error }
     if (!data) return { data: null, error: null }
@@ -272,6 +272,13 @@ export const requestRangeRepo = {
     const { data, error } = await requestRangeDao.getByRequestId(requestID)
     if (error) return { data: null, error }
     const modelData = (data || []).map(r => toRequestRangeModel(r))
+    return { data: modelData, error: null }
+  },
+  create: async (payload: Omit<RequestRangeDAO, 'requestRangeID'>): SupabaseResult<RequestRange> => {
+    const { data, error } = await requestRangeDao.create(payload)
+    if (error) return { data: null, error }
+    if (!data) return { data: null, error: null }
+    const modelData = toRequestRangeModel(data)
     return { data: modelData, error: null }
   }
 }

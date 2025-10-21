@@ -18,7 +18,7 @@ export interface VacationDAO {
 }
 
 export interface RequestDAO {
-  id: number
+  requestID: number
   created_at: string
   update_at: string
   status: string
@@ -30,6 +30,6 @@ export interface RequestDAO {
 export interface RequestRangeDAO {
   requestRangeID: number
   requestID: number
-  start_date: string
-  end_date: string
+  startDate: string
+  endDate: string
 }

@@ -89,7 +89,7 @@ export const requestDao = {
   getByReceiverId: async (employedID: number): SupabaseResult<RequestDAO[]> => {
     return from<RequestDAO[]>("request", (t: any) => t.select('*').eq('receiverID', employedID))
   },
-  create: async (payload: Omit<RequestDAO, 'id' | 'created_at' | 'update_at'>): SupabaseResult<RequestDAO> => {
+  create: async (payload: Omit<RequestDAO, 'requestID' | 'created_at' | 'update_at'>): SupabaseResult<RequestDAO> => {
     return from<RequestDAO>("request", (t: any) => t.insert(payload).select().single())
   },
   update: async (id: number, payload: Partial<RequestDAO>): SupabaseResult<RequestDAO> => {
@@ -102,7 +102,10 @@ export const requestDao = {
 
 export const requestRangeDao = {
   getByRequestId: async (requestID: number): SupabaseResult<RequestRangeDAO[]> => {
-    return from<RequestRangeDAO[]>("request_range", (t: any) => t.select('*').eq('requestID', requestID))
+    return from<RequestRangeDAO[]>("requestRange", (t: any) => t.select('*').eq('requestID', requestID))
+  },
+  create: async (payload: Omit<RequestRangeDAO, 'requestRangeID'>): SupabaseResult<RequestRangeDAO> => {
+    return from<RequestRangeDAO>("requestRange", (t: any) => t.insert(payload).select().single())
   },
 }
 

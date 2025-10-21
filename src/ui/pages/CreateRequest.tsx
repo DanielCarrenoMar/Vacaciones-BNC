@@ -1,5 +1,5 @@
 import { useVerifyAuth } from '#providers/VerifyAuthProvider.tsx'
-import { requestRepo, userRepo } from '#repository/databaseRepositoryImpl.tsx'
+import { requestRangeRepo, requestRepo, userRepo } from '#repository/databaseRepositoryImpl.tsx'
 import { ArrowLeft, ChevronLeft, ChevronRight, Calendar as CalendarIcon } from 'lucide-react'
 import { pino } from 'pino'
 import { useEffect, useState } from 'react'
@@ -93,14 +93,24 @@ export default function CreateRequest(){
     }
 
     const handleCreate = async () => {
-        const {error} = await requestRepo.create({
+        const {data:requestData, error:requestError} = await requestRepo.create({
             senderID: user!.employedID,
             receiverID: user!.reportTo,
             status: 'pending',
             message: `Solicitud de vacaciones desde el día ${startDate} hasta el día ${endDate}`,
         })
+        if (requestError) {
+            logger.error('Error creating request:', requestError)
+            return
+        }
+        console.log('Request created:', requestData)
+        const {error} = await requestRangeRepo.create({
+            requestID: requestData!.requestID,
+            startDate: new Date(currentMonth.getFullYear(), currentMonth.getMonth(), startDate!).toDateString(),
+            endDate: new Date(currentMonth.getFullYear(), currentMonth.getMonth(), endDate!).toDateString(),
+        })
         if (error) {
-            logger.error('Error creating request:', error)
+            logger.error('Error creating request range:', error)
             return
         }
         navigate('/my-requests')

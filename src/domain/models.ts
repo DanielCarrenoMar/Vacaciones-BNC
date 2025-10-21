@@ -58,7 +58,7 @@ export function toVacationDao(model: Vacation): VacationDAO {
 }
 
 export interface Request {
-  id: number
+  requestID: number
   created_at: string
   update_at: string
   status: string
@@ -68,7 +68,7 @@ export interface Request {
 }
 export function toRequestModel(dao: RequestDAO): Request {
   return {
-    id: dao.id,
+    requestID: dao.requestID,
     created_at: dao.created_at,
     update_at: dao.update_at,
     status: dao.status,
@@ -79,7 +79,7 @@ export function toRequestModel(dao: RequestDAO): Request {
 }
 export function toRequestDao(model: Request): RequestDAO {
   return {
-    id: model.id,
+    requestID: model.requestID,
     created_at: model.created_at,
     update_at: model.update_at,
     status: model.status,
@@ -101,9 +101,9 @@ export function toRequestRangeModel(dao: RequestRangeDAO): RequestRange {
   return {
     requestRangeID: dao.requestRangeID,
     requestID: dao.requestID,
-    start_date: new Date(dao.start_date),
-    end_date: new Date(dao.end_date),
-    days: Math.floor((new Date(dao.end_date).getTime() - new Date(dao.start_date).getTime()) / (1000 * 60 * 60 * 24)) + 1
+    start_date: new Date(dao.startDate),
+    end_date: new Date(dao.endDate),
+    days: Math.floor((new Date(dao.endDate).getTime() - new Date(dao.startDate).getTime()) / (1000 * 60 * 60 * 24)) + 1
   }
 }
 
@@ -111,7 +111,7 @@ export function toRequestRangeDao(model: RequestRange): RequestRangeDAO {
   return {
     requestRangeID: model.requestRangeID,
     requestID: model.requestID,
-    start_date: model.start_date.toDateString(),
-    end_date: model.end_date.toDateString()
+    startDate: model.start_date.toDateString(),
+    endDate: model.end_date.toDateString()
   }
 }
