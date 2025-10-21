@@ -51,29 +51,7 @@ export const userRepo = {
     return { data: modelData, error: null }
   },
   getLevelsBelow: async (employedID: number): SupabaseResult<{ levelsBelow: number; totalSubordinates: number }> => {
-    try {
-      let levels = 0
-      let total = 0
-      let currentLevelIds: Array<number> = [employedID]
-
-      // Iteramos por niveles descendentes usando la columna `reportTo`.
-      while (true) {
-        // Buscar reportes cuyo reportTo está en currentLevelIds
-        const { data, error } = await supabase.from('user').select('employedID').in('reportTo', currentLevelIds)
-        if (error) return { data: null, error }
-        if (!data || data.length === 0) break
-
-        // Extraer ids para el siguiente nivel
-        const ids = data.map((r: any) => r.employedID)
-        total += ids.length
-        levels += 1
-        currentLevelIds = ids
-      }
-
-      return { data: { levelsBelow: levels, totalSubordinates: total }, error: null }
-    } catch (err) {
-      return { data: null, error: err }
-    }
+    return await userDao.getLevelsBelow(employedID)
   },
   getVacationBalance: async (employedID: number, todayParam?: string): SupabaseResult<{
     previous: { entitlement: number; taken: number; balance: number; start: string; end: string }
