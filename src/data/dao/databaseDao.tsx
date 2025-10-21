@@ -1,36 +1,34 @@
-import type { Request, User, Vacation } from '#domain/models.ts';
 import supabase from '../supabase'
+import type { RequestRangeDAO, UserDAO, RequestDAO, VacationDAO } from './dao';
 type SupabaseResult<T> = Promise<{ data: T | null; error: any }>
 
-// Helpers genéricos
 async function from<T>(table: string, query: (q: any) => any): SupabaseResult<T> {
   const { data, error } = await query(supabase.from(table))
   return { data: data as T | null, error }
 }
 
-// User CRUD
 export const userDao = {
-  getAll: async (): SupabaseResult<User[]> => {
-    return from<User[]>("user", (t: any) => t.select('*'))
+  getAll: async (): SupabaseResult<UserDAO[]> => {
+    return from<UserDAO[]>("user", (t: any) => t.select('*'))
   },
-  getById: async (employedID: number): SupabaseResult<User> => {
-    return from<User>("user", (t: any) => t.select('*').eq('employedID', employedID).single())
+  getById: async (employedID: number): SupabaseResult<UserDAO> => {
+    return from<UserDAO>("user", (t: any) => t.select('*').eq('employedID', employedID).single())
   },
-  getByEmail: async (email: string): SupabaseResult<User> => {
-    return from<User>("user", (t: any) => t.select('*').eq('email', email).single())
+  getByEmail: async (email: string): SupabaseResult<UserDAO> => {
+    return from<UserDAO>("user", (t: any) => t.select('*').eq('email', email).single())
   },
-  create: async (payload: User): SupabaseResult<User> => {
-    return from<User>("user", (t: any) => t.insert(payload).select().single())
+  create: async (payload: UserDAO): SupabaseResult<UserDAO> => {
+    return from<UserDAO>("user", (t: any) => t.insert(payload).select().single())
   },
-  update: async (employedID: string, payload: Partial<User>): SupabaseResult<User> => {
-    return from<User>("user", (t: any) => t.update(payload).eq('employedID', employedID).select().single())
+  update: async (employedID: string, payload: Partial<UserDAO>): SupabaseResult<UserDAO> => {
+    return from<UserDAO>("user", (t: any) => t.update(payload).eq('employedID', employedID).select().single())
   },
   remove: async (employedID: number): SupabaseResult<null> => {
     return from<null>("user", (t: any) => t.delete().eq('employedID', employedID))
   },
   // Devuelve los reportes directos (usuarios cuyo reportTo === employedID)
-  getDirectReports: async (employedID: string): SupabaseResult<User[]> => {
-    return from<User[]>("user", (t: any) => t.select('*').eq('reportTo', employedID))
+  getDirectReports: async (employedID: string): SupabaseResult<UserDAO[]> => {
+    return from<UserDAO[]>("user", (t: any) => t.select('*').eq('reportTo', employedID))
   },
   getLevelsBelow: async (employedID: number): SupabaseResult<{ levelsBelow: number; totalSubordinates: number }> => {
     try {
@@ -61,7 +59,7 @@ export const userDao = {
     try {
       const { data: user, error: userError } = await userDao.getByEmail(email);
       if (userError) return { data: null, error: userError };
-      if (!user) return { data: null, error: 'User not found' };
+      if (!user) return { data: null, error: 'UserDAO not found' };
       return userDao.getLevelsBelow(user.employedID);
     } catch (err) {
       return { data: null, error: err }
@@ -81,7 +79,7 @@ export const userDao = {
       // obtener usuario
       const { data: user, error: userError } = await userDao.getById(employedID)
       if (userError) return { data: null, error: userError }
-      if (!user) return { data: null, error: 'User not found' }
+      if (!user) return { data: null, error: 'UserDAO not found' }
 
       const entry = new Date((user as any).entryDate)
 
@@ -180,50 +178,56 @@ export const userDao = {
   }
 }
 
-// Vacation CRUD
+// VacationDAO CRUD
 export const vacationDao = {
-  getAll: async (): SupabaseResult<Vacation[]> => {
-    return from<Vacation[]>("vacation", (t: any) => t.select('*'))
+  getAll: async (): SupabaseResult<VacationDAO[]> => {
+    return from<VacationDAO[]>("vacation", (t: any) => t.select('*'))
   },
-  getById: async (id: number): SupabaseResult<Vacation> => {
-    return from<Vacation>("vacation", (t: any) => t.select('*').eq('id', id).single())
+  getById: async (id: number): SupabaseResult<VacationDAO> => {
+    return from<VacationDAO>("vacation", (t: any) => t.select('*').eq('id', id).single())
   },
-  create: async (payload: Omit<Vacation, 'id'>): SupabaseResult<Vacation> => {
-    return from<Vacation>("vacation", (t: any) => t.insert(payload).select().single())
+  create: async (payload: Omit<VacationDAO, 'id'>): SupabaseResult<VacationDAO> => {
+    return from<VacationDAO>("vacation", (t: any) => t.insert(payload).select().single())
   },
-  update: async (id: number, payload: Partial<Vacation>): SupabaseResult<Vacation> => {
-    return from<Vacation>("vacation", (t: any) => t.update(payload).eq('id', id).select().single())
+  update: async (id: number, payload: Partial<VacationDAO>): SupabaseResult<VacationDAO> => {
+    return from<VacationDAO>("vacation", (t: any) => t.update(payload).eq('id', id).select().single())
   },
   remove: async (id: number): SupabaseResult<null> => {
     return from<null>("vacation", (t: any) => t.delete().eq('id', id))
   },
 }
 
-// Request CRUD
 export const requestDao = {
-  getAll: async (): SupabaseResult<Request[]> => {
-    return from<Request[]>("request", (t: any) => t.select('*'))
+  getAll: async (): SupabaseResult<RequestDAO[]> => {
+    return from<RequestDAO[]>("request", (t: any) => t.select('*'))
   },
-  getById: async (id: number): SupabaseResult<Request> => {
-    return from<Request>("request", (t: any) => t.select('*').eq('id', id).single())
+  getById: async (id: number): SupabaseResult<RequestDAO> => {
+    return from<RequestDAO>("request", (t: any) => t.select('*').eq('id', id).single())
   },
-  getByUserId: async (employedID: number): SupabaseResult<Request[]> => {
-    return from<Request[]>("request", (t: any) => t.select('*').eq('employedID', employedID))
+  getByUserId: async (employedID: number): SupabaseResult<RequestDAO[]> => {
+    return from<RequestDAO[]>("request", (t: any) => t.select('*').eq('employedID', employedID))
   },
-  create: async (payload: Omit<Request, 'id' | 'created_at' | 'update_at'>): SupabaseResult<Request> => {
-    return from<Request>("request", (t: any) => t.insert(payload).select().single())
+  create: async (payload: Omit<RequestDAO, 'id' | 'created_at' | 'update_at'>): SupabaseResult<RequestDAO> => {
+    return from<RequestDAO>("request", (t: any) => t.insert(payload).select().single())
   },
-  update: async (id: number, payload: Partial<Request>): SupabaseResult<Request> => {
-    return from<Request>("request", (t: any) => t.update(payload).eq('id', id).select().single())
+  update: async (id: number, payload: Partial<RequestDAO>): SupabaseResult<RequestDAO> => {
+    return from<RequestDAO>("request", (t: any) => t.update(payload).eq('id', id).select().single())
   },
   remove: async (id: number): SupabaseResult<null> => {
     return from<null>("request", (t: any) => t.delete().eq('id', id))
   }
 }
 
+export const requestRangeDao = {
+  getByRequestId: async (requestID: number): SupabaseResult<RequestRangeDAO[]> => {
+    return from<RequestRangeDAO[]>("request_range", (t: any) => t.select('*').eq('requestID', requestID))
+  },
+}
+
 // Ejemplo de uso exportado por conveniencia
 export default {
   userDao,
   vacationDao,
-  requestDao
+  requestDao,
+  requestRangeDao
 }

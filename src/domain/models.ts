@@ -1,4 +1,4 @@
-import type { RequestDAO, UserDAO, VacationDAO } from "#data/dao/dao.ts"
+import type { RequestDAO, RequestRangeDAO, UserDAO, VacationDAO } from "#data/dao/dao.ts"
 
 export type Role = 'colaborador' | 'nivel2' | 'nivel1' | 'gestionHumana'
 
@@ -8,7 +8,7 @@ export interface User {
   area: string
   position: string
   email: string
-  entryDate: string
+  entryDate: Date
   reportTo?: number | null
 }
 export function toUserModel(dao: UserDAO): User {
@@ -18,7 +18,7 @@ export function toUserModel(dao: UserDAO): User {
     area: dao.area,
     position: dao.position,
     email: dao.email,
-    entryDate: dao.entryDate,
+    entryDate: new Date(dao.entryDate),
     reportTo: dao.reportTo
   }
 }
@@ -29,7 +29,7 @@ export function toUserDao( model: User ): UserDAO {
     area: model.area,
     position: model.position,
     email: model.email,
-    entryDate: model.entryDate,
+    entryDate: model.entryDate.toDateString(),
     reportTo: model.reportTo
   }
 }
@@ -86,5 +86,32 @@ export function toRequestDao(model: Request): RequestDAO {
     senderID: model.senderID,
     receiverID: model.receiverID,
     message: model.message
+  }
+}
+
+export interface RequestRange {
+  requestRangeID: number
+  requestID: number
+  start_date: Date
+  end_date: Date
+  days: number
+}
+
+export function toRequestRangeModel(dao: RequestRangeDAO): RequestRange {
+  return {
+    requestRangeID: dao.requestRangeID,
+    requestID: dao.requestID,
+    start_date: new Date(dao.start_date),
+    end_date: new Date(dao.end_date),
+    days: Math.floor((new Date(dao.end_date).getTime() - new Date(dao.start_date).getTime()) / (1000 * 60 * 60 * 24)) + 1
+  }
+}
+
+export function toRequestRangeDao(model: RequestRange): RequestRangeDAO {
+  return {
+    requestRangeID: model.requestRangeID,
+    requestID: model.requestID,
+    start_date: model.start_date.toDateString(),
+    end_date: model.end_date.toDateString()
   }
 }

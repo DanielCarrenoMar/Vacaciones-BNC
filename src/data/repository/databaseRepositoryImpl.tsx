@@ -1,10 +1,8 @@
-import { toRequestDao, toRequestModel, toUserDao, toUserModel, toVacationDao, toVacationModel, type Request, type User, type Vacation } from '#domain/models.ts';
+import { toRequestModel, toRequestRangeModel, toUserModel, toVacationModel, type Request, type RequestRange, type User, type Vacation } from '#domain/models.ts';
 import type { RequestDAO, SupabaseResult, UserDAO, VacationDAO } from '#data/dao/dao.ts';
-import { userDao, vacationDao, requestDao } from '#data/dao/databaseDao.tsx';
+import { userDao, vacationDao, requestDao, requestRangeDao } from '#data/dao/databaseDao.tsx';
 import supabase from '#data/supabase.ts'
 
-
-// User CRUD
 export const userRepo = {
   getAll: async (): SupabaseResult<User[]> => {
     const { data, error } = await userDao.getAll()
@@ -200,7 +198,6 @@ export const userRepo = {
   }
 }
 
-// Vacation CRUD
 export const vacationRepo = {
   getAll: async (): SupabaseResult<Vacation[]> => {
     const { data, error } = await vacationDao.getAll()
@@ -236,7 +233,6 @@ export const vacationRepo = {
   },
 }
 
-// Request CRUD
 export const requestRepo = {
   getAll: async (): SupabaseResult<Request[]> => {
     const { data, error } = await requestDao.getAll()
@@ -275,6 +271,15 @@ export const requestRepo = {
     const { data, error } = await requestDao.remove(id)
     if (error) return { data: null, error }
     return { data: data ?? null, error: null }
+  }
+}
+
+export const requestRangeRepo = {
+  getByRequestId: async (requestID: number): SupabaseResult<RequestRange[]> => {
+    const { data, error } = await requestRangeDao.getByRequestId(requestID)
+    if (error) return { data: null, error }
+    const modelData = (data || []).map(r => toRequestRangeModel(r))
+    return { data: modelData, error: null }
   }
 }
 

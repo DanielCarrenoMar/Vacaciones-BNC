@@ -26,3 +26,10 @@ export interface RequestDAO {
   receiverID: number
   message?: string | null
 }
+
+export interface RequestRangeDAO {
+  requestRangeID: number
+  requestID: number
+  start_date: string
+  end_date: string
+}
