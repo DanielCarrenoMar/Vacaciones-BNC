@@ -1,13 +1,18 @@
 import React, { createContext, useContext, useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import supabase from '../data/supabase'
+import type { User } from '#domain/models.ts'
+import { userRepo } from '#repository/databaseRepositoryImpl.tsx'
+import type { Session } from '@supabase/supabase-js'
 
 type VerifyAuthContextType = {
   loading: boolean
   session: any | null
+  user: User | null
+  levelUser: number | null
 }
 
-const VerifyAuthContext = createContext<VerifyAuthContextType>({ loading: true, session: null })
+const VerifyAuthContext = createContext<VerifyAuthContextType>({ loading: true, session: null, user: null, levelUser: null })
 
 export const useVerifyAuth = () => useContext(VerifyAuthContext)
 
@@ -15,11 +20,28 @@ export const useVerifyAuth = () => useContext(VerifyAuthContext)
 export const VerifyAuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [loading, setLoading] = useState(true)
   const [session, setSession] = useState<any | null>(null)
+  const [user, setUser] = useState<User | null>(null)
+  const [levelUser, setLevelUser] = useState<number | null>(null)
   const navigate = useNavigate()
   const location = useLocation()
 
   useEffect(() => {
     let mounted = true
+
+    async function fetchUserData(session: Session | null){
+      if (session) {
+          if (!session?.user?.email) return
+          const { data: userData, error: userError } = await userRepo.getByEmail(session.user.email)
+          if (userError) throw userError
+
+          if (!userData) return
+          setUser(userData)
+
+          const { data: levelData, error: levelError } = await userRepo.getLevelsBelow(userData.employedID)
+          if (levelError) throw levelError
+          setLevelUser(levelData?.levelsBelow ?? null)
+        }
+    }
 
     // helper to avoid redirect loop for /auth routes
     const isAuthRoute = (path: string) => path.startsWith('/auth')
@@ -31,11 +53,12 @@ export const VerifyAuthProvider: React.FC<{ children: React.ReactNode }> = ({ ch
         if (error) throw error
         if (!mounted) return
         setSession(data.session ?? null)
+        await fetchUserData(data.session)
         setLoading(false)
 
         if (!data.session && !isAuthRoute(location.pathname)) {
           navigate('/auth/login', { replace: true })
-        }
+        } 
       } catch (err) {
         // on error, assume unauthenticated
         if (!mounted) return
@@ -53,7 +76,7 @@ export const VerifyAuthProvider: React.FC<{ children: React.ReactNode }> = ({ ch
     const { data: subscription } = supabase.auth.onAuthStateChange((_event, session) => {
       if (!mounted) return
       setSession(session ?? null)
-      setLoading(false)
+      console.log('Auth state changed:', _event, session)
       if (!session && !isAuthRoute(location.pathname)) {
         navigate('/auth/login', { replace: true })
       }
@@ -78,7 +101,7 @@ export const VerifyAuthProvider: React.FC<{ children: React.ReactNode }> = ({ ch
   }, [])
 
   return (
-    <VerifyAuthContext.Provider value={{ loading, session }}>
+    <VerifyAuthContext.Provider value={{ loading, session, user, levelUser }}>
       {children}
     </VerifyAuthContext.Provider>
   )

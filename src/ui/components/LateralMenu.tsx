@@ -51,6 +51,7 @@ export default function LateralMenu({ role }: LateralMenuProps) {
                 {items.map((it) => (
                     <MenuItem key={it.path} label={it.label} href={it.path} />
                 ))}
+                <MenuItem label="Cerrar sesión" href="/auth/logout" />
             </nav>
         </aside>
     )
