@@ -54,9 +54,9 @@ export const router = createBrowserRouter([
                     { path: "/nivel2/dashboard", element: <DashBoardNivel2 /> },
                     { path: "/nivel2/review", element: <ReviewRequestNivel2 /> },
                     { path: "/nivel2/review/:id", element: <ReviewRequestDetailNivel2 /> },
+                    { path: "/request/:id", element: <Request /> },
                 ]
             },
-            { path: "/request/:id", element: <Request /> },
         ],
     },
 ])
