@@ -53,10 +53,6 @@ export default function ReviewRequestNivel2(){
             {/* Header con información del usuario */}
             <div className="flex justify-between items-center mb-6">
                 <h1 className="text-2xl font-semibold text-primary">Revisar Peticiones</h1>
-                <div className="text-right">
-                    <div className="text-sm font-medium text-onsurface">Líder Nivel 1</div>
-                    <div className="text-xs text-gray-500">lider.nivel1@correo.com</div>
-                </div>
             </div>
 
             {/* Contenedor principal */}
