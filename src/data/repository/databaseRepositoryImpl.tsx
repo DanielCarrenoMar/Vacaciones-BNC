@@ -157,15 +157,12 @@ export const userRepo = {
 
       const prevEntitlement = entitlementForPeriod(prevStart, prevEnd)
       const currEntitlement = entitlementForPeriod(currStart, currEnd)
-      console.log('Prev Entitlement:', prevEntitlement, 'Curr Entitlement:', currEntitlement)
 
       const takenPrev = await fetchTaken(prevStart, prevEnd)
       const takenCurr = await fetchTaken(currStart, currEnd)
-      console.log('Taken Prev:', takenPrev, 'Taken Curr:', takenCurr)
 
       const prevBalance = Math.round((prevEntitlement - takenPrev) * 100) / 100
       const currBalance = Math.round((currEntitlement - takenCurr) * 100) / 100
-      console.log('Prev Balance:', prevBalance, 'Curr Balance:', currBalance)
 
       const totalAvailable = Math.round((prevBalance + currBalance) * 100) / 100
 
