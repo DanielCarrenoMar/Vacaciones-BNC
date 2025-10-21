@@ -3,7 +3,7 @@ import { useVerifyAuth } from '#providers/VerifyAuthProvider.tsx';
 import { requestRepo, requestRangeRepo, userRepo } from '#data/repository/databaseRepositoryImpl.tsx';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { Download, Filter, AlertTriangle, TrendingUp, Calendar as CalendarIcon } from 'lucide-react';
-import type { User, Request, RequestRange } from '#domain/models.ts';
+import type { User } from '#domain/models.ts';
 
 type TeamMemberStats = {
     user: User
@@ -36,6 +36,7 @@ export default function Statistics() {
     const [requestDetails, setRequestDetails] = useState<RequestDetail[]>([])
     const [heatMapData, setHeatMapData] = useState<HeatMapDay[]>([])
     const [loading, setLoading] = useState(true)
+    const [visibleDays, setVisibleDays] = useState(28) // Inicialmente 4 semanas
     
     // Filtros
     const [filterEmployee, setFilterEmployee] = useState<string>('all')
@@ -86,16 +87,16 @@ export default function Statistics() {
                         
                         if (requests) {
                             for (const request of requests) {
-                                const { data: ranges } = await requestRangeRepo.getByRequestId(request.id)
+                                const { data: ranges } = await requestRangeRepo.getByRequestId(request.requestID)
                                 
                                 if (ranges && ranges.length > 0) {
                                     ranges.forEach(range => {
-                                        const startDate = new Date(range.start_date)
-                                        const endDate = new Date(range.end_date)
+                                        const startDate = range.startDate
+                                        const endDate = range.endDate
                                         
                                         // Agregar a detalles
                                         details.push({
-                                            id: request.id,
+                                            id: request.requestID,
                                             employeeName: member.name,
                                             startDate: startDate,
                                             endDate: endDate,
@@ -108,7 +109,7 @@ export default function Statistics() {
                                         monthlyData[months[monthIndex]] += range.days
 
                                         // Agregar al mapa de calor (solo aprobadas)
-                                        if (request.status === 'Aprobada') {
+                                        if (request.status === 'approved') {
                                             const currentDate = new Date(startDate)
                                             while (currentDate <= endDate) {
                                                 const dateKey = currentDate.toISOString().split('T')[0]
@@ -208,6 +209,16 @@ export default function Statistics() {
 
     // Empleados únicos para el filtro
     const uniqueEmployees = Array.from(new Set(requestDetails.map(d => d.employeeName)))
+
+    // Helper para convertir Status a texto legible
+    const getStatusLabel = (status: string) => {
+        switch (status) {
+            case 'approved': return 'Aprobada'
+            case 'waiting': return 'En espera'
+            case 'rejected': return 'Rechazada'
+            default: return status
+        }
+    }
 
     return (
         <div className="p-6 bg-background min-h-screen" style={{ fontFamily: 'Poppins, sans-serif' }}>
@@ -313,7 +324,7 @@ export default function Statistics() {
 
                         {/* Mapa de calor simplificado por semanas */}
                         <div className="grid grid-cols-7 gap-1">
-                            {heatMapData.slice(0, 84).map((day, index) => (
+                            {heatMapData.slice(0, visibleDays).map((day, index) => (
                                 <div
                                     key={index}
                                     className={`aspect-square ${getHeatColor(day.count)} rounded flex items-center justify-center text-xs font-medium hover:ring-2 hover:ring-primary transition-all cursor-pointer`}
@@ -323,6 +334,19 @@ export default function Statistics() {
                                 </div>
                             ))}
                         </div>
+
+                        {/* Botón Ver más días */}
+                        {visibleDays < 90 && (
+                            <div className="mt-4 flex justify-center">
+                                <button
+                                    onClick={() => setVisibleDays(prev => Math.min(prev + 28, 90))}
+                                    className="px-6 py-2 bg-primary text-white rounded-lg hover:bg-primaryVar transition-colors flex items-center gap-2"
+                                >
+                                    <CalendarIcon size={16} />
+                                    <span>Ver más días ({Math.min(28, 90 - visibleDays)} días más)</span>
+                                </button>
+                            </div>
+                        )}
 
                         <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
                             <p className="text-sm text-blue-800">
@@ -408,10 +432,9 @@ export default function Statistics() {
                                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
                                 >
                                     <option value="all">Todos</option>
-                                    <option value="Aprobada">Aprobada</option>
-                                    <option value="En espera">En espera</option>
-                                    <option value="Rechazada">Rechazada</option>
-                                    <option value="Posibles días">Posibles días</option>
+                                    <option value="approved">Aprobada</option>
+                                    <option value="waiting">En espera</option>
+                                    <option value="rejected">Rechazada</option>
                                 </select>
                             </div>
 
@@ -462,12 +485,12 @@ export default function Statistics() {
                                                 <td className="py-3 px-4 text-sm font-semibold text-onsurface">{detail.days}</td>
                                                 <td className="py-3 px-4">
                                                     <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
-                                                        detail.status === 'Aprobada' ? 'bg-green-100 text-green-800' :
-                                                        detail.status === 'En espera' ? 'bg-orange-100 text-orange-800' :
-                                                        detail.status === 'Rechazada' ? 'bg-red-100 text-red-800' :
+                                                        detail.status === 'approved' ? 'bg-green-100 text-green-800' :
+                                                        detail.status === 'waiting' ? 'bg-orange-100 text-orange-800' :
+                                                        detail.status === 'rejected' ? 'bg-red-100 text-red-800' :
                                                         'bg-blue-100 text-blue-800'
                                                     }`}>
-                                                        {detail.status}
+                                                        {getStatusLabel(detail.status)}
                                                     </span>
                                                 </td>
                                             </tr>
