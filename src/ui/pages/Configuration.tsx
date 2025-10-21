@@ -1,9 +1,11 @@
 import { useState } from 'react'
 import { User, Shield, Bell, Palette, HelpCircle, ChevronRight, Camera, Phone, Mail, Lock, Globe, Moon, Sun, Monitor } from 'lucide-react'
+import { useVerifyAuth } from '#providers/VerifyAuthProvider.tsx'
 
 type ConfigSection = 'profile' | 'security' | 'notifications' | 'appearance' | 'help'
 
 export default function Configuration() {
+    const { user } = useVerifyAuth()
     const [activeSection, setActiveSection] = useState<ConfigSection>('profile')
     const [phoneNumber, setPhoneNumber] = useState('')
     const [emailNotifications, setEmailNotifications] = useState(true)
@@ -53,7 +55,7 @@ export default function Configuration() {
 
                     {/* Contenido principal */}
                     <main className="flex-1 bg-white rounded-lg shadow-sm p-8">
-                        {activeSection === 'profile' && <ProfileSection phoneNumber={phoneNumber} setPhoneNumber={setPhoneNumber} />}
+                        {activeSection === 'profile' && <ProfileSection user={user} phoneNumber={phoneNumber} setPhoneNumber={setPhoneNumber} />}
                         {activeSection === 'security' && <SecuritySection />}
                         {activeSection === 'notifications' && (
                             <NotificationsSection
@@ -86,7 +88,7 @@ export default function Configuration() {
 }
 
 // Sección de Perfil
-function ProfileSection({ phoneNumber, setPhoneNumber }: { phoneNumber: string; setPhoneNumber: (v: string) => void }) {
+function ProfileSection({ user, phoneNumber, setPhoneNumber }: { user: any; phoneNumber: string; setPhoneNumber: (v: string) => void }) {
     return (
         <div>
             <h2 className="text-2xl font-bold text-[#212121] mb-6">Gestión de Perfil</h2>
@@ -113,7 +115,7 @@ function ProfileSection({ phoneNumber, setPhoneNumber }: { phoneNumber: string; 
                         <label className="block text-sm font-medium text-gray-600 mb-1">Nombre</label>
                         <input
                             type="text"
-                            value="Pedrito"
+                            value={user?.name || ''}
                             disabled
                             className="w-full px-4 py-2 bg-gray-100 border border-gray-200 rounded-lg text-gray-700 cursor-not-allowed"
                         />
@@ -122,7 +124,7 @@ function ProfileSection({ phoneNumber, setPhoneNumber }: { phoneNumber: string; 
                         <label className="block text-sm font-medium text-gray-600 mb-1">Cédula</label>
                         <input
                             type="text"
-                            value="V-12.345.678"
+                            value={user?.idNumber || ''}
                             disabled
                             className="w-full px-4 py-2 bg-gray-100 border border-gray-200 rounded-lg text-gray-700 cursor-not-allowed"
                         />
@@ -131,7 +133,7 @@ function ProfileSection({ phoneNumber, setPhoneNumber }: { phoneNumber: string; 
                         <label className="block text-sm font-medium text-gray-600 mb-1">Cargo</label>
                         <input
                             type="text"
-                            value="Programador Frontend"
+                            value={user?.position || ''}
                             disabled
                             className="w-full px-4 py-2 bg-gray-100 border border-gray-200 rounded-lg text-gray-700 cursor-not-allowed"
                         />
@@ -140,7 +142,7 @@ function ProfileSection({ phoneNumber, setPhoneNumber }: { phoneNumber: string; 
                         <label className="block text-sm font-medium text-gray-600 mb-1">Departamento</label>
                         <input
                             type="text"
-                            value="Frontend"
+                            value={user?.department || ''}
                             disabled
                             className="w-full px-4 py-2 bg-gray-100 border border-gray-200 rounded-lg text-gray-700 cursor-not-allowed"
                         />
@@ -158,7 +160,7 @@ function ProfileSection({ phoneNumber, setPhoneNumber }: { phoneNumber: string; 
                             <Mail size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                             <input
                                 type="email"
-                                value="pedrito.24@correo.com"
+                                value={user?.email || ''}
                                 disabled
                                 className="w-full pl-10 pr-4 py-2 bg-gray-100 border border-gray-200 rounded-lg text-gray-700 cursor-not-allowed"
                             />
@@ -187,7 +189,7 @@ function ProfileSection({ phoneNumber, setPhoneNumber }: { phoneNumber: string; 
                     <label className="block text-sm font-medium text-gray-600 mb-1">Supervisor Directo</label>
                     <input
                         type="text"
-                        value="María González"
+                        value={user?.supervisorName || 'No asignado'}
                         disabled
                         className="w-full px-4 py-2 bg-gray-100 border border-gray-200 rounded-lg text-gray-700 cursor-not-allowed"
                     />
