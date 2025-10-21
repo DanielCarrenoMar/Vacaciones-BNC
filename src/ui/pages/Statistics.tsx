@@ -51,7 +51,7 @@ export default function Statistics() {
 
             try {
                 // Obtener miembros del equipo
-                const { data: directReports } = await userRepo.getDirectReports(user.employedID.toString())
+                const { data: directReports } = await userRepo.getUsersBelow(user.employedID)
                 
                 if (directReports && directReports.length > 0) {
                     const stats: TeamMemberStats[] = []

@@ -44,8 +44,14 @@ export const userRepo = {
     return { data: data ?? null, error: null }
   },
   // Devuelve los reportes directos (usuarios cuyo reportTo === employedID)
-  getDirectReports: async (employedID: string): SupabaseResult<User[]> => {
+  getDirectReports: async (employedID: number): SupabaseResult<User[]> => {
     const { data, error } = await userDao.getDirectReports(employedID)
+    if (error) return { data: null, error }
+    const modelData = (data || []).map((u: any) => toUserModel(u))
+    return { data: modelData, error: null }
+  },
+  getUsersBelow: async (employedID: number): SupabaseResult<User[]> => {
+    const { data, error } = await userDao.getUsersBelow(employedID)
     if (error) return { data: null, error }
     const modelData = (data || []).map((u: any) => toUserModel(u))
     return { data: modelData, error: null }
