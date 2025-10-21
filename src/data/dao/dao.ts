@@ -1,3 +1,5 @@
+import type { Status } from "#domain/models.ts";
+
 export type SupabaseResult<T> = Promise<{ data: T | null; error: any }>
 
 export interface UserDAO {
@@ -21,7 +23,7 @@ export interface RequestDAO {
   requestID: number
   created_at: string
   update_at: string
-  status: string
+  status: Status
   senderID: number
   receiverID: number
   message?: string | null

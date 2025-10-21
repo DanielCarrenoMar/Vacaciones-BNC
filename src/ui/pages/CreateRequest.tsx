@@ -96,7 +96,7 @@ export default function CreateRequest(){
         const {data:requestData, error:requestError} = await requestRepo.create({
             senderID: user!.employedID,
             receiverID: user!.reportTo,
-            status: 'pending',
+            status: 'waiting',
             message: `Solicitud de vacaciones desde el día ${startDate} hasta el día ${endDate}`,
         })
         if (requestError) {

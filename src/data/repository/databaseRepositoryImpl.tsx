@@ -252,9 +252,7 @@ export const requestRepo = {
     const { data, error } = await requestDao.create(payload)
     if (error) return { data: null, error }
     if (!data) return { data: null, error: null }
-    const { data: daysData, error: daysError } = await requestRangeDao.getPrimaryDays(data.requestID)
-    if (daysError) return { data: null, error: daysError }
-    const modelData = toRequestModel(data, daysData!!)
+    const modelData = toRequestModel(data, 0)
     return { data: modelData, error: null }
   },
   update: async (id: number, payload: Partial<RequestDAO>): SupabaseResult<Request> => {
