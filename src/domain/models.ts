@@ -1,4 +1,5 @@
 import type { RequestDAO, RequestRangeDAO, UserDAO, VacationDAO } from "#data/dao/dao.ts"
+import { requestRangeRepo } from "#repository/databaseRepositoryImpl.tsx"
 
 export type Role = 'colaborador' | 'nivel2' | 'nivel1' | 'gestionHumana'
 
@@ -65,8 +66,9 @@ export interface Request {
   senderID: number
   receiverID: number
   message?: string | null
+  days: number
 }
-export function toRequestModel(dao: RequestDAO): Request {
+export function toRequestModel(dao: RequestDAO, days: number): Request {
   return {
     requestID: dao.requestID,
     created_at: dao.created_at,
@@ -74,7 +76,8 @@ export function toRequestModel(dao: RequestDAO): Request {
     status: dao.status,
     senderID: dao.senderID,
     receiverID: dao.receiverID,
-    message: dao.message
+    message: dao.message,
+    days: days
   }
 }
 export function toRequestDao(model: Request): RequestDAO {
@@ -95,6 +98,7 @@ export interface RequestRange {
   start_date: Date
   end_date: Date
   days: number
+  isPrimary: boolean
 }
 
 export function toRequestRangeModel(dao: RequestRangeDAO): RequestRange {
@@ -103,7 +107,8 @@ export function toRequestRangeModel(dao: RequestRangeDAO): RequestRange {
     requestID: dao.requestID,
     start_date: new Date(dao.startDate),
     end_date: new Date(dao.endDate),
-    days: Math.floor((new Date(dao.endDate).getTime() - new Date(dao.startDate).getTime()) / (1000 * 60 * 60 * 24)) + 1
+    days: Math.floor((new Date(dao.endDate).getTime() - new Date(dao.startDate).getTime()) / (1000 * 60 * 60 * 24)) + 1,
+    isPrimary: dao.isPrimary
   }
 }
 
@@ -112,6 +117,7 @@ export function toRequestRangeDao(model: RequestRange): RequestRangeDAO {
     requestRangeID: model.requestRangeID,
     requestID: model.requestID,
     startDate: model.start_date.toDateString(),
-    endDate: model.end_date.toDateString()
+    endDate: model.end_date.toDateString(),
+    isPrimary: model.isPrimary
   }
 }

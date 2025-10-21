@@ -32,4 +32,5 @@ export interface RequestRangeDAO {
   requestID: number
   startDate: string
   endDate: string
+  isPrimary: boolean
 }

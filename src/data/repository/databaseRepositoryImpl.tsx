@@ -1,4 +1,4 @@
-import { toRequestModel, toRequestRangeModel, toUserModel, toVacationModel, type Request, type RequestRange, type User, type Vacation } from '#domain/models.ts';
+import { toRequestModel, toRequestRangeDao, toRequestRangeModel, toUserModel, toVacationModel, type Request, type RequestRange, type User, type Vacation } from '#domain/models.ts';
 import type { RequestDAO, RequestRangeDAO, SupabaseResult, UserDAO, VacationDAO } from '#data/dao/dao.ts';
 import { userDao, vacationDao, requestDao, requestRangeDao } from '#data/dao/databaseDao.tsx';
 import supabase from '#data/supabase.ts'
@@ -224,40 +224,62 @@ export const requestRepo = {
   getAll: async (): SupabaseResult<Request[]> => {
     const { data, error } = await requestDao.getAll()
     if (error) return { data: null, error }
-    const modelData = (data || []).map(r => toRequestModel(r))
+
+    const modelData = await Promise.all((data || []).map(async r => {
+      const { data: daysData, error: daysError } = await requestRangeDao.getPrimaryDays(r.requestID)
+      if (daysError) throw daysError
+      return toRequestModel(r, daysData!!)
+    }))
+    
     return { data: modelData, error: null }
   },
   getById: async (id: number): SupabaseResult<Request> => {
     const { data, error } = await requestDao.getById(id)
     if (error) return { data: null, error }
     if (!data) return { data: null, error: null }
-    const modelData = toRequestModel(data)
+    const { data: daysData, error: daysError } = await requestRangeDao.getPrimaryDays(id)
+    if (daysError) return { data: null, error: daysError }
+    const modelData = toRequestModel(data, daysData!!)
     return { data: modelData, error: null }
   },
   getBySenderId: async (employedID: number): SupabaseResult<Request[]> => {
     const { data, error } = await requestDao.getBySenderId(employedID)
     if (error) return { data: null, error }
-    const modelData = (data || []).map(r => toRequestModel(r))
+
+    const modelData = await Promise.all((data || []).map(async r => {
+      const { data: daysData, error: daysError } = await requestRangeDao.getPrimaryDays(r.requestID)
+      if (daysError) throw daysError
+      return toRequestModel(r, daysData!!)
+    }))
+
     return { data: modelData, error: null }
   },
   getByReceiverId: async (employedID: number): SupabaseResult<Request[]> => {
     const { data, error } = await requestDao.getByReceiverId(employedID)
     if (error) return { data: null, error }
-    const modelData = (data || []).map(r => toRequestModel(r))
+    const modelData = await Promise.all((data || []).map(async r => {
+      const { data: daysData, error: daysError } = await requestRangeDao.getPrimaryDays(r.requestID)
+      if (daysError) throw daysError
+      return toRequestModel(r, daysData!!)
+    }))
     return { data: modelData, error: null }
   },
   create: async (payload: Omit<RequestDAO, 'requestID' | 'created_at' | 'update_at'>): SupabaseResult<Request> => {
     const { data, error } = await requestDao.create(payload)
     if (error) return { data: null, error }
     if (!data) return { data: null, error: null }
-    const modelData = toRequestModel(data)
+    const { data: daysData, error: daysError } = await requestRangeDao.getPrimaryDays(data.requestID)
+    if (daysError) return { data: null, error: daysError }
+    const modelData = toRequestModel(data, daysData!!)
     return { data: modelData, error: null }
   },
   update: async (id: number, payload: Partial<RequestDAO>): SupabaseResult<Request> => {
     const { data, error } = await requestDao.update(id, payload)
     if (error) return { data: null, error }
     if (!data) return { data: null, error: null }
-    const modelData = toRequestModel(data)
+    const { data: daysData, error: daysError } = await requestRangeDao.getPrimaryDays(id)
+    if (daysError) return { data: null, error: daysError }
+    const modelData = toRequestModel(data, daysData!!)
     return { data: modelData, error: null }
   },
   remove: async (id: number): SupabaseResult<null> => {
@@ -272,6 +294,13 @@ export const requestRangeRepo = {
     const { data, error } = await requestRangeDao.getByRequestId(requestID)
     if (error) return { data: null, error }
     const modelData = (data || []).map(r => toRequestRangeModel(r))
+    return { data: modelData, error: null }
+  },
+  getPrimaryByRequestId: async (requestID: number): SupabaseResult<RequestRange | null> => {
+    const { data, error } = await requestRangeDao.getPrimaryByRequestId(requestID)
+    if (error) return { data: null, error }
+    if (!data) return { data: null, error: null }
+    const modelData = toRequestRangeModel(data)
     return { data: modelData, error: null }
   },
   create: async (payload: Omit<RequestRangeDAO, 'requestRangeID'>): SupabaseResult<RequestRange> => {

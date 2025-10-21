@@ -108,6 +108,7 @@ export default function CreateRequest(){
             requestID: requestData!.requestID,
             startDate: new Date(currentMonth.getFullYear(), currentMonth.getMonth(), startDate!).toDateString(),
             endDate: new Date(currentMonth.getFullYear(), currentMonth.getMonth(), endDate!).toDateString(),
+            isPrimary: true
         })
         if (error) {
             logger.error('Error creating request range:', error)

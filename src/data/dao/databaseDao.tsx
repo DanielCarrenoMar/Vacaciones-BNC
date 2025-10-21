@@ -104,6 +104,19 @@ export const requestRangeDao = {
   getByRequestId: async (requestID: number): SupabaseResult<RequestRangeDAO[]> => {
     return from<RequestRangeDAO[]>("requestRange", (t: any) => t.select('*').eq('requestID', requestID))
   },
+  getPrimaryByRequestId: async (requestID: number): SupabaseResult<RequestRangeDAO> => {
+    return from<RequestRangeDAO>("requestRange", (t: any) => t.select('*').eq('requestID', requestID).eq('isPrimary', true).single())
+  },
+  getPrimaryDays: async (requestID: number): SupabaseResult<number> => {
+    const { data, error } = await from<RequestRangeDAO>("requestRange", (t: any) => t.select('*').eq('requestID', requestID).eq('isPrimary', true).single())
+    if (error) return { data: null, error }
+    if (!data) return { data: null, error: null }
+    const start = new Date(data.startDate)
+    const end = new Date(data.endDate)
+    const diffTime = Math.abs(end.getTime() - start.getTime())
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1 // +1 para incluir ambos días
+    return { data: diffDays, error: null }
+  },
   create: async (payload: Omit<RequestRangeDAO, 'requestRangeID'>): SupabaseResult<RequestRangeDAO> => {
     return from<RequestRangeDAO>("requestRange", (t: any) => t.insert(payload).select().single())
   },
