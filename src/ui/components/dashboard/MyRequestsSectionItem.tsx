@@ -6,7 +6,7 @@ interface MyRequestsItemProps {
   request: Request
 }
 
-export default function MyRequestsItem({ request }: MyRequestsItemProps) {
+export default function MyRequestsSectionItem({ request }: MyRequestsItemProps) {
   return (
     <Link
       key={request.requestID}

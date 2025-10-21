@@ -1,6 +1,6 @@
 import type { Request } from '#domain/models.ts'
 import { ChevronDown, Maximize2 } from 'lucide-react'
-import MyRequestsItem from './MyRequestsItem'
+import MyRequestsSectionItem from './MyRequestsSectionItem'
 
 interface MyRequestsSectionProps {
   userRequests: Request[]
@@ -31,7 +31,7 @@ export default function MyRequestsSection({ userRequests }: MyRequestsSectionPro
       {/* Lista de peticiones */}
       <div className="space-y-3">
         {userRequests.map((request) => (
-          <MyRequestsItem key={request.requestID} request={request} />
+          <MyRequestsSectionItem key={request.requestID} request={request} />
         ))}
       </div>
     </div>

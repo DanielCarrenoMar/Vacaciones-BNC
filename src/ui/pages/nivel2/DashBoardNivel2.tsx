@@ -4,7 +4,7 @@ import { useVerifyAuth } from '#providers/VerifyAuthProvider.tsx';
 import { requestRepo, userRepo } from '#repository/databaseRepositoryImpl.tsx';
 import { Link } from 'react-router-dom'
 import type { Request } from '#domain/models.ts';
-import MyRequestsSection from '#components/MyRequestsSection.tsx';
+import MyRequestsSection from '#ui/components/dashboard/MyRequestsSection.tsx';
 import AssistantSection from '#components/AssistantSection.tsx';
 
 export default function DashBoardNivel2() {
