@@ -1,5 +1,4 @@
 import type { Role } from '#domain/models.ts';
-import supabase from '../../data/supabase';
 import MenuItem from './MenuItem'
 import ConfirmModal from './ConfirmModal'
 import { LayoutDashboard, RefreshCw, FileText, Users, Calendar, Settings, LogOut, ChevronLeft, ChevronRight, TrendingUp, Rocket } from 'lucide-react'
