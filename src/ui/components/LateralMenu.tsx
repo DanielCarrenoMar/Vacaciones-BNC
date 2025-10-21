@@ -1,7 +1,7 @@
 import type { Role } from '#domain/models.ts';
 import MenuItem from './MenuItem'
 import ConfirmModal from './ConfirmModal'
-import { LayoutDashboard, RefreshCw, FileText, Users, Calendar, Settings, LogOut, ChevronLeft, ChevronRight, TrendingUp, Rocket, CheckCircle } from 'lucide-react'
+import { LayoutDashboard, RefreshCw, FileText, Users, Calendar, Settings, LogOut, ChevronLeft, ChevronRight, TrendingUp, Rocket, CheckCircle, Menu, X } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 
@@ -61,6 +61,7 @@ export default function LateralMenu({ role }: LateralMenuProps) {
         const saved = localStorage.getItem('menuCollapsed')
         return saved !== null ? JSON.parse(saved) : true
     })
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
     const [showLogoutModal, setShowLogoutModal] = useState(false)
     const navigate = useNavigate()
     
@@ -68,6 +69,11 @@ export default function LateralMenu({ role }: LateralMenuProps) {
     useEffect(() => {
         localStorage.setItem('menuCollapsed', JSON.stringify(isCollapsed))
     }, [isCollapsed])
+    
+    // Cerrar menú móvil cuando se cambia de ruta
+    useEffect(() => {
+        setIsMobileMenuOpen(false)
+    }, [navigate])
     
     const principalItems = items.filter(item => item.section === 'principal')
     const sistemaItems = items.filter(item => item.section === 'sistema')
@@ -82,9 +88,28 @@ export default function LateralMenu({ role }: LateralMenuProps) {
     }
 
     return (
-        <div className="flex h-full" style={{ fontFamily: 'Poppins, sans-serif' }}>
-            {isCollapsed ? 
-            <aside className="w-20 bg-white border-r border-gray-200 p-3 h-full flex flex-col items-center">
+        <>
+            {/* Botón hamburguesa para móvil */}
+            <button
+                className="md:hidden fixed top-4 left-4 z-50 p-2 bg-white rounded-lg shadow-lg text-onsurface hover:bg-gray-100 transition-colors"
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                aria-label="Toggle menu"
+            >
+                {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+            </button>
+
+            {/* Overlay para móvil */}
+            {isMobileMenuOpen && (
+                <div
+                    className="md:hidden fixed inset-0 bg-black bg-opacity-50 z-30"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                />
+            )}
+
+            <div className="flex h-full" style={{ fontFamily: 'Poppins, sans-serif' }}>
+                {/* Menú colapsado (solo desktop) */}
+                {isCollapsed ? 
+            <aside className="hidden md:flex w-20 bg-white border-r border-gray-200 p-3 h-full flex-col items-center">
                 {/* Botón de toggle */}
                 <button
                     className="flex items-center justify-center p-2 w-10 h-10 mb-4 hover:bg-background rounded-lg transition-colors text-onsurface"
@@ -128,10 +153,17 @@ export default function LateralMenu({ role }: LateralMenuProps) {
                 </div>
             </aside>:
             <aside
-                className={`${isCollapsed ? 'w-0 opacity-0' : 'w-80 opacity-100'} bg-background border-r border-gray-200 p-5 h-full transition-all duration-300 flex flex-col overflow-hidden`}
+                className={`
+                    ${isCollapsed ? 'w-0 opacity-0' : 'w-80 opacity-100'}
+                    ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
+                    fixed md:relative z-40 md:z-auto
+                    bg-background border-r border-gray-200 p-5 h-full 
+                    transition-all duration-300 flex flex-col overflow-hidden
+                `}
             >
+                {/* Botón de toggle (solo desktop) */}
                 <button
-                    className="flex items-center justify-center p-2 w-10 h-10 mb-4 hover:bg-background rounded-lg transition-colors text-onsurface"
+                    className="hidden md:flex items-center justify-center p-2 w-10 h-10 mb-4 hover:bg-background rounded-lg transition-colors text-onsurface"
                     onClick={() => setIsCollapsed(!isCollapsed)}
                     title={isCollapsed ? "Expandir menú" : "Colapsar menú"}
                 >
@@ -183,6 +215,7 @@ export default function LateralMenu({ role }: LateralMenuProps) {
                     </nav>
                 </div>
             </aside>}
+            </div>
 
             {/* Modal de confirmación de logout */}
             <ConfirmModal
@@ -194,6 +227,6 @@ export default function LateralMenu({ role }: LateralMenuProps) {
                 confirmText="Sí, cerrar sesión"
                 cancelText="Cancelar"
             />
-        </div>
+        </>
     )
 }
