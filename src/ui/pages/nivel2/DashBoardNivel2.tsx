@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import '@n8n/chat/style.css';
 import { useVerifyAuth } from '#providers/VerifyAuthProvider.tsx';
 import { requestRepo, userRepo } from '#repository/databaseRepositoryImpl.tsx';
-import { CheckCircle, ChevronDown, Maximize2, Calendar } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import type { Request } from '#domain/models.ts';
 import MyRequestsSection from '#components/MyRequestsSection.tsx';
