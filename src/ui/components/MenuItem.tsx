@@ -6,9 +6,10 @@ type MenuItemProps = {
   label: string
   href: string
   isCollapsed?: boolean
+  onClick?: () => void
 }
 
-export default function MenuItem({ icon, label, href, isCollapsed = false }: MenuItemProps) {
+export default function MenuItem({ icon, label, href, isCollapsed = false, onClick }: MenuItemProps) {
   const location = useLocation()
   const isActive = location.pathname === href
 
@@ -16,6 +17,7 @@ export default function MenuItem({ icon, label, href, isCollapsed = false }: Men
     return (
       <Link 
         to={href} 
+        onClick={onClick}
         className={`flex items-center justify-center p-2 w-10 h-10 rounded-lg transition-colors ${
           isActive 
             ? 'bg-[#4A90E2] text-white' 

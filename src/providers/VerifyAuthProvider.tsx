@@ -4,6 +4,8 @@ import supabase from '../data/supabase'
 import type { Role, User } from '#domain/models.ts'
 import { userRepo } from '#repository/databaseRepositoryImpl.tsx'
 import type { Session } from '@supabase/supabase-js'
+import LoadingPage from '#ui/components/LoadingPage.tsx'
+import pino from 'pino'
 
 type VerifyAuthContextType = {
   loading: boolean
@@ -15,9 +17,7 @@ type VerifyAuthContextType = {
 const VerifyAuthContext = createContext<VerifyAuthContextType>({ loading: true, session: null, user: null, userRole: "colaborador" })
 
 export const useVerifyAuth = () => useContext(VerifyAuthContext)
-
-// MODO DESARROLLO: Cambiar a true para simular autenticación sin Supabase
-const DEV_MODE = true
+const logger = pino()
 
 // Provider that ensures the user is authenticated. If not, redirects to /auth/login
 export const VerifyAuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -27,6 +27,18 @@ export const VerifyAuthProvider: React.FC<{ children: React.ReactNode }> = ({ ch
   const [userRole, setUserRole] = useState<Role>("colaborador")
   const navigate = useNavigate()
   const location = useLocation()
+
+  // helpers fuera del useEffect
+  const isAuthRoute = (path: string) => path.startsWith('/auth')
+  const isNivel2Route = (path: string) => path.startsWith('/nivel2')
+  const isNivel1Route = (path: string) => path.startsWith('/nivel1')
+  const isgestionRoute = (path: string) => path.startsWith('/gestion')
+
+  function redirectProtedRoute(path: string, role: Role) {
+    if (isgestionRoute(path) && role !== 'gestionHumana') navigate('/', { replace: true })
+    else if (isNivel1Route(path) && role !== 'nivel1') navigate('/', { replace: true })
+    else if (isNivel2Route(path) && role !== 'nivel2') navigate('/', { replace: true })
+  }
 
   useEffect(() => {
     let mounted = true
@@ -43,7 +55,7 @@ export const VerifyAuthProvider: React.FC<{ children: React.ReactNode }> = ({ ch
         const { data: levelData, error: levelError } = await userRepo.getLevelsBelow(userData.employedID)
         if (levelError) throw levelError
         if (!levelData) return
-        setUserRole((()=>{
+        setUserRole((() => {
           if (user?.area === "Gestión Humana") return 'gestionHumana'
           else if (levelData.levelsBelow === 2) return 'nivel1'
           else if (levelData.levelsBelow === 1) return 'nivel2'
@@ -52,35 +64,6 @@ export const VerifyAuthProvider: React.FC<{ children: React.ReactNode }> = ({ ch
       }
     }
 
-    // helper to avoid redirect loop for /auth routes
-    const isAuthRoute = (path: string) => path.startsWith('/auth')
-    const isNivel2Route = (path: string) => path.startsWith('/nivel2')
-    const isNivel1Route = (path: string) => path.startsWith('/nivel1')
-    const isgestionRoute = (path: string) => path.startsWith('/gestion')
-
-    function redirectProtedRoute(path: string) {
-      if (isgestionRoute(path) && userRole !== 'gestionHumana') navigate('/', { replace: true })
-      else if (isNivel1Route(path) && userRole !== 'nivel1') navigate('/', { replace: true })
-      else if (isNivel2Route(path) && userRole !== 'nivel2') navigate('/', { replace: true })
-    }
-
-    // MODO DESARROLLO: Simular sesión autenticada
-    if (DEV_MODE) {
-      const mockSession = {
-        user: {
-          id: 'mock-user-id',
-          email: 'pedrito.24@correo.com',
-          user_metadata: {
-            name: 'Pedrito'
-          }
-        }
-      }
-      setSession(mockSession)
-      setLoading(false)
-      return
-    }
-
-    // get initial session
     const getSession = async () => {
       try {
         const { data, error } = await supabase.auth.getSession()
@@ -89,19 +72,11 @@ export const VerifyAuthProvider: React.FC<{ children: React.ReactNode }> = ({ ch
         setSession(data.session ?? null)
         await fetchUserData(data.session)
         setLoading(false)
-
-        if (!data.session && !isAuthRoute(location.pathname)) {
-          navigate('/auth/login', { replace: true })
-        }
-        redirectProtedRoute(location.pathname)
       } catch (err) {
-        // on error, assume unauthenticated
+        logger.error('Error getting session')
         if (!mounted) return
         setSession(null)
         setLoading(false)
-        if (!isAuthRoute(location.pathname)) {
-          navigate('/auth/login', { replace: true })
-        }
       }
     }
 
@@ -111,34 +86,33 @@ export const VerifyAuthProvider: React.FC<{ children: React.ReactNode }> = ({ ch
     const { data: subscription } = supabase.auth.onAuthStateChange((_event, session) => {
       if (!mounted) return
       setSession(session ?? null)
-
-      if (!session && !isAuthRoute(location.pathname)) {
-        navigate('/auth/login', { replace: true })
-      }
-      redirectProtedRoute(location.pathname)
     })
 
     return () => {
       mounted = false
-      // unsubscribe if available (defensive for different supabase client shapes)
       try {
-        // supabase v2 returns { data: { subscription } }
-        // some typings may differ; attempt to call unsubscribe if present
-        // @ts-ignore - defensive runtime check
         const maybeSub = subscription?.subscription ?? subscription
         if (maybeSub && typeof maybeSub.unsubscribe === 'function') {
           maybeSub.unsubscribe()
         }
       } catch (e) {
-        // ignore
+        logger.error('Error unsubscribing from auth listener')
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  useEffect(() => {
+    if (!session && !isAuthRoute(location.pathname)) {
+      navigate('/auth/login', { replace: true })
+    }
+    if (!loading && user && userRole) {
+      redirectProtedRoute(location.pathname, userRole)
+    }
+  }, [loading, user, userRole, location.pathname])
 
   return (
     <VerifyAuthContext.Provider value={{ loading, session, user, userRole }}>
-      {children}
+      {loading ? <LoadingPage /> : children}
     </VerifyAuthContext.Provider>
   )
 }

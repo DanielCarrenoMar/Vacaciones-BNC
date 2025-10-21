@@ -1,4 +1,5 @@
 import type { Role } from '#domain/models.ts';
+import supabase from '../../data/supabase';
 import MenuItem from './MenuItem'
 import { LayoutDashboard, RefreshCw, FileText, Users, Calendar, Settings, LogOut, ChevronLeft, ChevronRight, TrendingUp, Rocket } from 'lucide-react'
 import { useState } from 'react'
@@ -59,7 +60,7 @@ const itemsByRole: Record<Role, Array<MenuItem>> = {
 export default function LateralMenu({ role }: LateralMenuProps) {
     const items = itemsByRole[role]
     const [isCollapsed, setIsCollapsed] = useState(false)
-    
+
     const principalItems = items.filter(item => item.section === 'principal')
     const sistemaItems = items.filter(item => item.section === 'sistema')
 
@@ -68,21 +69,21 @@ export default function LateralMenu({ role }: LateralMenuProps) {
             {/* Panel lateral colapsado con íconos */}
             <aside className="w-20 bg-white border-r border-gray-200 p-3 h-full flex flex-col items-center">
                 {/* Botón de toggle */}
-                <button 
+                <button
                     className="flex items-center justify-center p-2 w-10 h-10 mb-4 hover:bg-[#F5F5F7] rounded-lg transition-colors text-[#212121]"
                     onClick={() => setIsCollapsed(!isCollapsed)}
                     title={isCollapsed ? "Expandir menú" : "Colapsar menú"}
                 >
                     {isCollapsed ? <ChevronRight size={20} /> : <ChevronLeft size={20} />}
                 </button>
-                
+
                 <div className="mb-6 text-xs font-semibold text-gray-400">P</div>
                 <nav className="flex flex-col gap-2 items-center flex-1">
                     {principalItems.map((item) => (
-                        <MenuItem 
+                        <MenuItem
                             key={`icon-${item.path}`}
-                            label={item.label} 
-                            href={item.path} 
+                            label={item.label}
+                            href={item.path}
                             icon={item.icon}
                             isCollapsed={true}
                         />
@@ -91,26 +92,27 @@ export default function LateralMenu({ role }: LateralMenuProps) {
                 <div className="mt-auto flex flex-col gap-2 items-center">
                     <div className="mb-2 text-xs font-semibold text-gray-400">S</div>
                     {sistemaItems.map((item) => (
-                        <MenuItem 
+                        <MenuItem
                             key={`icon-${item.path}`}
-                            label={item.label} 
-                            href={item.path} 
+                            label={item.label}
+                            href={item.path}
                             icon={item.icon}
                             isCollapsed={true}
                         />
                     ))}
-                    <button 
-                        className="flex items-center justify-center p-2 w-10 h-10 text-left hover:bg-[#F5F5F7] rounded-lg transition-colors text-[#212121]"
-                        onClick={() => {/* Implementar logout */}}
-                        title="Cerrar sesión"
-                    >
-                        <LogOut size={20} />
-                    </button>
+                    <MenuItem
+                        key={`icon-logout`}
+                        label="Cerrar sesión"
+                        href="/auth/logout"
+                        icon={<LogOut size={20} />}
+                        isCollapsed={true}
+                        onClick={() => { supabase.auth.signOut() }}
+                    />
                 </div>
             </aside>
 
             {/* Panel principal expandido */}
-            <aside 
+            <aside
                 className={`${isCollapsed ? 'w-0 opacity-0' : 'w-80 opacity-100'} bg-[#F5F5F7] border-r border-gray-200 p-5 h-full transition-all duration-300 flex flex-col overflow-hidden`}
             >
                 {/* Header */}
@@ -124,10 +126,10 @@ export default function LateralMenu({ role }: LateralMenuProps) {
                     <div className="text-xs font-semibold text-gray-500 mb-3 px-3">PRINCIPAL</div>
                     <nav className="flex flex-col gap-1">
                         {principalItems.map((item) => (
-                            <MenuItem 
-                                key={item.path} 
-                                label={item.label} 
-                                href={item.path} 
+                            <MenuItem
+                                key={item.path}
+                                label={item.label}
+                                href={item.path}
                                 icon={item.icon}
                                 isCollapsed={false}
                             />
@@ -140,21 +142,22 @@ export default function LateralMenu({ role }: LateralMenuProps) {
                     <div className="text-xs font-semibold text-gray-500 mb-3 px-3">SISTEMA</div>
                     <nav className="flex flex-col gap-1">
                         {sistemaItems.map((item) => (
-                            <MenuItem 
-                                key={item.path} 
-                                label={item.label} 
-                                href={item.path} 
+                            <MenuItem
+                                key={item.path}
+                                label={item.label}
+                                href={item.path}
                                 icon={item.icon}
                                 isCollapsed={false}
                             />
                         ))}
-                        <button 
-                            className="flex items-center gap-3 px-3 py-3 w-full text-left hover:bg-white rounded-lg transition-colors text-[#212121]"
-                            onClick={() => {/* Implementar logout */}}
-                        >
-                            <LogOut size={20} />
-                            <span className="text-sm">Cerrar sesión</span>
-                        </button>
+                        <MenuItem
+                            key={`icon-logout`}
+                            label="Cerrar sesión"
+                            href="/auth/logout"
+                            icon={<LogOut size={20} />}
+                            isCollapsed={false}
+                            onClick={() => { supabase.auth.signOut() }}
+                        />
                     </nav>
                 </div>
             </aside>

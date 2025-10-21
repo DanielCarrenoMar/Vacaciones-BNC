@@ -64,9 +64,6 @@ export default function DashBoard(){
             },
             enableStreaming: false,
         });
-
-
-        // El array de dependencias vacío [] asegura que esto se ejecute solo una vez.
     }, []);
 
     return (
