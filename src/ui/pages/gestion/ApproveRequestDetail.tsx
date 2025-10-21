@@ -70,7 +70,9 @@ export default function ApproveRequestDetail() {
         vacationRepo.create({
             employedID: senderUser!.employedID,
             startDate: requestPrimaryRange!.startDate.toDateString(),
-            endDate: requestPrimaryRange!.endDate.toDateString()
+            endDate: requestPrimaryRange!.endDate.toDateString(),
+            requestID: requestID,
+            bonus: Number(paymentAmount)
         }).then(({error}) => {
             if (error) logger.error(error)
         })
@@ -83,9 +85,6 @@ export default function ApproveRequestDetail() {
             else navigate('/gestion/approve')
         })
 
-    }
-    function onDeny() {
-        // No puede
     }
 
     return (

@@ -1,5 +1,5 @@
-import type { Request, RequestRange, User } from '#domain/models.ts'
-import { requestRangeRepo, requestRepo, userRepo } from '#repository/databaseRepositoryImpl.tsx'
+import type { Request, RequestRange, User, Vacation } from '#domain/models.ts'
+import { requestRangeRepo, requestRepo, userRepo, vacationRepo } from '#repository/databaseRepositoryImpl.tsx'
 import { ArrowLeft, CheckCircle, XCircle, Clock, Calendar as CalendarIcon } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
@@ -12,6 +12,7 @@ export default function Request() {
     const [senderUser, setSenderUser] = useState<User>()
     const [receiverUser, setReceiverUser] = useState<User>()
     const [receiverLevel, setReceiverLevel] = useState<number>()
+    const [vacationApproved, setVacationApproved] = useState<Vacation>()
     const navigate = useNavigate()
 
     useEffect(() => {
@@ -21,6 +22,12 @@ export default function Request() {
             if (requestError) throw requestError
             if (!requestData) return
             setRequest(requestData)
+
+            if (requestData.status === 'approved') {
+                const { data: vacationData, error: vacationError } = await vacationRepo.getByRequestId(requestID)
+                if (vacationError) throw vacationError
+                if (vacationData) setVacationApproved(vacationData)
+            }
 
             // 2. Fetch Primary Range
             const { data: primaryRangeData, error: primaryRangeError } = await requestRangeRepo.getPrimaryByRequestId(requestID)
@@ -282,6 +289,12 @@ export default function Request() {
                             <p className={'text-sm font-medium text-warning'}>
                                 Te notificaremos cuando se tome la decisión.
                             </p>
+                        )}
+                        {request?.status === 'approved' && (
+                            <div className="flex justify-between text-sm">
+                                <span className="text-gray-600">Bono vacacional:</span>
+                                <span className="font-medium text-onsurface">{vacationApproved?.bonus}</span>
+                            </div>
                         )}
                     </div>
 
