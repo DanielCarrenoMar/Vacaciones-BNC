@@ -32,9 +32,6 @@ export const userRepo = {
   getDirectReports: async (employedID: string): SupabaseResult<User[]> => {
     return from<User[]>("user", (t: any) => t.select('*').eq('reportTo', employedID))
   },
-  // Calcula cuántos niveles hay por debajo del usuario (altura del sub-árbol)
-  // y el número total de subordinados directos + indirectos.
-  // Devuelve { levelsBelow, totalSubordinates } dentro de data.
   getLevelsBelow: async (employedID: number): SupabaseResult<{ levelsBelow: number; totalSubordinates: number }> => {
     try {
       let levels = 0
@@ -69,6 +66,101 @@ export const userRepo = {
     } catch (err) {
       return { data: null, error: err }
     }
+  },
+  // Calcula balance por política dividiendo en 2 periodos (periodo anterior y periodo actual)
+  // - Usa la fecha de ingreso (`user.entryDate`) para prorratear el primer periodo si aplica
+  // - Resta sólo las vacaciones aprobadas (campo `aprovated_at`) que cayeron dentro de cada periodo
+  getVacationBalance: async (employedID: number, todayParam?: string): SupabaseResult<{
+    previous: { entitlement: number; taken: number; balance: number; start: string; end: string }
+    current: { entitlement: number; taken: number; balance: number; start: string; end: string }
+    totalAvailable: number
+  }> => {
+    try {
+      const today = todayParam ? new Date(todayParam) : new Date()
+
+      // obtener usuario
+      const { data: user, error: userError } = await userRepo.getById(employedID)
+      if (userError) return { data: null, error: userError }
+      if (!user) return { data: null, error: 'User not found' }
+
+      const entry = new Date((user as any).entryDate)
+
+      // Helper: crear fecha de aniversario para un año concreto manteniendo mes/día del entry
+      const anniversaryForYear = (year: number) => {
+        const d = new Date(entry)
+        d.setFullYear(year)
+        // normalize time to start of day
+        d.setHours(0, 0, 0, 0)
+        return d
+      }
+
+      // Determinar último aniversario pasado (start of current period)
+      let lastAnniv = anniversaryForYear(today.getFullYear())
+      if (today < lastAnniv) {
+        lastAnniv = anniversaryForYear(today.getFullYear() - 1)
+      }
+      const nextAnniv = anniversaryForYear(lastAnniv.getFullYear() + 1)
+
+      const prevStart = anniversaryForYear(lastAnniv.getFullYear() - 1)
+      const prevEnd = lastAnniv
+
+      const currStart = lastAnniv
+      const currEnd = nextAnniv
+
+      const daysBetween = (a: Date, b: Date) => Math.ceil((b.getTime() - a.getTime()) / (1000 * 60 * 60 * 24))
+      const daysInYear = (d: Date) => (isLeapYear(d.getFullYear()) ? 366 : 365)
+      function isLeapYear(y: number) { return (y % 4 === 0 && y % 100 !== 0) || (y % 400 === 0) }
+
+      const annualEntitlement = ((user as any).vacationsBalance ?? 0)
+
+      const entitlementForPeriod = (periodStart: Date, periodEnd: Date) => {
+        // If entry is before or on periodStart => full entitlement
+        if (entry <= periodStart) return annualEntitlement
+        // If entry is on/after periodEnd => no entitlement in that period
+        if (entry >= periodEnd) return 0
+        // else entry is inside the period => prorate from entry to periodEnd
+        const daysActive = daysBetween(entry, periodEnd)
+        const denom = daysInYear(periodEnd)
+        return Math.round((annualEntitlement * (daysActive / denom)) * 100) / 100 // round to 2 decimals
+      }
+
+      // obtener vacaciones aprobadas por periodo
+      const fetchTaken = async (start: Date, end: Date) => {
+        const { data, error } = await supabase
+          .from('vacation')
+          .select('days, aprovated_at')
+          .eq('employedID', employedID)
+          .not('aprovated_at', 'is', null)
+          .gte('aprovated_at', start.toISOString())
+          .lt('aprovated_at', end.toISOString())
+
+        if (error) throw error
+        return (data || []).reduce((s: number, v: any) => s + (v.days || 0), 0)
+      }
+
+      const prevEntitlement = entitlementForPeriod(prevStart, prevEnd)
+      const currEntitlement = entitlementForPeriod(currStart, currEnd)
+      console.log('Prev Entitlement:', prevEntitlement, 'Curr Entitlement:', currEntitlement)
+
+      const takenPrev = await fetchTaken(prevStart, prevEnd)
+      const takenCurr = await fetchTaken(currStart, currEnd)
+
+      const prevBalance = Math.round((prevEntitlement - takenPrev) * 100) / 100
+      const currBalance = Math.round((currEntitlement - takenCurr) * 100) / 100
+
+      const totalAvailable = Math.round((prevBalance + currBalance) * 100) / 100
+
+      return {
+        data: {
+          previous: { entitlement: prevEntitlement, taken: takenPrev, balance: prevBalance, start: prevStart.toISOString(), end: prevEnd.toISOString() },
+          current: { entitlement: currEntitlement, taken: takenCurr, balance: currBalance, start: currStart.toISOString(), end: currEnd.toISOString() },
+          totalAvailable
+        },
+        error: null
+      }
+    } catch (err) {
+      return { data: null, error: err }
+    }
   }
 }
 
@@ -88,7 +180,7 @@ export const vacationRepo = {
   },
   remove: async (id: number): SupabaseResult<null> => {
     return from<null>("vacation", (t: any) => t.delete().eq('id', id))
-  }
+  },
 }
 
 // Request CRUD
