@@ -45,8 +45,11 @@ export default function MenuLayer() {
     <div className="h-screen flex bg-[#F5F5F7] overflow-hidden">
         <LateralMenu role={userRole ?? 'colaborador'} />
         <main className="flex-1 p-6 flex-col flex overflow-y-auto">
-            <header>
-                <h1 className="text-2xl font-bold mb-4">Bienvenido, {user?.name}</h1>
+            <header className="mb-6">
+                <div className="text-sm font-medium text-[#212121]">
+                    {user?.name} ({user?.position || 'Sin cargo'})
+                </div>
+                <div className="text-xs text-gray-500">{user?.email}</div>
             </header>
             <Outlet />
         </main>

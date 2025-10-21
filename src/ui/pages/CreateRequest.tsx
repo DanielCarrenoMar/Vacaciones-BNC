@@ -92,10 +92,6 @@ export default function CreateRequest(){
                     <ArrowLeft size={20} />
                     <span className="text-sm">Mis peticiones</span>
                 </button>
-                <div className="text-right">
-                    <div className="text-sm font-medium text-[#212121]">Pedrito (Programador Frontend)</div>
-                    <div className="text-xs text-gray-500">pedrito.24@correo.com</div>
-                </div>
             </div>
 
             <div className="max-w-2xl mx-auto">
