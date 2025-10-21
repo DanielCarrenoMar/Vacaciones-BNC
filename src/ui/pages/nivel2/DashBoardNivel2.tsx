@@ -72,11 +72,11 @@ export default function DashBoardNivel2() {
                     <div className="text-sm font-medium text-gray-600 mb-2">Antigüedad</div>
                     <div className="flex items-baseline gap-2">
                         <div className="flex items-baseline gap-1">
-                            <span className="text-4xl font-bold text-[#212121]">{user ? new Date().getFullYear() - user.entryDate.getFullYear() : 0}</span>
+                            <span className="text-4xl font-bold text-onsurface">{user ? new Date().getFullYear() - user.entryDate.getFullYear() : 0}</span>
                             <span className="text-lg text-gray-600">año y</span>
                         </div>
                         <div className="flex items-baseline gap-1">
-                            <span className="text-4xl font-bold text-[#212121]">{user ? new Date().getMonth() - user.entryDate.getMonth() : 0}</span>
+                            <span className="text-4xl font-bold text-onsurface">{user ? new Date().getMonth() - user.entryDate.getMonth() : 0}</span>
                             <span className="text-lg text-gray-600">meses</span>
                         </div>
                     </div>

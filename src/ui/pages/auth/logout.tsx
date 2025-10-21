@@ -36,7 +36,7 @@ export default function LogoutPage() {
         {/* Header con avatar y nombre */}
         <div className="flex items-center justify-center gap-3 mb-8">
           <div className="w-12 h-12 bg-gray-300 rounded-full"></div>
-          <span className="text-[#212121] font-medium text-lg">Bienestar BNC</span>
+          <span className="text-onsurface font-medium text-lg">Bienestar BNC</span>
           <button 
             onClick={() => navigate(-1)}
             className="ml-2 p-1 hover:bg-gray-200 rounded-full transition-colors"
@@ -54,7 +54,7 @@ export default function LogoutPage() {
         </div>
 
         {/* Mensaje */}
-        <p className="text-[#212121] text-lg font-medium">
+        <p className="text-onsurface text-lg font-medium">
           {isLoggingOut ? 'Cerrando sesión...' : 'Se ha cerrado la sesión con éxito.'}
         </p>
       </div>

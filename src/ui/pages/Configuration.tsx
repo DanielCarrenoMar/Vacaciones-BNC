@@ -27,7 +27,7 @@ export default function Configuration() {
     return (
         <div className="h-full bg-background p-8" style={{ fontFamily: 'Poppins, sans-serif' }}>
             <div className="max-w-7xl mx-auto">
-                <h1 className="text-3xl font-bold text-[#212121] mb-8">Configuración</h1>
+                <h1 className="text-3xl font-bold text-onsurface mb-8">Configuración</h1>
 
                 <div className="flex gap-6">
                     {/* Sidebar con pestañas */}
@@ -40,7 +40,7 @@ export default function Configuration() {
                                     className={`flex items-center justify-between px-4 py-3 rounded-lg transition-colors ${
                                         activeSection === section.id
                                             ? 'bg-blue-50 text-blue-600'
-                                            : 'text-[#212121] hover:bg-gray-50'
+                                            : 'text-onsurface hover:bg-gray-50'
                                     }`}
                                 >
                                     <div className="flex items-center gap-3">
@@ -91,7 +91,7 @@ export default function Configuration() {
 function ProfileSection({ user, phoneNumber, setPhoneNumber }: { user: any; phoneNumber: string; setPhoneNumber: (v: string) => void }) {
     return (
         <div>
-            <h2 className="text-2xl font-bold text-[#212121] mb-6">Gestión de Perfil</h2>
+            <h2 className="text-2xl font-bold text-onsurface mb-6">Gestión de Perfil</h2>
 
             {/* Foto de perfil */}
             <div className="mb-8">
@@ -109,7 +109,7 @@ function ProfileSection({ user, phoneNumber, setPhoneNumber }: { user: any; phon
 
             {/* Información Personal (Solo lectura) */}
             <div className="mb-8">
-                <h3 className="text-lg font-semibold text-[#212121] mb-4">Información Personal</h3>
+                <h3 className="text-lg font-semibold text-onsurface mb-4">Información Personal</h3>
                 <div className="grid grid-cols-2 gap-4">
                     <div>
                         <label className="block text-sm font-medium text-gray-600 mb-1">Nombre</label>
@@ -152,7 +152,7 @@ function ProfileSection({ user, phoneNumber, setPhoneNumber }: { user: any; phon
 
             {/* Información de Contacto (Editable) */}
             <div className="mb-8">
-                <h3 className="text-lg font-semibold text-[#212121] mb-4">Información de Contacto</h3>
+                <h3 className="text-lg font-semibold text-onsurface mb-4">Información de Contacto</h3>
                 <div className="grid grid-cols-2 gap-4">
                     <div>
                         <label className="block text-sm font-medium text-gray-600 mb-1">Email</label>
@@ -184,7 +184,7 @@ function ProfileSection({ user, phoneNumber, setPhoneNumber }: { user: any; phon
 
             {/* Información Organizacional (Solo lectura) */}
             <div className="mb-8">
-                <h3 className="text-lg font-semibold text-[#212121] mb-4">Información Organizacional</h3>
+                <h3 className="text-lg font-semibold text-onsurface mb-4">Información Organizacional</h3>
                 <div>
                     <label className="block text-sm font-medium text-gray-600 mb-1">Supervisor Directo</label>
                     <input
@@ -207,7 +207,7 @@ function ProfileSection({ user, phoneNumber, setPhoneNumber }: { user: any; phon
 function SecuritySection() {
     return (
         <div>
-            <h2 className="text-2xl font-bold text-[#212121] mb-6">Seguridad de la Cuenta</h2>
+            <h2 className="text-2xl font-bold text-onsurface mb-6">Seguridad de la Cuenta</h2>
 
             <div className="space-y-6">
                 {/* Cambiar Contraseña */}
@@ -217,7 +217,7 @@ function SecuritySection() {
                             <Lock size={24} className="text-blue-600" />
                         </div>
                         <div className="flex-1">
-                            <h3 className="text-lg font-semibold text-[#212121] mb-2">Cambiar Contraseña</h3>
+                            <h3 className="text-lg font-semibold text-onsurface mb-2">Cambiar Contraseña</h3>
                             <p className="text-gray-600 mb-4">
                                 Actualiza tu contraseña regularmente para mantener tu cuenta segura.
                             </p>
@@ -235,7 +235,7 @@ function SecuritySection() {
                             <Shield size={24} className="text-green-600" />
                         </div>
                         <div className="flex-1">
-                            <h3 className="text-lg font-semibold text-[#212121] mb-2">Autenticación de Dos Pasos (2FA)</h3>
+                            <h3 className="text-lg font-semibold text-onsurface mb-2">Autenticación de Dos Pasos (2FA)</h3>
                             <p className="text-gray-600 mb-4">
                                 Añade una capa extra de seguridad a tu cuenta requiriendo un código adicional al iniciar sesión.
                             </p>
@@ -265,15 +265,15 @@ function NotificationsSection({
 }: any) {
     return (
         <div>
-            <h2 className="text-2xl font-bold text-[#212121] mb-6">Preferencias de Notificaciones</h2>
+            <h2 className="text-2xl font-bold text-onsurface mb-6">Preferencias de Notificaciones</h2>
 
             {/* Canales de notificación */}
             <div className="mb-8">
-                <h3 className="text-lg font-semibold text-[#212121] mb-4">Canales de Notificación</h3>
+                <h3 className="text-lg font-semibold text-onsurface mb-4">Canales de Notificación</h3>
                 <div className="space-y-4">
                     <div className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
                         <div>
-                            <p className="font-medium text-[#212121]">Notificarme por Email</p>
+                            <p className="font-medium text-onsurface">Notificarme por Email</p>
                             <p className="text-sm text-gray-600">Recibe notificaciones en tu correo electrónico</p>
                         </div>
                         <label className="relative inline-flex items-center cursor-pointer">
@@ -289,7 +289,7 @@ function NotificationsSection({
 
                     <div className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
                         <div>
-                            <p className="font-medium text-[#212121]">Notificarme por Push</p>
+                            <p className="font-medium text-onsurface">Notificarme por Push</p>
                             <p className="text-sm text-gray-600">Recibe notificaciones push en tu dispositivo</p>
                         </div>
                         <label className="relative inline-flex items-center cursor-pointer">
@@ -307,7 +307,7 @@ function NotificationsSection({
 
             {/* Tipos de notificaciones */}
             <div>
-                <h3 className="text-lg font-semibold text-[#212121] mb-4">Avisarme sobre</h3>
+                <h3 className="text-lg font-semibold text-onsurface mb-4">Avisarme sobre</h3>
                 <div className="space-y-3">
                     <label className="flex items-center gap-3 p-4 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50">
                         <input
@@ -317,7 +317,7 @@ function NotificationsSection({
                             className="w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                         />
                         <div>
-                            <p className="font-medium text-[#212121]">Cambios de estado en mis solicitudes</p>
+                            <p className="font-medium text-onsurface">Cambios de estado en mis solicitudes</p>
                             <p className="text-sm text-gray-600">Aprobada, Rechazada, En revisión</p>
                         </div>
                     </label>
@@ -330,7 +330,7 @@ function NotificationsSection({
                             className="w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                         />
                         <div>
-                            <p className="font-medium text-[#212121]">Recordatorios de vacaciones próximas</p>
+                            <p className="font-medium text-onsurface">Recordatorios de vacaciones próximas</p>
                             <p className="text-sm text-gray-600">Te avisaremos antes de tus vacaciones programadas</p>
                         </div>
                     </label>
@@ -343,7 +343,7 @@ function NotificationsSection({
                             className="w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                         />
                         <div>
-                            <p className="font-medium text-[#212121]">Anuncios de la empresa o RRHH</p>
+                            <p className="font-medium text-onsurface">Anuncios de la empresa o RRHH</p>
                             <p className="text-sm text-gray-600">Comunicados importantes y actualizaciones</p>
                         </div>
                     </label>
@@ -357,11 +357,11 @@ function NotificationsSection({
 function AppearanceSection({ language, setLanguage, theme, setTheme }: any) {
     return (
         <div>
-            <h2 className="text-2xl font-bold text-[#212121] mb-6">Preferencias de Apariencia</h2>
+            <h2 className="text-2xl font-bold text-onsurface mb-6">Preferencias de Apariencia</h2>
 
             {/* Idioma */}
             <div className="mb-8">
-                <h3 className="text-lg font-semibold text-[#212121] mb-4">Idioma</h3>
+                <h3 className="text-lg font-semibold text-onsurface mb-4">Idioma</h3>
                 <div className="relative">
                     <Globe size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                     <select
@@ -377,7 +377,7 @@ function AppearanceSection({ language, setLanguage, theme, setTheme }: any) {
 
             {/* Tema */}
             <div>
-                <h3 className="text-lg font-semibold text-[#212121] mb-4">Tema (Apariencia)</h3>
+                <h3 className="text-lg font-semibold text-onsurface mb-4">Tema (Apariencia)</h3>
                 <div className="grid grid-cols-3 gap-4">
                     <button
                         onClick={() => setTheme('light')}
@@ -429,7 +429,7 @@ function AppearanceSection({ language, setLanguage, theme, setTheme }: any) {
 function HelpSection() {
     return (
         <div>
-            <h2 className="text-2xl font-bold text-[#212121] mb-6">Ayuda y Soporte</h2>
+            <h2 className="text-2xl font-bold text-onsurface mb-6">Ayuda y Soporte</h2>
 
             <div className="space-y-4">
                 {/* Centro de Ayuda */}
@@ -442,7 +442,7 @@ function HelpSection() {
                             <HelpCircle size={24} className="text-blue-600" />
                         </div>
                         <div>
-                            <h3 className="text-lg font-semibold text-[#212121]">Centro de Ayuda</h3>
+                            <h3 className="text-lg font-semibold text-onsurface">Centro de Ayuda</h3>
                             <p className="text-gray-600">Ver Preguntas Frecuentes (FAQ)</p>
                         </div>
                     </div>
@@ -459,7 +459,7 @@ function HelpSection() {
                             <Mail size={24} className="text-green-600" />
                         </div>
                         <div>
-                            <h3 className="text-lg font-semibold text-[#212121]">Contactar a Soporte</h3>
+                            <h3 className="text-lg font-semibold text-onsurface">Contactar a Soporte</h3>
                             <p className="text-gray-600">Reportar un problema o solicitar ayuda</p>
                         </div>
                     </div>
@@ -468,7 +468,7 @@ function HelpSection() {
 
                 {/* Acerca de */}
                 <div className="p-6 border border-gray-200 rounded-lg">
-                    <h3 className="text-lg font-semibold text-[#212121] mb-2">Acerca de</h3>
+                    <h3 className="text-lg font-semibold text-onsurface mb-2">Acerca de</h3>
                     <div className="space-y-2 text-gray-600">
                         <p><span className="font-medium">Versión:</span> 1.0.0</p>
                         <p><span className="font-medium">Última actualización:</span> Octubre 2025</p>

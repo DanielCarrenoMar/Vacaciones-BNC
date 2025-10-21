@@ -89,7 +89,7 @@ export default function LateralMenu({ role }: LateralMenuProps) {
             <aside className="w-20 bg-white border-r border-gray-200 p-3 h-full flex flex-col items-center">
                 {/* Botón de toggle */}
                 <button
-                    className="flex items-center justify-center p-2 w-10 h-10 mb-4 hover:bg-background rounded-lg transition-colors text-[#212121]"
+                    className="flex items-center justify-center p-2 w-10 h-10 mb-4 hover:bg-background rounded-lg transition-colors text-onsurface"
                     onClick={() => setIsCollapsed(!isCollapsed)}
                     title={isCollapsed ? "Expandir menú" : "Colapsar menú"}
                 >
@@ -137,7 +137,7 @@ export default function LateralMenu({ role }: LateralMenuProps) {
                 {/* Header */}
                 <div className="mb-6 flex items-center gap-3">
                     <div className="w-12 h-12 bg-gray-300 rounded-full"></div>
-                    <span className="text-[#212121] font-medium">Bienestar BNC</span>
+                    <span className="text-onsurface font-medium">Bienestar BNC</span>
                 </div>
 
                 {/* Principal Section */}

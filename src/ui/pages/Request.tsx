@@ -109,7 +109,7 @@ export default function Request() {
                     <span className="text-sm">Mis peticiones</span>
                 </button>
                 <div className="text-right">
-                    <div className="text-sm font-medium text-[#212121]">{senderUser?.name} ({senderUser?.position})</div>
+                    <div className="text-sm font-medium text-onsurface">{senderUser?.name} ({senderUser?.position})</div>
                     <div className="text-xs text-gray-500">pedrito.24@correo.com</div>
                 </div>
             </div>
@@ -119,7 +119,7 @@ export default function Request() {
                 <div className="space-y-6">
                     {/* Seguimiento de solicitud */}
                     <div className="bg-white rounded-lg shadow-lg p-6">
-                        <h2 className="text-lg font-semibold text-[#212121] mb-6">Seguimiento de solicitud</h2>
+                        <h2 className="text-lg font-semibold text-onsurface mb-6">Seguimiento de solicitud</h2>
 
                         <div className="space-y-4">
                             {request?.status === 'waiting' && (
@@ -128,7 +128,7 @@ export default function Request() {
                                         <div className="w-0.5 h-10 mt-2 bg-warning" />
                                     </div>
                                     <div className="flex-1 pb-2">
-                                        <h3 className="font-medium text-[#212121]">Solicitud creada con exito</h3>
+                                        <h3 className="font-medium text-onsurface">Solicitud creada con exito</h3>
                                         <p className="text-sm text-gray-600 mt-1">Enviada por {senderUser?.name}: {request?.created_at}</p>
                                     </div>
                                 </div>
@@ -148,7 +148,7 @@ export default function Request() {
                                         )}
                                     </div>
                                     <div className="flex-1 pb-2">
-                                        <h3 className="font-medium text-[#212121]">{step.title}</h3>
+                                        <h3 className="font-medium text-onsurface">{step.title}</h3>
                                         <p className="text-sm text-gray-600 mt-1">{step.subtitle}</p>
                                     </div>
                                 </div>
@@ -167,7 +167,7 @@ export default function Request() {
                 <div className="space-y-6">
                     {/* Estado de solicitud */}
                     <div className={`bg-white rounded-lg shadow-lg p-6 border-2 ${statusConfig?.borderColor}`}>
-                        <h2 className="text-lg font-semibold text-[#212121] mb-4">Estado de solicitud</h2>
+                        <h2 className="text-lg font-semibold text-onsurface mb-4">Estado de solicitud</h2>
 
                         <div className={`flex items-center gap-2 mb-4 ${statusConfig?.color}`}>
                             {statusConfig?.icon}
@@ -187,48 +187,48 @@ export default function Request() {
 
                     {/* Detalles Solicitud */}
                     <div className="bg-white rounded-lg shadow-lg p-6">
-                        <h2 className="text-lg font-semibold text-[#212121] mb-4">Detalles Solicitud</h2>
+                        <h2 className="text-lg font-semibold text-onsurface mb-4">Detalles Solicitud</h2>
 
                         <div className="space-y-3">
                             <div className="flex justify-between text-sm">
                                 <span className="text-gray-600">Total días solicitados:</span>
-                                <span className="font-medium text-[#212121]">{request?.days}</span>
+                                <span className="font-medium text-onsurface">{request?.days}</span>
                             </div>
                             <div className="flex justify-between text-sm">
                                 <span className="text-gray-600">Fecha de inicio:</span>
-                                <span className="font-medium text-[#212121]">{requestPrimaryRange?.startDate.toDateString()}</span>
+                                <span className="font-medium text-onsurface">{requestPrimaryRange?.startDate.toDateString()}</span>
                             </div>
                             <div className="flex justify-between text-sm">
                                 <span className="text-gray-600">Fecha de reintegro:</span>
-                                <span className="font-medium text-[#212121]">{requestPrimaryRange?.endDate.toDateString()}</span>
+                                <span className="font-medium text-onsurface">{requestPrimaryRange?.endDate.toDateString()}</span>
                             </div>
                             <div className="flex justify-between text-sm">
                                 <span className="text-gray-600">Periodo Vacacional:</span>
-                                <span className="font-medium text-[#212121]">{requestPrimaryRange?.startDate.getFullYear()}</span>
+                                <span className="font-medium text-onsurface">{requestPrimaryRange?.startDate.getFullYear()}</span>
                             </div>
                         </div>
                     </div>
 
                     {/* Información Colaborador */}
                     <div className="bg-white rounded-lg shadow-lg p-6">
-                        <h2 className="text-lg font-semibold text-[#212121] mb-4">Informacion Colaborador</h2>
+                        <h2 className="text-lg font-semibold text-onsurface mb-4">Informacion Colaborador</h2>
 
                         <div className="space-y-3">
                             <div className="flex justify-between text-sm">
                                 <span className="text-gray-600">Nombre:</span>
-                                <span className="font-medium text-[#212121]">{senderUser?.name}</span>
+                                <span className="font-medium text-onsurface">{senderUser?.name}</span>
                             </div>
                             <div className="flex justify-between text-sm">
                                 <span className="text-gray-600">Cedula:</span>
-                                <span className="font-medium text-[#212121]">{senderUser?.employedID}</span>
+                                <span className="font-medium text-onsurface">{senderUser?.employedID}</span>
                             </div>
                             <div className="flex justify-between text-sm">
                                 <span className="text-gray-600">Cargo:</span>
-                                <span className="font-medium text-[#212121]">{senderUser?.position}</span>
+                                <span className="font-medium text-onsurface">{senderUser?.position}</span>
                             </div>
                             <div className="flex justify-between text-sm">
                                 <span className="text-gray-600">Departamento:</span>
-                                <span className="font-medium text-[#212121]">{senderUser?.area}</span>
+                                <span className="font-medium text-onsurface">{senderUser?.area}</span>
                             </div>
                         </div>
                     </div>

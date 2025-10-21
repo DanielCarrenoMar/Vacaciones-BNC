@@ -187,7 +187,7 @@ export default function Team() {
         <div className="h-full bg-background" style={{ fontFamily: 'Poppins, sans-serif' }}>
             {/* Header */}
             <div className="mb-6">
-                <h1 className="text-2xl font-semibold text-[#212121] mb-2">Gestión de Equipo</h1>
+                <h1 className="text-2xl font-semibold text-onsurface mb-2">Gestión de Equipo</h1>
                 <p className="text-sm text-gray-600">Administra las vacaciones y disponibilidad de tu equipo</p>
             </div>
 
@@ -200,7 +200,7 @@ export default function Team() {
                         </div>
                         <span className="text-sm font-medium text-gray-600">Ausentes Hoy</span>
                     </div>
-                    <div className="text-4xl font-bold text-[#212121]">{absentToday}</div>
+                    <div className="text-4xl font-bold text-onsurface">{absentToday}</div>
                 </div>
 
                 <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
@@ -210,7 +210,7 @@ export default function Team() {
                         </div>
                         <span className="text-sm font-medium text-gray-600">Pendientes</span>
                     </div>
-                    <div className="text-4xl font-bold text-[#212121]">{pendingApprovals}</div>
+                    <div className="text-4xl font-bold text-onsurface">{pendingApprovals}</div>
                 </div>
 
                 <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
@@ -220,7 +220,7 @@ export default function Team() {
                         </div>
                         <span className="text-sm font-medium text-gray-600">Miembros</span>
                     </div>
-                    <div className="text-4xl font-bold text-[#212121]">{teamMembers.length}</div>
+                    <div className="text-4xl font-bold text-onsurface">{teamMembers.length}</div>
                 </div>
 
                 <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
@@ -230,7 +230,7 @@ export default function Team() {
                         </div>
                         <span className="text-sm font-medium text-gray-600">Días Totales</span>
                     </div>
-                    <div className="text-4xl font-bold text-[#212121]">{totalTeamDays}</div>
+                    <div className="text-4xl font-bold text-onsurface">{totalTeamDays}</div>
                 </div>
             </div>
 
@@ -241,7 +241,7 @@ export default function Team() {
                     <div className="flex items-center justify-between mb-6">
                         <div className="flex items-center gap-3">
                             <CalendarIcon size={24} className="text-primary" />
-                            <h2 className="text-xl font-semibold text-[#212121]">{monthNames[month]} {year}</h2>
+                            <h2 className="text-xl font-semibold text-onsurface">{monthNames[month]} {year}</h2>
                         </div>
                         <div className="flex gap-2">
                             <button onClick={prevMonth} className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
@@ -300,7 +300,7 @@ export default function Team() {
                                         } ${isToday ? 'ring-2 ring-primary' : ''} ${conflict ? 'bg-red-50' : ''}`}
                                     >
                                         <div className={`text-xs font-medium mb-1 ${
-                                            dayInfo.isCurrentMonth ? 'text-[#212121]' : 'text-gray-400'
+                                            dayInfo.isCurrentMonth ? 'text-onsurface' : 'text-gray-400'
                                         } ${isToday ? 'text-primary font-bold' : ''}`}>
                                             {dayInfo.day}
                                         </div>
@@ -334,7 +334,7 @@ export default function Team() {
                     <div className="bg-white rounded-lg shadow-sm p-6">
                         <div className="flex items-center gap-2 mb-4">
                             <AlertTriangle size={20} className="text-orange-500" />
-                            <h3 className="font-semibold text-[#212121]">Alertas de Bienestar</h3>
+                            <h3 className="font-semibold text-onsurface">Alertas de Bienestar</h3>
                         </div>
                         
                         <div className="space-y-4">
@@ -361,7 +361,7 @@ export default function Team() {
                     </div>
 
                     <div className="bg-white rounded-lg shadow-sm p-6">
-                        <h3 className="font-semibold text-[#212121] mb-3">Resumen Rápido</h3>
+                        <h3 className="font-semibold text-onsurface mb-3">Resumen Rápido</h3>
                         <div className="space-y-3 text-sm">
                             <div className="flex justify-between">
                                 <span className="text-gray-600">Promedio días/persona:</span>
@@ -378,7 +378,7 @@ export default function Team() {
 
             {/* Lista de Miembros del Equipo */}
             <div className="bg-white rounded-lg shadow-sm p-6">
-                <h2 className="text-xl font-semibold text-[#212121] mb-4">Miembros del Equipo</h2>
+                <h2 className="text-xl font-semibold text-onsurface mb-4">Miembros del Equipo</h2>
                 
                 {loading ? (
                     <div className="text-center py-8 text-gray-500">Cargando miembros...</div>
@@ -405,7 +405,7 @@ export default function Team() {
                                                     {member.user.name.split(' ').map(n => n[0]).join('').slice(0, 2)}
                                                 </div>
                                                 <div>
-                                                    <div className="font-medium text-[#212121]">{member.user.name}</div>
+                                                    <div className="font-medium text-onsurface">{member.user.name}</div>
                                                     <div className="text-xs text-gray-500">{member.user.email}</div>
                                                 </div>
                                             </div>

@@ -50,7 +50,7 @@ export default function ReviewRequestDetailNivel2(){
                     <span className="text-sm">Revisar peticiones</span>
                 </button>
                 <div className="text-right">
-                    <div className="text-sm font-medium text-[#212121]">Líder Nivel 1</div>
+                    <div className="text-sm font-medium text-onsurface">Líder Nivel 1</div>
                     <div className="text-xs text-gray-500">lider.nivel1@correo.com</div>
                 </div>
             </div>
@@ -58,24 +58,24 @@ export default function ReviewRequestDetailNivel2(){
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 {/* Información de la petición */}
                 <div className="bg-white rounded-lg shadow-sm p-6">
-                    <h1 className="text-3xl font-bold text-[#212121] mb-6">{peticion.nombre}</h1>
+                    <h1 className="text-3xl font-bold text-onsurface mb-6">{peticion.nombre}</h1>
                     
                     <div className="space-y-4">
                         <div className="flex justify-between py-2 border-b">
                             <span className="text-gray-600">Cédula:</span>
-                            <span className="font-medium text-[#212121]">{peticion.cedula}</span>
+                            <span className="font-medium text-onsurface">{peticion.cedula}</span>
                         </div>
                         <div className="flex justify-between py-2 border-b">
                             <span className="text-gray-600">Departamento:</span>
-                            <span className="font-medium text-[#212121]">{peticion.departamento}</span>
+                            <span className="font-medium text-onsurface">{peticion.departamento}</span>
                         </div>
                         <div className="flex justify-between py-2 border-b">
                             <span className="text-gray-600">Cargo:</span>
-                            <span className="font-medium text-[#212121]">{peticion.cargo}</span>
+                            <span className="font-medium text-onsurface">{peticion.cargo}</span>
                         </div>
                         <div className="flex justify-between py-2 border-b">
                             <span className="text-gray-600">Fecha de envío:</span>
-                            <span className="font-medium text-[#212121]">{peticion.fechaEnvio}</span>
+                            <span className="font-medium text-onsurface">{peticion.fechaEnvio}</span>
                         </div>
                     </div>
                 </div>
@@ -85,11 +85,11 @@ export default function ReviewRequestDetailNivel2(){
                     {/* Header del calendario */}
                     <div className="flex justify-between items-center mb-6">
                         <button onClick={prevMonth} className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
-                            <ChevronLeft size={20} className="text-[#212121]" />
+                            <ChevronLeft size={20} className="text-onsurface" />
                         </button>
-                        <h2 className="text-lg font-semibold text-[#212121] capitalize">{monthName}</h2>
+                        <h2 className="text-lg font-semibold text-onsurface capitalize">{monthName}</h2>
                         <button onClick={nextMonth} className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
-                            <ChevronRight size={20} className="text-[#212121]" />
+                            <ChevronRight size={20} className="text-onsurface" />
                         </button>
                     </div>
 
@@ -118,7 +118,7 @@ export default function ReviewRequestDetailNivel2(){
                                     className={`aspect-square flex items-center justify-center rounded-lg text-sm font-medium transition-colors
                                         ${isSelected ? 'bg-success text-white' : ''}
                                         ${isToday && !isSelected ? 'bg-gray-700 text-white' : ''}
-                                        ${!isSelected && !isToday ? 'text-[#212121] hover:bg-gray-100' : ''}
+                                        ${!isSelected && !isToday ? 'text-onsurface hover:bg-gray-100' : ''}
                                     `}
                                 >
                                     {day}
@@ -132,7 +132,7 @@ export default function ReviewRequestDetailNivel2(){
             {/* Botones de acción */}
             <div className="flex justify-center gap-4 mt-8">
                 <button className="flex items-center gap-2 px-2 hover:bg-gray-100 rounded-lg transition-colors">
-                    <ChevronLeft size={24} className="text-[#212121]" />
+                    <ChevronLeft size={24} className="text-onsurface" />
                 </button>
                 <button className="bg-error text-white px-12 py-3 rounded-lg hover:bg-[#C0392B] transition-colors font-medium">
                     Denegar
@@ -141,7 +141,7 @@ export default function ReviewRequestDetailNivel2(){
                     Aprobar
                 </button>
                 <button className="flex items-center gap-2 px-2 hover:bg-gray-100 rounded-lg transition-colors">
-                    <ChevronRight size={24} className="text-[#212121]" />
+                    <ChevronRight size={24} className="text-onsurface" />
                 </button>
             </div>
         </div>

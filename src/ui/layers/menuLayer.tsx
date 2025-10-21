@@ -53,7 +53,7 @@ export default function MenuLayer() {
         <LateralMenu role={userRole ?? 'colaborador'} />
         <main className="flex-1 p-6 flex-col flex overflow-y-auto">
             <header className="mb-6">
-                <div className="text-sm font-medium text-[#212121]">
+                <div className="text-sm font-medium text-onsurface">
                     {user?.name} ({user?.position || 'Sin cargo'})
                 </div>
                 <div className="text-xs text-gray-500">{user?.email}</div>

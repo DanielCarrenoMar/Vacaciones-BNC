@@ -17,7 +17,7 @@ export default function MyRequestsSectionItem({ request }: MyRequestsItemProps) 
         {request.status === 'waiting' && (
           <>
             <Clock size={20} className="text-orange-400" />
-            <span className="text-sm text-[#212121]">En espera</span>
+            <span className="text-sm text-onsurface">En espera</span>
           </>
         )}
         {request.status === 'rejected' && (
@@ -29,7 +29,7 @@ export default function MyRequestsSectionItem({ request }: MyRequestsItemProps) 
         {request.status === 'approved' && (
           <>
             <CheckCircle size={20} className="text-success" />
-            <span className="text-sm text-[#212121]">Aprobada</span>
+            <span className="text-sm text-onsurface">Aprobada</span>
           </>
         )}
       </div>

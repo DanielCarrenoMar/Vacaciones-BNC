@@ -145,14 +145,14 @@ export default function CreateRequest(){
                             onClick={prevMonth} 
                             className="p-1.5 hover:bg-gray-100 rounded-lg transition-colors"
                         >
-                            <ChevronLeft size={18} className="text-[#212121]" />
+                            <ChevronLeft size={18} className="text-onsurface" />
                         </button>
-                        <h2 className="text-base font-semibold text-[#212121]">{monthName}</h2>
+                        <h2 className="text-base font-semibold text-onsurface">{monthName}</h2>
                         <button 
                             onClick={nextMonth} 
                             className="p-1.5 hover:bg-gray-100 rounded-lg transition-colors"
                         >
-                            <ChevronRight size={18} className="text-[#212121]" />
+                            <ChevronRight size={18} className="text-onsurface" />
                         </button>
                     </div>
 
@@ -185,7 +185,7 @@ export default function CreateRequest(){
                                         ${isStart ? 'bg-[#2C5AA0] text-white shadow-md' : ''}
                                         ${isEnd ? 'bg-[#1E3A5F] text-white shadow-md' : ''}
                                         ${isMiddle ? 'bg-primary text-white' : ''}
-                                        ${!isSelected ? 'text-[#212121] hover:bg-gray-100' : ''}
+                                        ${!isSelected ? 'text-onsurface hover:bg-gray-100' : ''}
                                     `}
                                 >
                                     {day}

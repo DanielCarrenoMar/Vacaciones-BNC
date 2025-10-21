@@ -26,7 +26,7 @@ export default function ConfirmModal({
       <div className="bg-white rounded-lg shadow-xl max-w-md w-full mx-4 p-6">
         {/* Header */}
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-semibold text-[#212121]">{title}</h2>
+          <h2 className="text-xl font-semibold text-onsurface">{title}</h2>
           <button
             onClick={onClose}
             className="p-1 hover:bg-gray-100 rounded-full transition-colors"
@@ -42,7 +42,7 @@ export default function ConfirmModal({
         <div className="flex gap-3 justify-end">
           <button
             onClick={onClose}
-            className="px-4 py-2 rounded-md border border-gray-300 hover:bg-gray-50 transition-colors text-[#212121]"
+            className="px-4 py-2 rounded-md border border-gray-300 hover:bg-gray-50 transition-colors text-onsurface"
           >
             {cancelText}
           </button>

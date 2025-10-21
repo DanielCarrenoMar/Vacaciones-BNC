@@ -17,7 +17,7 @@ export default function ReviewRequestNivel2(){
             <div className="flex justify-between items-center mb-6">
                 <h1 className="text-2xl font-semibold text-primary">Revisar Peticiones</h1>
                 <div className="text-right">
-                    <div className="text-sm font-medium text-[#212121]">Líder Nivel 1</div>
+                    <div className="text-sm font-medium text-onsurface">Líder Nivel 1</div>
                     <div className="text-xs text-gray-500">lider.nivel1@correo.com</div>
                 </div>
             </div>
@@ -26,7 +26,7 @@ export default function ReviewRequestNivel2(){
             <div className="bg-white rounded-lg shadow-sm p-6">
                 {/* Header de la tabla */}
                 <div className="flex justify-between items-center mb-6">
-                    <h2 className="text-lg font-semibold text-[#212121]">Peticiones por Revisar</h2>
+                    <h2 className="text-lg font-semibold text-onsurface">Peticiones por Revisar</h2>
                     <div className="text-sm text-gray-600">Faltantes: {faltantes}</div>
                 </div>
 
@@ -62,7 +62,7 @@ export default function ReviewRequestNivel2(){
                         >
                             <div className="flex flex-col">
                                 <span className="text-xs text-gray-500 mb-1">Realizada por</span>
-                                <span className="text-sm font-medium text-[#212121]">{peticion.emisor}</span>
+                                <span className="text-sm font-medium text-onsurface">{peticion.emisor}</span>
                             </div>
                             <div className="flex items-center justify-center text-sm text-gray-600">
                                 {peticion.fecha}

@@ -45,11 +45,11 @@ export default function DashBoard() {
                     <div className="text-sm font-medium text-gray-600 mb-2">Antigüedad</div>
                     <div className="flex items-baseline gap-2">
                         <div className="flex items-baseline gap-1">
-                            <span className="text-4xl font-bold text-[#212121]">{user ? new Date().getFullYear() - user.entryDate.getFullYear() : 0}</span>
+                            <span className="text-4xl font-bold text-onsurface">{user ? new Date().getFullYear() - user.entryDate.getFullYear() : 0}</span>
                             <span className="text-lg text-gray-600">año y</span>
                         </div>
                         <div className="flex items-baseline gap-1">
-                            <span className="text-4xl font-bold text-[#212121]">{user ? new Date().getMonth() - user.entryDate.getMonth() : 0}</span>
+                            <span className="text-4xl font-bold text-onsurface">{user ? new Date().getMonth() - user.entryDate.getMonth() : 0}</span>
                             <span className="text-lg text-gray-600">meses</span>
                         </div>
                     </div>
@@ -69,7 +69,7 @@ export default function DashBoard() {
                 {/* Sección de Mis Peticiones */}
                 <div className="bg-white rounded-lg shadow-sm p-6">
                     <div className="flex items-center justify-between mb-4">
-                        <h2 className="text-xl font-semibold text-[#212121]">Mis Peticiones</h2>
+                        <h2 className="text-xl font-semibold text-onsurface">Mis Peticiones</h2>
                         <button className="p-1 hover:bg-gray-100 rounded transition-colors">
                             <Maximize2 size={20} className="text-gray-400" />
                         </button>
@@ -99,19 +99,19 @@ export default function DashBoard() {
                                     {request.status === 'En espera' && (
                                         <>
                                             <Clock size={20} className="text-orange-400" />
-                                            <span className="text-sm text-[#212121]">{request.status}</span>
+                                            <span className="text-sm text-onsurface">{request.status}</span>
                                         </>
                                     )}
                                     {request.status === 'Posibles días' && (
                                         <>
                                             <Clock size={20} className="text-gray-400" />
-                                            <span className="text-sm text-[#212121]">{request.status}</span>
+                                            <span className="text-sm text-onsurface">{request.status}</span>
                                         </>
                                     )}
                                     {request.status === 'Aprobada' && (
                                         <>
                                             <CheckCircle size={20} className="text-success" />
-                                            <span className="text-sm text-[#212121]">{request.status}</span>
+                                            <span className="text-sm text-onsurface">{request.status}</span>
                                         </>
                                     )}
                                 </div>
@@ -127,7 +127,7 @@ export default function DashBoard() {
                 {/* Sección de Asistente */}
                 <div className="bg-white rounded-lg shadow-sm p-6">
                     <div className="flex items-center justify-between mb-4">
-                        <h2 className="text-xl font-semibold text-[#212121]">¡Pulsa aquí y habla con tu asistente!</h2>
+                        <h2 className="text-xl font-semibold text-onsurface">¡Pulsa aquí y habla con tu asistente!</h2>
                         <button className="p-1 hover:bg-gray-100 rounded transition-colors">
                             <Maximize2 size={20} className="text-gray-400" />
                         </button>

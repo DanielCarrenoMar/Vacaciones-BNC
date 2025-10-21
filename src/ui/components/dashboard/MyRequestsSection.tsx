@@ -10,7 +10,7 @@ export default function MyRequestsSection({ userRequests }: MyRequestsSectionPro
   return (
     <div className="bg-white rounded-lg shadow-sm p-6">
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-xl font-semibold text-[#212121]">Mis Peticiones</h2>
+        <h2 className="text-xl font-semibold text-onsurface">Mis Peticiones</h2>
         <button className="p-1 hover:bg-gray-100 rounded transition-colors">
           <Maximize2 size={20} className="text-gray-400" />
         </button>

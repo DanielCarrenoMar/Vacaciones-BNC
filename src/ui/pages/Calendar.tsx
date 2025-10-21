@@ -166,7 +166,7 @@ export default function Calendar() {
         <div className="h-full bg-background" style={{ fontFamily: 'Poppins, sans-serif' }}>
             {/* Header */}
             <div className="mb-6">
-                <h1 className="text-2xl font-semibold text-[#212121] mb-2">Calendario de Vacaciones</h1>
+                <h1 className="text-2xl font-semibold text-onsurface mb-2">Calendario de Vacaciones</h1>
                 <p className="text-sm text-gray-600">Visualiza tus solicitudes de vacaciones aprobadas, pendientes y rechazadas</p>
             </div>
 
@@ -175,14 +175,14 @@ export default function Calendar() {
                 <div className="flex items-center justify-between mb-6">
                     <div className="flex items-center gap-3">
                         <CalendarIcon size={24} className="text-primary" />
-                        <h2 className="text-xl font-semibold text-[#212121]">{monthName} {year}</h2>
+                        <h2 className="text-xl font-semibold text-onsurface">{monthName} {year}</h2>
                     </div>
                     <div className="flex gap-2">
                         <button
                             onClick={prevMonth}
                             className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
                         >
-                            <ChevronLeft size={20} className="text-[#212121]" />
+                            <ChevronLeft size={20} className="text-onsurface" />
                         </button>
                         <button
                             onClick={() => setCurrentDate(new Date())}
@@ -194,7 +194,7 @@ export default function Calendar() {
                             onClick={nextMonth}
                             className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
                         >
-                            <ChevronRight size={20} className="text-[#212121]" />
+                            <ChevronRight size={20} className="text-onsurface" />
                         </button>
                     </div>
                 </div>
@@ -252,7 +252,7 @@ export default function Calendar() {
                                     } ${isToday ? 'ring-2 ring-primary' : ''}`}
                                 >
                                     <div className={`text-sm font-medium mb-1 ${
-                                        dayInfo.isCurrentMonth ? 'text-[#212121]' : 'text-gray-400'
+                                        dayInfo.isCurrentMonth ? 'text-onsurface' : 'text-gray-400'
                                     } ${isToday ? 'text-primary font-bold' : ''}`}>
                                         {dayInfo.day}
                                     </div>
@@ -265,7 +265,7 @@ export default function Calendar() {
                                                 className={`text-xs px-2 py-1 rounded border-l-4 ${getStatusBorder(event.status)} bg-opacity-10 ${getStatusColor(event.status)}`}
                                                 title={`${event.status} - ${event.days} día(s)`}
                                             >
-                                                <div className="text-[#212121] font-medium truncate">
+                                                <div className="text-onsurface font-medium truncate">
                                                     {event.status}
                                                 </div>
                                             </div>

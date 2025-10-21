@@ -26,7 +26,7 @@ export default function MyRequest() {
     return (
         <div className="p-6 bg-background min-h-screen" style={{ fontFamily: 'Poppins, sans-serif' }}>
             <div className="flex justify-between items-center mb-6">
-                <h1 className="text-2xl font-semibold text-[#212121]">Mis Peticiones</h1>
+                <h1 className="text-2xl font-semibold text-onsurface">Mis Peticiones</h1>
                 <button
                     onClick={() => navigate('/create-request')}
                     className="bg-primary text-white px-6 py-2 rounded-lg hover:bg-primaryVar transition-colors font-medium"
