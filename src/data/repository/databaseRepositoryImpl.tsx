@@ -111,17 +111,34 @@ export const userRepo = {
       const daysInYear = (d: Date) => (isLeapYear(d.getFullYear()) ? 366 : 365)
       function isLeapYear(y: number) { return (y % 4 === 0 && y % 100 !== 0) || (y % 400 === 0) }
 
-      const annualEntitlement = ((user as any).vacationsBalance ?? 0)
+      // Policy-based entitlement
+      // - Right to request activates after 1 year continuous service
+      // - Base: 20 days after first year
+      // - +1 day for each subsequent year, capped at +15
+      const entitlementForDate = (refDate: Date) => {
+        // compute full years completed as of refDate
+        let years = refDate.getFullYear() - entry.getFullYear()
+        const refMonthDay = (m: Date) => m.getMonth() * 100 + m.getDate()
+        if (refMonthDay(refDate) < refMonthDay(entry)) years -= 1
+        if (years < 1) return 0
+        const extra = Math.min(Math.max(0, years - 1), 15)
+        return 20 + extra
+      }
+
+      // activation date (when right starts): entry + 1 year
+      const activationDate = new Date(entry)
+      activationDate.setFullYear(activationDate.getFullYear() + 1)
 
       const entitlementForPeriod = (periodStart: Date, periodEnd: Date) => {
-        // If entry is before or on periodStart => full entitlement
-        if (entry <= periodStart) return annualEntitlement
-        // If entry is on/after periodEnd => no entitlement in that period
-        if (entry >= periodEnd) return 0
-        // else entry is inside the period => prorate from entry to periodEnd
-        const daysActive = daysBetween(entry, periodEnd)
+        // If activation happens on/after periodEnd => not eligible in that period
+        if (activationDate >= periodEnd) return 0
+        // If activation was before or on periodStart => full entitlement based on periodStart
+        if (activationDate <= periodStart) return entitlementForDate(periodStart)
+        // Else activation is inside the period => prorate from activationDate to periodEnd
+        const daysActive = daysBetween(activationDate, periodEnd)
         const denom = daysInYear(periodEnd)
-        return Math.round((annualEntitlement * (daysActive / denom)) * 100) / 100 // round to 2 decimals
+        const full = entitlementForDate(activationDate)
+        return Math.round((full * (daysActive / denom)) * 100) / 100
       }
 
       // obtener vacaciones aprobadas por periodo
@@ -144,9 +161,11 @@ export const userRepo = {
 
       const takenPrev = await fetchTaken(prevStart, prevEnd)
       const takenCurr = await fetchTaken(currStart, currEnd)
+      console.log('Taken Prev:', takenPrev, 'Taken Curr:', takenCurr)
 
       const prevBalance = Math.round((prevEntitlement - takenPrev) * 100) / 100
       const currBalance = Math.round((currEntitlement - takenCurr) * 100) / 100
+      console.log('Prev Balance:', prevBalance, 'Curr Balance:', currBalance)
 
       const totalAvailable = Math.round((prevBalance + currBalance) * 100) / 100
 
