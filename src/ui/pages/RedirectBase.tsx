@@ -9,7 +9,7 @@ export default function RedirectBase(){
         if (!userRole) return
         if (userRole === 'nivel2') navigate('/nivel2/dashboard', { replace: true })
         else if (userRole === 'nivel1') navigate('/nivel2/dashboard', { replace: true })
-        else if (userRole === 'gestionHumana') navigate('/gestion/dashboard', { replace: true })
+        else if (userRole === 'gestionHumana') navigate('/nivel2/dashboard', { replace: true })
         else navigate('/dashboard', { replace: true })
     }, [userRole])
     return <></>
