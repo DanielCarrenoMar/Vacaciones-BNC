@@ -92,7 +92,7 @@ export const VerifyAuthProvider: React.FC<{ children: React.ReactNode }> = ({ ch
     const { data: subscription } = supabase.auth.onAuthStateChange((_event, session) => {
       if (!mounted) return
       setSession(session ?? null)
-      console.log('Auth state changed:', _event, session)
+
       if (!session && !isAuthRoute(location.pathname)) {
         navigate('/auth/login', { replace: true })
       }
