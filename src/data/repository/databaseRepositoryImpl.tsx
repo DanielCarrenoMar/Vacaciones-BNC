@@ -1,4 +1,5 @@
 import type { Request, User, Vacation } from '#domain/models.ts';
+import { get } from 'http';
 import supabase from '../supabase'
 type SupabaseResult<T> = Promise<{ data: T | null; error: any }>
 
@@ -206,6 +207,9 @@ export const requestRepo = {
   },
   getById: async (id: number): SupabaseResult<Request> => {
     return from<Request>("request", (t: any) => t.select('*').eq('id', id).single())
+  },
+  getByUserId: async (employedID: number): SupabaseResult<Request[]> => {
+    return from<Request[]>("request", (t: any) => t.select('*').eq('employedID', employedID))
   },
   create: async (payload: Omit<Request, 'id' | 'created_at' | 'update_at'>): SupabaseResult<Request> => {
     return from<Request>("request", (t: any) => t.insert(payload).select().single())

@@ -16,6 +16,9 @@ const VerifyAuthContext = createContext<VerifyAuthContextType>({ loading: true, 
 
 export const useVerifyAuth = () => useContext(VerifyAuthContext)
 
+// MODO DESARROLLO: Cambiar a true para simular autenticación sin Supabase
+const DEV_MODE = true
+
 // Provider that ensures the user is authenticated. If not, redirects to /auth/login
 export const VerifyAuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [loading, setLoading] = useState(true)
@@ -59,6 +62,22 @@ export const VerifyAuthProvider: React.FC<{ children: React.ReactNode }> = ({ ch
       if (isgestionRoute(path) && userRole !== 'gestionHumana') navigate('/', { replace: true })
       else if (isNivel1Route(path) && userRole !== 'nivel1') navigate('/', { replace: true })
       else if (isNivel2Route(path) && userRole !== 'nivel2') navigate('/', { replace: true })
+    }
+
+    // MODO DESARROLLO: Simular sesión autenticada
+    if (DEV_MODE) {
+      const mockSession = {
+        user: {
+          id: 'mock-user-id',
+          email: 'pedrito.24@correo.com',
+          user_metadata: {
+            name: 'Pedrito'
+          }
+        }
+      }
+      setSession(mockSession)
+      setLoading(false)
+      return
     }
 
     // get initial session

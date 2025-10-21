@@ -10,8 +10,12 @@ import MyRequest from "#ui/pages/MyRequest.tsx";
 import Request from "#ui/pages/Request.tsx";
 import ApproveRequest from "#ui/pages/gestion/ApproveRequest.tsx";
 import ReviewRequestNivel1 from "#ui/pages/nivel1/ReviewRequestNivel1.tsx";
+import ReviewRequestDetail from "#ui/pages/nivel1/ReviewRequestDetail.tsx";
 import ReviewRequestNivel2 from "#ui/pages/nivel2/ReviewRequestNivel2.tsx";
+import ReviewRequestDetailNivel2 from "#ui/pages/nivel2/ReviewRequestDetailNivel2.tsx";
 import Assistant from "./pages/Assistant";
+import Team from "./pages/Team";
+import Statistics from "./pages/Statistics";
 import MenuLayer from "./layers/menuLayer";
 import Logout from "./pages/auth/logout";
 
@@ -37,11 +41,15 @@ export const router = createBrowserRouter([
                     { path: "/config", element: <Configuration /> },
                     { path: "/create-request", element: <CreateRequest /> },
                     { path: "/assistant", element: <Assistant /> },
+                    { path: "/statistics", element: <Statistics /> },
                     { path: "/my-requests", element: <MyRequest /> },
                     { path: "/request", element: <MyRequest /> },
+                    { path: "/team", element: <Team /> },
                     { path: "/gestion/approve", element: <ApproveRequest /> },
                     { path: "/nivel1/review", element: <ReviewRequestNivel1 /> },
+                    { path: "/nivel1/review/:id", element: <ReviewRequestDetail /> },
                     { path: "/nivel2/review", element: <ReviewRequestNivel2 /> },
+                    { path: "/nivel2/review/:id", element: <ReviewRequestDetailNivel2 /> },
                 ]
             },
             { path: "/request/:id", element: <Request /> },
