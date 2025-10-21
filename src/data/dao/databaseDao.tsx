@@ -81,7 +81,7 @@ export const requestDao = {
     return from<RequestDAO[]>("request", (t: any) => t.select('*'))
   },
   getById: async (id: number): SupabaseResult<RequestDAO> => {
-    return from<RequestDAO>("request", (t: any) => t.select('*').eq('id', id).single())
+    return from<RequestDAO>("request", (t: any) => t.select('*').eq('requestID', id).single())
   },
   getBySenderId: async (employedID: number): SupabaseResult<RequestDAO[]> => {
     return from<RequestDAO[]>("request", (t: any) => t.select('*').eq('senderID', employedID))
