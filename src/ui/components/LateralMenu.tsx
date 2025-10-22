@@ -1,7 +1,7 @@
 import type { Role } from '#domain/models.ts';
 import MenuItem from './MenuItem'
 import ConfirmModal from './ConfirmModal'
-import { LayoutDashboard, RefreshCw, FileText, Users, Calendar, Settings, LogOut, ChevronLeft, ChevronRight, TrendingUp, Rocket, CheckCircle, Menu, X } from 'lucide-react'
+import { LayoutDashboard, RefreshCw, FileText, Users, Calendar, Settings, LogOut, ChevronLeft, ChevronRight, TrendingUp, CheckCircle, Menu, X } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 
