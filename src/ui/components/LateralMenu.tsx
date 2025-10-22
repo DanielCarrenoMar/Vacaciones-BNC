@@ -23,7 +23,6 @@ const itemsByRole: Record<Role, Array<MenuItem>> = {
         { label: 'Aprobar Peticiones', path: '/gestion/approve', icon: <CheckCircle size={20} />, section: 'principal' },
         { label: 'Mis Peticiones', path: '/my-requests', icon: <FileText size={20} />, section: 'principal' },
         { label: 'Estadísticas', path: '/statistics', icon: <TrendingUp size={20} />, section: 'principal' },
-        { label: 'Asistente', path: '/assistant', icon: <Rocket size={20} />, section: 'principal' },
         { label: 'Equipo', path: '/team', icon: <Users size={20} />, section: 'principal' },
         { label: 'Calendario', path: '/calendar', icon: <Calendar size={20} />, section: 'principal' },
         { label: 'Configuración', path: '/config', icon: <Settings size={20} />, section: 'sistema' },
