@@ -28,7 +28,7 @@ export default function DashBoardNivel2() {
         }
         async function fetchPendingReviewRequests() {
             if (!user) return;
-            const { data, error } = await requestRepo.getByReceiverId(user.employedID)
+            const { data, error } = await requestRepo.getWithFinalApprovedByReceiverId(user.employedID)
             if (error) throw error
             if (data) {
                 // Contar solo las peticiones en espera

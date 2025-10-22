@@ -120,6 +120,9 @@ export const requestDao = {
   getByReceiverId: async (employedID: number): SupabaseResult<RequestDAO[]> => {
     return from<RequestDAO[]>("request", (t: any) => t.select('*').eq('receiverID', employedID).eq("finalApprove", false))
   },
+  getWithFinalApprovedByReceiverId: async (employedID: number): SupabaseResult<RequestDAO[]> => {
+    return from<RequestDAO[]>("request", (t: any) => t.select('*').eq('receiverID', employedID))
+  },
   create: async (payload: Omit<RequestDAO, 'requestID' | 'created_at' | 'update_at'>): SupabaseResult<RequestDAO> => {
     return from<RequestDAO>("request", (t: any) => t.insert(payload).select().single())
   },
