@@ -137,9 +137,9 @@ export const requestRangeDao = {
     return from<RequestRangeDAO>("requestRange", (t: any) => t.select('*').eq('requestID', requestID).eq('isPrimary', true).single())
   },
   getPrimaryDays: async (requestID: number): SupabaseResult<number> => {
-    const { data, error } = await from<RequestRangeDAO>("requestRange", (t: any) => t.select('*').eq('requestID', requestID).eq('isPrimary', true).single())
+    const { data, error } = await from<RequestRangeDAO>("requestRange", (t: any) => t.select('*').eq('requestID', requestID).eq('isPrimary', true).maybeSingle())
     if (error) return { data: null, error }
-    if (!data) return { data: null, error: null }
+    if (!data) return { data: 0, error: null } // Si no hay rango primario, devolver 0 días.
     const start = new Date(data.startDate)
     const end = new Date(data.endDate)
     const diffTime = Math.abs(end.getTime() - start.getTime())

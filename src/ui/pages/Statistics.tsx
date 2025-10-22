@@ -37,7 +37,7 @@ export default function Statistics() {
     const [heatMapData, setHeatMapData] = useState<HeatMapDay[]>([])
     const [loading, setLoading] = useState(true)
     const [visibleDays, setVisibleDays] = useState(28) // Inicialmente 4 semanas
-    
+
     // Filtros
     const [filterEmployee, setFilterEmployee] = useState<string>('all')
     const [filterStatus, setFilterStatus] = useState<string>('all')
@@ -48,110 +48,106 @@ export default function Statistics() {
         async function fetchStatistics() {
             if (!user) return
             setLoading(true)
+            // Obtener miembros del equipo
+            const { data: directReports } = await userRepo.getUsersBelow(user.employedID)
 
-            try {
-                // Obtener miembros del equipo
-                const { data: directReports } = await userRepo.getUsersBelow(user.employedID)
-                
-                if (directReports && directReports.length > 0) {
-                    const stats: TeamMemberStats[] = []
-                    const details: RequestDetail[] = []
-                    const monthlyData: { [key: string]: number } = {}
-                    const heatMap: { [key: string]: number } = {}
+            if (directReports && directReports.length > 0) {
+                const stats: TeamMemberStats[] = []
+                const details: RequestDetail[] = []
+                const monthlyData: { [key: string]: number } = {}
+                const heatMap: { [key: string]: number } = {}
 
-                    // Inicializar meses
-                    const months = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic']
-                    months.forEach(month => monthlyData[month] = 0)
+                // Inicializar meses
+                const months = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic']
+                months.forEach(month => monthlyData[month] = 0)
 
-                    // Inicializar próximos 90 días para el mapa de calor
-                    const today = new Date()
-                    for (let i = 0; i < 90; i++) {
-                        const date = new Date(today)
-                        date.setDate(today.getDate() + i)
-                        const dateKey = date.toISOString().split('T')[0]
-                        heatMap[dateKey] = 0
-                    }
+                // Inicializar próximos 90 días para el mapa de calor
+                const today = new Date()
+                for (let i = 0; i < 90; i++) {
+                    const date = new Date(today)
+                    date.setDate(today.getDate() + i)
+                    const dateKey = date.toISOString().split('T')[0]
+                    heatMap[dateKey] = 0
+                }
 
-                    for (const member of directReports) {
-                        // Obtener días disponibles
-                        const { data: balance } = await userRepo.getVacationBalance(member.employedID)
-                        const vacDays = balance?.totalAvailable || 0
+                for (const member of directReports) {
+                    // Obtener días disponibles
+                    const { data: balance } = await userRepo.getVacationBalance(member.employedID)
+                    const vacDays = balance?.totalAvailable || 0
+                    console.log('Vacation days for', member.name, vacDays)
 
-                        stats.push({
-                            user: member,
-                            vacationDays: vacDays
-                        })
+                    stats.push({
+                        user: member,
+                        vacationDays: vacDays
+                    })
 
-                        // Obtener solicitudes
-                        const { data: requests } = await requestRepo.getBySenderId(member.employedID)
-                        
-                        if (requests) {
-                            for (const request of requests) {
-                                const { data: ranges } = await requestRangeRepo.getByRequestId(request.requestID)
-                                
-                                if (ranges && ranges.length > 0) {
-                                    ranges.forEach(range => {
-                                        const startDate = range.startDate
-                                        const endDate = range.endDate
-                                        
-                                        // Agregar a detalles
-                                        details.push({
-                                            id: request.requestID,
-                                            employeeName: member.name,
-                                            startDate: startDate,
-                                            endDate: endDate,
-                                            days: range.days,
-                                            status: request.status
-                                        })
+                    // Obtener solicitudes
+                    console.log('Fetching requests for', member.name, member.employedID)
+                    const { data: requests } = await requestRepo.getBySenderId(member.employedID)
+                    console.log('Requests for', member.name, requests)
 
-                                        // Agregar a estadísticas mensuales
-                                        const monthIndex = startDate.getMonth()
-                                        monthlyData[months[monthIndex]] += range.days
+                    if (requests) {
+                        for (const request of requests) {
+                            const { data: ranges } = await requestRangeRepo.getByRequestId(request.requestID)
 
-                                        // Agregar al mapa de calor (solo aprobadas)
-                                        if (request.status === 'approved') {
-                                            const currentDate = new Date(startDate)
-                                            while (currentDate <= endDate) {
-                                                const dateKey = currentDate.toISOString().split('T')[0]
-                                                if (heatMap[dateKey] !== undefined) {
-                                                    heatMap[dateKey]++
-                                                }
-                                                currentDate.setDate(currentDate.getDate() + 1)
-                                            }
-                                        }
+                            if (ranges && ranges.length > 0) {
+                                ranges.forEach(range => {
+                                    const startDate = range.startDate
+                                    const endDate = range.endDate
+
+                                    // Agregar a detalles
+                                    details.push({
+                                        id: request.requestID,
+                                        employeeName: member.name,
+                                        startDate: startDate,
+                                        endDate: endDate,
+                                        days: range.days,
+                                        status: request.status
                                     })
-                                }
+
+                                    // Agregar a estadísticas mensuales
+                                    const monthIndex = startDate.getMonth()
+                                    monthlyData[months[monthIndex]] += range.days
+
+                                    // Agregar al mapa de calor (solo aprobadas)
+                                    if (request.status === 'approved') {
+                                        const currentDate = new Date(startDate)
+                                        while (currentDate <= endDate) {
+                                            const dateKey = currentDate.toISOString().split('T')[0]
+                                            if (heatMap[dateKey] !== undefined) {
+                                                heatMap[dateKey]++
+                                            }
+                                            currentDate.setDate(currentDate.getDate() + 1)
+                                        }
+                                    }
+                                })
                             }
                         }
                     }
-
-                    // Ordenar por días acumulados (mayor a menor)
-                    stats.sort((a, b) => b.vacationDays - a.vacationDays)
-
-                    // Convertir datos mensuales a array
-                    const monthlyArray = months.map(month => ({
-                        month,
-                        totalDays: monthlyData[month]
-                    }))
-
-                    // Convertir mapa de calor a array
-                    const heatMapArray = Object.entries(heatMap).map(([dateStr, count]) => ({
-                        date: new Date(dateStr),
-                        count
-                    }))
-
-                    setTeamStats(stats)
-                    setMonthlyStats(monthlyArray)
-                    setRequestDetails(details)
-                    setHeatMapData(heatMapArray)
                 }
-            } catch (error) {
-                console.error('Error fetching statistics:', error)
-            } finally {
-                setLoading(false)
-            }
-        }
 
+                // Ordenar por días acumulados (mayor a menor)
+                stats.sort((a, b) => b.vacationDays - a.vacationDays)
+
+                // Convertir datos mensuales a array
+                const monthlyArray = months.map(month => ({
+                    month,
+                    totalDays: monthlyData[month]
+                }))
+
+                // Convertir mapa de calor a array
+                const heatMapArray = Object.entries(heatMap).map(([dateStr, count]) => ({
+                    date: new Date(dateStr),
+                    count
+                }))
+
+                setTeamStats(stats)
+                setMonthlyStats(monthlyArray)
+                setRequestDetails(details)
+                setHeatMapData(heatMapArray)
+            }
+            setLoading(false)
+        }
         fetchStatistics()
     }, [user])
 
@@ -254,21 +250,19 @@ export default function Statistics() {
                                         <div className="flex-1">
                                             <div className="flex items-center justify-between mb-1">
                                                 <span className="font-medium text-onsurface">{member.user.name}</span>
-                                                <span className={`font-bold ${
-                                                    member.vacationDays > 20 ? 'text-red-600' :
-                                                    member.vacationDays > 15 ? 'text-orange-600' :
-                                                    'text-green-600'
-                                                }`}>
+                                                <span className={`font-bold ${member.vacationDays > 20 ? 'text-red-600' :
+                                                        member.vacationDays > 15 ? 'text-orange-600' :
+                                                            'text-green-600'
+                                                    }`}>
                                                     {member.vacationDays} días
                                                 </span>
                                             </div>
                                             <div className="w-full bg-gray-200 rounded-full h-3">
                                                 <div
-                                                    className={`h-3 rounded-full transition-all ${
-                                                        member.vacationDays > 20 ? 'bg-red-500' :
-                                                        member.vacationDays > 15 ? 'bg-orange-500' :
-                                                        'bg-green-500'
-                                                    }`}
+                                                    className={`h-3 rounded-full transition-all ${member.vacationDays > 20 ? 'bg-red-500' :
+                                                            member.vacationDays > 15 ? 'bg-orange-500' :
+                                                                'bg-green-500'
+                                                        }`}
                                                     style={{ width: `${Math.min((member.vacationDays / 30) * 100, 100)}%` }}
                                                 />
                                             </div>
@@ -283,7 +277,7 @@ export default function Statistics() {
                         {top5Accumulators.some(m => m.vacationDays > 20) && (
                             <div className="mt-6 p-4 bg-orange-50 border border-orange-200 rounded-lg">
                                 <p className="text-sm text-orange-800">
-                                    <strong>⚠️ Alerta:</strong> Hay empleados con más de 20 días acumulados. 
+                                    <strong>⚠️ Alerta:</strong> Hay empleados con más de 20 días acumulados.
                                     Considera animarlos a tomar vacaciones para prevenir el burnout.
                                 </p>
                             </div>
@@ -350,7 +344,7 @@ export default function Statistics() {
 
                         <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
                             <p className="text-sm text-blue-800">
-                                <strong>💡 Tip:</strong> Los días en rojo indican alta carga de ausencias. 
+                                <strong>💡 Tip:</strong> Los días en rojo indican alta carga de ausencias.
                                 Evita aprobar nuevas solicitudes en esos días para mantener la operatividad del equipo.
                             </p>
                         </div>
@@ -381,7 +375,7 @@ export default function Statistics() {
 
                         <div className="mt-4 p-4 bg-green-50 border border-green-200 rounded-lg">
                             <p className="text-sm text-green-800">
-                                <strong>📊 Insight:</strong> Identifica tus "meses calientes" para planificar proyectos importantes 
+                                <strong>📊 Insight:</strong> Identifica tus "meses calientes" para planificar proyectos importantes
                                 en los meses con menor demanda de vacaciones.
                             </p>
                         </div>
@@ -484,12 +478,11 @@ export default function Statistics() {
                                                 </td>
                                                 <td className="py-3 px-4 text-sm font-semibold text-onsurface">{detail.days}</td>
                                                 <td className="py-3 px-4">
-                                                    <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
-                                                        detail.status === 'approved' ? 'bg-green-100 text-green-800' :
-                                                        detail.status === 'waiting' ? 'bg-orange-100 text-orange-800' :
-                                                        detail.status === 'rejected' ? 'bg-red-100 text-red-800' :
-                                                        'bg-blue-100 text-blue-800'
-                                                    }`}>
+                                                    <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${detail.status === 'approved' ? 'bg-green-100 text-green-800' :
+                                                            detail.status === 'waiting' ? 'bg-orange-100 text-orange-800' :
+                                                                detail.status === 'rejected' ? 'bg-red-100 text-red-800' :
+                                                                    'bg-blue-100 text-blue-800'
+                                                        }`}>
                                                         {getStatusLabel(detail.status)}
                                                     </span>
                                                 </td>
