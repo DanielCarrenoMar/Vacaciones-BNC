@@ -212,6 +212,12 @@ export const vacationRepo = {
     const modelData = toVacationModel(data)
     return { data: modelData, error: null }
   },
+  getByRequestId: async (requestID: number): SupabaseResult<Vacation[]> => {
+    const { data, error } = await vacationDao.getByRequestId(requestID)
+    if (error) return { data: null, error }
+    const modelData = (data || []).map(v => toVacationModel(v))
+    return { data: modelData, error: null }
+  },
   create: async (payload: Omit<VacationDAO, 'id' | 'aprovated_at'>): SupabaseResult<Vacation> => {
     const { data, error } = await vacationDao.create(payload)
     if (error) return { data: null, error }

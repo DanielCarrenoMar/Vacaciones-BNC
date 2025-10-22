@@ -18,6 +18,8 @@ export interface VacationDAO {
   startDate: string
   endDate: string
   employedID: number
+  requestID: number
+  bonus: number
 }
 
 export interface RequestDAO {
