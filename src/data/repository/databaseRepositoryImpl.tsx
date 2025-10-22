@@ -1,4 +1,4 @@
-import { toRequestModel, toRequestRangeDao, toRequestRangeModel, toUserModel, toVacationModel, type Request, type RequestRange, type User, type Vacation } from '#domain/models.ts';
+import { toRequestModel, toRequestRangeModel, toUserModel, toVacationModel, type Request, type RequestRange, type User, type Vacation } from '#domain/models.ts';
 import type { RequestDAO, RequestRangeDAO, SupabaseResult, UserDAO, VacationDAO } from '#data/dao/dao.ts';
 import { userDao, vacationDao, requestDao, requestRangeDao } from '#data/dao/databaseDao.tsx';
 import supabase from '#data/supabase.ts'

@@ -45,7 +45,7 @@ export default function Team() {
             
             try {
                 // Obtener miembros del equipo (reportes directos)
-                const { data: directReports, error: reportsError } = await userRepo.getDirectReports(user.employedID.toString())
+                const { data: directReports, error: reportsError } = await userRepo.getDirectReports(user.employedID)
                 if (reportsError) throw reportsError
                 
                 if (directReports && directReports.length > 0) {
@@ -63,22 +63,22 @@ export default function Team() {
                         
                         // Obtener solicitudes del miembro
                         const { data: requests } = await requestRepo.getBySenderId(member.employedID)
-                        const pendingCount = requests?.filter(r => r.status === 'En espera').length || 0
+                        const pendingCount = requests?.filter(r => r.status === 'waiting').length || 0
                         pending += pendingCount
                         
                         // Obtener próxima ausencia
                         let nextAbsence: Date | null = null
                         if (requests) {
                             for (const request of requests) {
-                                if (request.status === 'Aprobada') {
-                                    const { data: ranges } = await requestRangeRepo.getByRequestId(request.id)
+                                if (request.status === 'approved') {
+                                    const { data: ranges } = await requestRangeRepo.getByRequestId(request.requestID)
                                     if (ranges && ranges.length > 0) {
-                                        const futureRanges = ranges.filter(r => new Date(r.start_date) > new Date())
+                                        const futureRanges = ranges.filter(r => new Date(r.startDate) > new Date())
                                         if (futureRanges.length > 0) {
                                             const nearest = futureRanges.sort((a, b) => 
-                                                new Date(a.start_date).getTime() - new Date(b.start_date).getTime()
+                                                new Date(a.startDate).getTime() - new Date(b.startDate).getTime()
                                             )[0]
-                                            nextAbsence = new Date(nearest.start_date)
+                                            nextAbsence = new Date(nearest.startDate)
                                             break
                                         }
                                     }
@@ -87,15 +87,15 @@ export default function Team() {
                             
                             // Agregar eventos al calendario
                             for (const request of requests) {
-                                const { data: ranges } = await requestRangeRepo.getByRequestId(request.id)
+                                const { data: ranges } = await requestRangeRepo.getByRequestId(request.requestID)
                                 if (ranges && ranges.length > 0) {
                                     ranges.forEach(range => {
                                         events.push({
                                             user: member,
-                                            requestId: request.id,
+                                            requestId: request.requestID,
                                             status: request.status,
-                                            startDate: range.start_date,
-                                            endDate: range.end_date,
+                                            startDate: range.startDate,
+                                            endDate: range.endDate,
                                             days: range.days
                                         })
                                     })

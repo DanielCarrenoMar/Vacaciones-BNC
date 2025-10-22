@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useVerifyAuth } from '#providers/VerifyAuthProvider.tsx';
 import { requestRepo, userRepo } from '#repository/databaseRepositoryImpl.tsx';
-import { Clock, CheckCircle, Rocket, ChevronDown, Maximize2, Calendar } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import type { Request } from '#domain/models.ts';
 import MyRequestsSection from '#ui/components/dashboard/MyRequestsSection.tsx';

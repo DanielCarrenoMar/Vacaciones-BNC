@@ -29,18 +29,22 @@ export default function MenuLayer() {
                     userName: user.name
                 },
                 showWelcomeScreen: false,
-                defaultLanguage: 'es',
+                defaultLanguage: 'en',
                 initialMessages: [
                     'Hola soy tu Asistente Vacacional',
                     'En que te puedo ayudar hoy?'
                 ],
                 i18n: {
-                    es: {
+                    en: {
                         title: '¡Hola! 👋',
                         subtitle: "Inicia un chat. Estamos aquí para ayudarte 24/7.",
                         footer: '',
                         getStarted: 'New Conversation',
                         inputPlaceholder: 'Type your question..',
+                        sendButtonLabel: 'Send',
+                        closeButtonLabel: 'Close chat',
+                        closeButtonTooltip: 'Close chat',
+                        welcomeMessage: 'Hello! How can I assist you today?',
                     },
                 },
                 enableStreaming: false,

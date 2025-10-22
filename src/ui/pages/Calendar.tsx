@@ -36,16 +36,16 @@ export default function Calendar() {
                     const events: VacationEvent[] = []
                     
                     for (const request of requests) {
-                        const { data: ranges, error: rangeError } = await requestRangeRepo.getByRequestId(request.id)
+                        const { data: ranges, error: rangeError } = await requestRangeRepo.getByRequestId(request.requestID)
                         if (rangeError) continue
                         
                         if (ranges && ranges.length > 0) {
                             ranges.forEach(range => {
                                 events.push({
-                                    requestId: request.id,
+                                    requestId: request.requestID,
                                     status: request.status,
-                                    startDate: range.start_date,
-                                    endDate: range.end_date,
+                                    startDate: range.startDate,
+                                    endDate: range.endDate,
                                     days: range.days
                                 })
                             })

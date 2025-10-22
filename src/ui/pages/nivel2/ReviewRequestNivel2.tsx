@@ -1,4 +1,4 @@
-import type { Request, User } from '#domain/models.ts';
+import type { Request } from '#domain/models.ts';
 import { useVerifyAuth } from '#providers/VerifyAuthProvider.tsx';
 import { requestRepo, userRepo } from '#repository/databaseRepositoryImpl.tsx';
 import { Calendar } from 'lucide-react'

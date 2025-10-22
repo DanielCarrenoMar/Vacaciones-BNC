@@ -4,13 +4,11 @@ import { ArrowLeft, ChevronLeft, ChevronRight } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { pino } from 'pino'
-import { useVerifyAuth } from '#providers/VerifyAuthProvider.tsx'
 
 const logger = pino()
 
 export default function ApproveRequestDetail() {
     const { id } = useParams()
-    const { user } = useVerifyAuth()
     const requestID = Number(id)
     const [currentMonth, setCurrentMonth] = useState(new Date())
     const [request, setRequest] = useState<Request>()
