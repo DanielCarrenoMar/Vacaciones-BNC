@@ -185,17 +185,11 @@ export default function ReviewRequestDetailNivel2() {
 
             {/* Botones de acción */}
             <div className="flex justify-center gap-4 mt-8">
-                <button className="flex items-center gap-2 px-2 hover:bg-gray-100 rounded-lg transition-colors">
-                    <ChevronLeft size={24} className="text-onsurface" />
-                </button>
                 <button onClick={onDeny} className="bg-error text-white px-12 py-3 rounded-lg hover:bg-error transition-colors font-medium">
                     Denegar
                 </button>
                 <button onClick={onApprove} className="bg-success text-white px-12 py-3 rounded-lg hover:bg-success transition-colors font-medium">
                     Aprobar
-                </button>
-                <button className="flex items-center gap-2 px-2 hover:bg-gray-100 rounded-lg transition-colors">
-                    <ChevronRight size={24} className="text-onsurface" />
                 </button>
             </div>
         </div>
