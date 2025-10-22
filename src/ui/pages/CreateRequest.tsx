@@ -186,7 +186,7 @@ export default function CreateRequest(){
                             const today = new Date()
                             const isToday = day === today.getDate() && currentMonth.getMonth() === today.getMonth() && currentMonth.getFullYear() === today.getFullYear()
                             const date = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), day)
-                            const isPast = date < new Date(today.getFullYear(), today.getMonth(), today.getDate())
+                            const isPast = date < new Date(today.getFullYear(), today.getMonth(), today.getDate() + 30)
                             
                             return (
                                 <button
