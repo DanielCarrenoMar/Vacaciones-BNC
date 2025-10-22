@@ -130,8 +130,7 @@ export const userRepo = {
         return Math.round((full * (daysActive / denom)) * 100) / 100
       }
 
-      // obtener vacaciones aprobadas por periodo
-      const fetchTaken = async (start: Date, end: Date) => {
+      const fetchVacationTaken = async (start: Date, end: Date) => {
         const { data, error } = await supabase
           .from('vacation')
           .select('startDate, endDate')
@@ -150,11 +149,34 @@ export const userRepo = {
         }, 0)
       }
 
+      const fetchTakenDaysFromRequests = async (start: Date, end: Date) => {
+        const { data, error } = await supabase
+          .from('request')
+          .select('requestID, requestRange(startDate, endDate)')
+          .eq('senderID', employedID)
+          .eq('finalApprove', true)
+          .gte('update_at', start.toISOString())
+          .lt('update_at', end.toISOString())
+
+        if (error) throw error
+
+        return (data || []).reduce((totalDays, request) => {
+          const ranges = (request as any).requestRange || []
+          const daysInRequest = ranges.reduce((subTotal: number, range: any) => {
+            const startDate = new Date(range.startDate)
+            const endDate = new Date(range.endDate)
+            const duration = Math.ceil((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)) + 1
+            return subTotal + (duration || 0)
+          }, 0)
+          return totalDays + daysInRequest
+        }, 0)
+      }
+
       const prevEntitlement = entitlementForPeriod(prevStart, prevEnd)
       const currEntitlement = entitlementForPeriod(currStart, currEnd)
 
-      const takenPrev = await fetchTaken(prevStart, prevEnd)
-      const takenCurr = await fetchTaken(currStart, currEnd)
+      const takenPrev = await fetchVacationTaken(prevStart, prevEnd) + await fetchTakenDaysFromRequests(prevStart, prevEnd)
+      const takenCurr = await fetchVacationTaken(currStart, currEnd) + await fetchTakenDaysFromRequests(currStart, currEnd)
 
       const prevBalance = Math.round((prevEntitlement - takenPrev) * 100) / 100
       const currBalance = Math.round((currEntitlement - takenCurr) * 100) / 100
