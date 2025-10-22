@@ -27,11 +27,40 @@ export default function MenuItem({ icon, label, href, isCollapsed = false, onCli
     isActive = location.pathname === href || location.pathname.startsWith(href + '/')
   }
 
+  if (onClick) {
+    const commonClass = `flex items-center gap-3 w-full text-left rounded-lg transition-colors  cursor-pointer ${
+      isActive 
+        ? 'bg-primary text-white' 
+        : 'text-onsurface hover:bg-white'
+    }`
+
+    if (isCollapsed) {
+      return (
+        <button
+          onClick={onClick}
+          className={`justify-center p-2 w-10 h-10 ${commonClass}`}
+          title={label}
+        >
+          {icon && <span className="flex-shrink-0">{icon}</span>}
+        </button>
+      )
+    }
+
+    return (
+      <button
+        onClick={onClick}
+        className={`px-3 py-3 ${commonClass}r`}
+      >
+        {icon && <span className="flex-shrink-0">{icon}</span>}
+        <span className="text-sm">{label}</span>
+      </button>
+    )
+  }
+
   if (isCollapsed) {
     return (
       <Link 
         to={href} 
-        onClick={onClick}
         className={`flex items-center justify-center p-2 w-10 h-10 rounded-lg transition-colors ${
           isActive 
             ? 'bg-primary text-white' 
