@@ -1,11 +1,10 @@
 import { userRepo } from "#repository/databaseRepositoryImpl.tsx";
 import { useEffect, useState } from "react";
 import supabase from "../../../data/supabase"
-import { Link, useNavigate } from "react-router-dom";
+import { Link} from "react-router-dom";
 import type { User } from "#domain/models.ts";
 
 export default function RegisterPage() {
-    const navigate = useNavigate();
     const [users, setUsers] = useState<User[]>([]);
     const [error, setError] = useState("");
     const [successMessage, setSuccessMessage] = useState("");
