@@ -14,6 +14,7 @@ export default function ApproveRequestDetail() {
     const [request, setRequest] = useState<Request>()
     const [requestPrimaryRange, setRequestPrimaryRange] = useState<RequestRange>()
     const [senderUser, setSenderUser] = useState<User>()
+    const [paymentAmount, setPaymentAmount] = useState('');
     const navigate = useNavigate()
 
     useEffect(() => {
@@ -60,6 +61,12 @@ export default function ApproveRequestDetail() {
     }
 
     function onApprove() {
+        // Condición de guarda: no hacer nada si el monto no es válido.
+        if (!paymentAmount || Number(paymentAmount) <= 0) {
+            logger.warn('Intento de aprobar sin un monto válido.');
+            return;
+        }
+
         vacationRepo.create({
             employedID: senderUser!.employedID,
             startDate: requestPrimaryRange!.startDate.toDateString(),
@@ -75,6 +82,7 @@ export default function ApproveRequestDetail() {
             if (error) logger.error(error)
             else navigate('/gestion/approve')
         })
+
     }
     function onDeny() {
         // No puede
@@ -126,6 +134,17 @@ export default function ApproveRequestDetail() {
                         <div className="flex justify-between py-2 border-b">
                             <span className="text-gray-600">Dias Totales:</span>
                             <span className="font-medium text-onsurface">{requestPrimaryRange?.days}</span>
+                        </div>
+                        <div className="flex justify-between items-center py-2 border-b">
+                            <label htmlFor="paymentAmount" className="text-gray-600">Monto a pagar (Bono):</label>
+                            <input
+                                id="paymentAmount"
+                                type="number"
+                                value={paymentAmount}
+                                onChange={(e) => setPaymentAmount(e.target.value)}
+                                placeholder="Ej: 1500.00"
+                                className="font-medium text-onsurface text-right border border-gray-300 rounded-md px-2 py-1 w-40 focus:outline-none focus:ring-2 focus:ring-primary"
+                            />
                         </div>
                     </div>
                 </div>
@@ -185,10 +204,11 @@ export default function ApproveRequestDetail() {
 
             {/* Botones de acción */}
             <div className="flex justify-center gap-4 mt-8">
-                <button onClick={onDeny} className="bg-error text-white px-12 py-3 rounded-lg hover:bg-error transition-colors font-medium">
-                    Denegar
-                </button>
-                <button onClick={onApprove} className="bg-success text-white px-12 py-3 rounded-lg hover:bg-success transition-colors font-medium">
+                <button
+                    onClick={onApprove}
+                    disabled={!paymentAmount || Number(paymentAmount) <= 0}
+                    className="bg-success text-white w-full py-3 rounded-lg transition-colors font-medium enabled:hover:bg-green-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
+                >
                     Aprobar
                 </button>
             </div>
