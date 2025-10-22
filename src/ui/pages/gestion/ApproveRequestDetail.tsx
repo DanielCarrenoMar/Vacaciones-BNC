@@ -72,6 +72,7 @@ export default function ApproveRequestDetail() {
         requestRepo.update(requestID, {
             requestID: requestID,
             status: 'approved',
+            finalApprove: false
         }).then(({error}) => {
             if (error) logger.error(error)
             else navigate('/gestion/approve')
