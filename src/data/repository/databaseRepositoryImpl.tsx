@@ -155,6 +155,7 @@ export const userRepo = {
           .select('requestID, requestRange(startDate, endDate)')
           .eq('senderID', employedID)
           .eq('finalApprove', true)
+          .not('status', 'eq', 'rejected')
           .gte('update_at', start.toISOString())
           .lt('update_at', end.toISOString())
 
