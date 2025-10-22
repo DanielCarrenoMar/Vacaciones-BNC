@@ -30,7 +30,7 @@ const itemsByRole: Record<Role, Array<MenuItem>> = {
     ],
     nivel1: [
         { label: 'DashBoard', path: '/', icon: <LayoutDashboard size={20} />, section: 'principal' },
-        { label: 'Revisar Peticiones', path: '/nivel2/review', icon: <RefreshCw size={20} />, section: 'principal' },
+        { label: 'Revisar Peticiones', path: '/nivel1/review', icon: <RefreshCw size={20} />, section: 'principal' },
         { label: 'Mis Peticiones', path: '/my-requests', icon: <FileText size={20} />, section: 'principal' },
         { label: 'Estadísticas', path: '/statistics', icon: <TrendingUp size={20} />, section: 'principal' },
         { label: 'Equipo', path: '/team', icon: <Users size={20} />, section: 'principal' },
