@@ -123,6 +123,10 @@ export default function ReviewRequestDetailNivel2() {
                             <span className="text-gray-600">Fin vacaciones:</span>
                             <span className="font-medium text-onsurface">{requestPrimaryRange?.endDate.toLocaleDateString('es-ES')}</span>
                         </div>
+                        <div className="flex justify-between py-2 border-b">
+                            <span className="text-gray-600">Dias Totales:</span>
+                            <span className="font-medium text-onsurface">{requestPrimaryRange?.days}</span>
+                        </div>
                     </div>
                 </div>
 
