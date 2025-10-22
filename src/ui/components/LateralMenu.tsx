@@ -83,7 +83,7 @@ export default function LateralMenu({ role }: LateralMenuProps) {
 
     return (
         <div className="flex h-full" style={{ fontFamily: 'Poppins, sans-serif' }}>
-            {/* Panel lateral colapsado con íconos */}
+            {isCollapsed ? 
             <aside className="w-20 bg-white border-r border-gray-200 p-3 h-full flex flex-col items-center">
                 {/* Botón de toggle */}
                 <button
@@ -126,12 +126,17 @@ export default function LateralMenu({ role }: LateralMenuProps) {
                             onClick={handleLogoutClick}
                     />
                 </div>
-            </aside>
-
-            {/* Panel principal expandido */}
+            </aside>:
             <aside
                 className={`${isCollapsed ? 'w-0 opacity-0' : 'w-80 opacity-100'} bg-background border-r border-gray-200 p-5 h-full transition-all duration-300 flex flex-col overflow-hidden`}
             >
+                <button
+                    className="flex items-center justify-center p-2 w-10 h-10 mb-4 hover:bg-background rounded-lg transition-colors text-onsurface"
+                    onClick={() => setIsCollapsed(!isCollapsed)}
+                    title={isCollapsed ? "Expandir menú" : "Colapsar menú"}
+                >
+                    {isCollapsed ? <ChevronRight size={20} /> : <ChevronLeft size={20} />}
+                </button>
                 {/* Header */}
                 <div className="mb-6 flex items-center gap-3">
                     <div className="w-12 h-12 bg-gray-300 rounded-full"></div>
@@ -177,7 +182,7 @@ export default function LateralMenu({ role }: LateralMenuProps) {
                         />
                     </nav>
                 </div>
-            </aside>
+            </aside>}
 
             {/* Modal de confirmación de logout */}
             <ConfirmModal
