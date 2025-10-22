@@ -106,17 +106,75 @@ export default function LateralMenu({ role }: LateralMenuProps) {
                 />
             )}
 
-            <div className="flex h-full" style={{ fontFamily: 'Poppins, sans-serif' }}>
-                {/* Menú colapsado (solo desktop) */}
+            {/* Menú para móvil */}
+            <aside
+                className={`
+                    fixed top-0 left-0 w-80 h-full bg-background z-40
+                    transition-transform duration-300 ease-in-out
+                    ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}
+                    md:hidden flex flex-col p-5 border-r border-gray-200
+                `}
+            >
+                {/* Header */}
+                <div className="mb-6 flex items-center gap-3">
+                    <div className="w-12 h-12 rounded-full overflow-clip p-1 flex items-center justify-center">
+                        <img src="/logo.jpg" alt="Logo" className="w-full h-full aspect-square mx-auto mb-1" />
+                    </div>
+                    <span className="text-onsurface font-medium">Bienestar BNC</span>
+                </div>
+
+                {/* Principal Section */}
+                <div className="mb-6">
+                    <div className="text-xs font-semibold text-gray-500 mb-3 px-3">PRINCIPAL</div>
+                    <nav className="flex flex-col gap-1">
+                        {principalItems.map((item) => (
+                            <MenuItem
+                                key={item.path}
+                                label={item.label}
+                                href={item.path}
+                                icon={item.icon}
+                                isCollapsed={false}
+                            />
+                        ))}
+                    </nav>
+                </div>
+
+                {/* Sistema Section */}
+                <div className="mt-auto">
+                    <div className="text-xs font-semibold text-gray-500 mb-3 px-3">SISTEMA</div>
+                    <nav className="flex flex-col gap-1">
+                        {sistemaItems.map((item) => (
+                            <MenuItem
+                                key={item.path}
+                                label={item.label}
+                                href={item.path}
+                                icon={item.icon}
+                                isCollapsed={false}
+                            />
+                        ))}
+                        <MenuItem
+                            key={`icon-logout-mobile`}
+                            label="Cerrar sesión"
+                            href="#"
+                            icon={<LogOut size={20} />}
+                            isCollapsed={false}
+                            onClick={handleLogoutClick}
+                        />
+                    </nav>
+                </div>
+            </aside>
+
+            <div className="hidden md:flex h-full" style={{ fontFamily: 'Poppins, sans-serif' }}>
+                {/* Menú para desktop */}
                 {isCollapsed ? 
-            <aside className="hidden md:flex w-20 bg-white border-r border-gray-200 p-3 h-full flex-col items-center">
+            <aside className="w-20 bg-white border-r border-gray-200 p-3 h-full flex-col items-center hidden md:flex">
                 {/* Botón de toggle */}
                 <button
                     className="flex items-center justify-center p-2 w-10 h-10 mb-4 hover:bg-background rounded-lg transition-colors text-onsurface"
                     onClick={() => setIsCollapsed(!isCollapsed)}
                     title={isCollapsed ? "Expandir menú" : "Colapsar menú"}
                 >
-                    {isCollapsed ? <ChevronRight size={20} /> : <ChevronLeft size={20} />}
+                    <ChevronRight size={20} />
                 </button>
 
                 <div className="mb-6 text-xs font-semibold text-gray-400">
@@ -156,10 +214,7 @@ export default function LateralMenu({ role }: LateralMenuProps) {
             </aside>:
             <aside
                 className={`
-                    ${isCollapsed ? 'w-0 opacity-0' : 'w-[85vw] md:w-80 opacity-100'}
-                    ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
-                    fixed md:relative z-40 md:z-auto
-                    bg-background border-r border-gray-200 p-5 h-full 
+                    w-80 bg-background border-r border-gray-200 p-5 h-full 
                     transition-all duration-300 flex flex-col overflow-hidden
                 `}
             >
@@ -169,7 +224,7 @@ export default function LateralMenu({ role }: LateralMenuProps) {
                     onClick={() => setIsCollapsed(!isCollapsed)}
                     title={isCollapsed ? "Expandir menú" : "Colapsar menú"}
                 >
-                    {isCollapsed ? <ChevronRight size={20} /> : <ChevronLeft size={20} />}
+                    <ChevronLeft size={20} />
                 </button>
                 {/* Header */}
                 <div className="mb-6 flex items-center gap-3">
