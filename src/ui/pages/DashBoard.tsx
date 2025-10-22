@@ -68,7 +68,6 @@ export default function DashBoard() {
             {/* Grid de dos columnas para Mis Peticiones y Asistente */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <MyRequestsSection userRequests={userRequests} />
-                <AssistantSection />
             </div>
         </div>
     )
