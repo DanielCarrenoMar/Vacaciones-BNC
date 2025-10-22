@@ -94,7 +94,6 @@ export default function CreateRequest(){
 
     const handleCreate = async () => {
         if (userRole === null) return
-        console.log("Cr", userRole === "nivel1");
         const {data:requestData, error:requestError} = await requestRepo.create({
             senderID: user!.employedID,
             receiverID: user!.reportTo,
