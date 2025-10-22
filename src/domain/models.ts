@@ -38,6 +38,8 @@ export function toUserDao( model: User ): UserDAO {
 export interface Vacation {
   id: number
   aprovated_at: string
+  startDate: Date
+  endDate: Date
   days: number
   employedID: number
 }
@@ -45,7 +47,9 @@ export function toVacationModel(dao: VacationDAO): Vacation {
   return {
     id: dao.id,
     aprovated_at: dao.aprovated_at,
-    days: dao.days,
+    startDate: new Date(dao.startDate),
+    endDate: new Date(dao.endDate),
+    days: Math.floor((new Date(dao.endDate).getTime() - new Date(dao.startDate).getTime()) / (1000 * 60 * 60 * 24)) + 1,
     employedID: dao.employedID
   }
 }
@@ -53,7 +57,8 @@ export function toVacationDao(model: Vacation): VacationDAO {
   return {
     id: model.id,
     aprovated_at: model.aprovated_at,
-    days: model.days,
+    startDate: model.startDate .toDateString(),
+    endDate: model.endDate.toDateString(),
     employedID: model.employedID
   }
 }
@@ -65,7 +70,7 @@ export interface Request {
   status: Status
   senderID: number
   receiverID: number
-  message?: string | null
+  message: string | null
   finalApprove: boolean
   days: number
 }

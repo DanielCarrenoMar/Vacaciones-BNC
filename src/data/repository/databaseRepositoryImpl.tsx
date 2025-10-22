@@ -134,14 +134,20 @@ export const userRepo = {
       const fetchTaken = async (start: Date, end: Date) => {
         const { data, error } = await supabase
           .from('vacation')
-          .select('days, aprovated_at')
+          .select('startDate, endDate')
           .eq('employedID', employedID)
           .not('aprovated_at', 'is', null)
           .gte('aprovated_at', start.toISOString())
           .lt('aprovated_at', end.toISOString())
 
         if (error) throw error
-        return (data || []).reduce((s: number, v: any) => s + (v.days || 0), 0)
+        return (data || []).reduce((totalDays: number, vacation: any) => {
+          const startDate = new Date(vacation.startDate)
+          const endDate = new Date(vacation.endDate)
+          // Se suma 1 porque la diferencia de fechas no incluye el día de inicio.
+          const duration = Math.ceil((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)) + 1
+          return totalDays + (duration || 0)
+        }, 0)
       }
 
       const prevEntitlement = entitlementForPeriod(prevStart, prevEnd)
@@ -183,7 +189,7 @@ export const vacationRepo = {
     const modelData = toVacationModel(data)
     return { data: modelData, error: null }
   },
-  create: async (payload: Omit<VacationDAO, 'id'>): SupabaseResult<Vacation> => {
+  create: async (payload: Omit<VacationDAO, 'id' | 'aprovated_at'>): SupabaseResult<Vacation> => {
     const { data, error } = await vacationDao.create(payload)
     if (error) return { data: null, error }
     if (!data) return { data: null, error: null }

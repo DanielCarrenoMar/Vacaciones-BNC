@@ -90,7 +90,7 @@ export const vacationDao = {
   getById: async (id: number): SupabaseResult<VacationDAO> => {
     return from<VacationDAO>("vacation", (t: any) => t.select('*').eq('id', id).single())
   },
-  create: async (payload: Omit<VacationDAO, 'id'>): SupabaseResult<VacationDAO> => {
+  create: async (payload: Omit<VacationDAO, 'id' | 'aprovated_at'>): SupabaseResult<VacationDAO> => {
     return from<VacationDAO>("vacation", (t: any) => t.insert(payload).select().single())
   },
   update: async (id: number, payload: Partial<VacationDAO>): SupabaseResult<VacationDAO> => {

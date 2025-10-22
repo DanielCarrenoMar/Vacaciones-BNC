@@ -15,7 +15,8 @@ export interface UserDAO {
 export interface VacationDAO {
   id: number
   aprovated_at: string
-  days: number
+  startDate: string
+  endDate: string
   employedID: number
 }
 

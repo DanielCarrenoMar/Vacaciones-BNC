@@ -1,5 +1,5 @@
 import type { Request, RequestRange, User } from '#domain/models.ts'
-import { requestRangeRepo, requestRepo, userRepo } from '#repository/databaseRepositoryImpl.tsx'
+import { requestRangeRepo, requestRepo, userRepo, vacationRepo } from '#repository/databaseRepositoryImpl.tsx'
 import { ArrowLeft, ChevronLeft, ChevronRight } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
@@ -62,22 +62,23 @@ export default function ApproveRequestDetail() {
     }
 
     function onApprove() {
-        requestRepo.update(requestID, {
-            requestID: requestID,
-            receiverID: user?.reportTo,
+        vacationRepo.create({
+            employedID: senderUser!.employedID,
+            startDate: requestPrimaryRange!.startDate.toDateString(),
+            endDate: requestPrimaryRange!.endDate.toDateString()
         }).then(({error}) => {
             if (error) logger.error(error)
-            else navigate('/nivel2/review')
+        })
+        requestRepo.update(requestID, {
+            requestID: requestID,
+            status: 'approved',
+        }).then(({error}) => {
+            if (error) logger.error(error)
+            else navigate('/gestion/approve')
         })
     }
     function onDeny() {
-        requestRepo.update(requestID, {
-            requestID: requestID,
-            status: 'rejected'
-        }).then(({error}) => {
-            if (error) logger.error(error)
-            else navigate('/nivel2/review')
-        })
+        // No puede
     }
 
     return (
