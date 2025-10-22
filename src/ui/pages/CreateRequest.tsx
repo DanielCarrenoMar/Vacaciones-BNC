@@ -10,7 +10,7 @@ const logger = pino()
 export default function CreateRequest(){
     const { user, userRole } = useVerifyAuth()
     const navigate = useNavigate()
-    const [currentMonth, setCurrentMonth] = useState(new Date(2025, 5)) // Junio 2025
+    const [currentMonth, setCurrentMonth] = useState(new Date())
     const [selectedDates, setSelectedDates] = useState<number[]>([])
     const [startDate, setStartDate] = useState<number | null>(null)
     const [endDate, setEndDate] = useState<number | null>(null)
@@ -54,6 +54,11 @@ export default function CreateRequest(){
     }
 
     const handleDateClick = (day: number) => {
+        const today = new Date()
+        const date = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), day)
+        if (date < new Date(today.getFullYear(), today.getMonth(), today.getDate())) {
+            return
+        }
         if (!startDate) {
             // Primera selección - día inicial
             setStartDate(day)
@@ -177,16 +182,23 @@ export default function CreateRequest(){
                             const isStart = day === startDate
                             const isEnd = day === endDate
                             const isMiddle = isSelected && !isStart && !isEnd
+                            const today = new Date()
+                            const isToday = day === today.getDate() && currentMonth.getMonth() === today.getMonth() && currentMonth.getFullYear() === today.getFullYear()
+                            const date = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), day)
+                            const isPast = date < new Date(today.getFullYear(), today.getMonth(), today.getDate())
                             
                             return (
                                 <button
                                     key={day}
                                     onClick={() => handleDateClick(day)}
+                                    disabled={isPast}
                                     className={`aspect-square flex items-center justify-center rounded-lg text-sm font-medium transition-all
                                         ${isStart ? 'bg-[#2C5AA0] text-white shadow-md' : ''}
                                         ${isEnd ? 'bg-[#1E3A5F] text-white shadow-md' : ''}
                                         ${isMiddle ? 'bg-primary text-white' : ''}
-                                        ${!isSelected ? 'text-onsurface hover:bg-gray-100' : ''}
+                                        ${!isSelected && !isPast ? 'text-onsurface hover:bg-gray-100' : ''}
+                                        ${isToday && !isSelected ? 'border-2 border-primary' : ''}
+                                        ${isPast ? 'text-gray-400 cursor-not-allowed' : ''}
                                     `}
                                 >
                                     {day}
@@ -222,9 +234,9 @@ export default function CreateRequest(){
                     </button>
                     <button 
                         onClick={handleCreate}
-                        disabled={selectedDates.length === 0}
+                        disabled={selectedDates.length < 7 || selectedDates.length > vacationDays}
                         className={`flex-1 px-6 py-3 rounded-lg transition-colors font-medium flex items-center justify-center gap-2
-                            ${selectedDates.length > 0 
+                            ${selectedDates.length >= 7 && selectedDates.length <= vacationDays
                                 ? 'bg-primary text-white hover:bg-primaryVar' 
                                 : 'bg-gray-300 text-gray-500 cursor-not-allowed'
                             }`}
