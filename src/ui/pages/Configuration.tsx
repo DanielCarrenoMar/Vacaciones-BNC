@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { User, Shield, Bell, Palette, HelpCircle, ChevronRight, Camera, Phone, Mail, Lock, Globe, Moon, Sun, Monitor } from 'lucide-react'
+import { User, Shield, Bell, HelpCircle, ChevronRight, Phone, Mail, Lock} from 'lucide-react'
 import { useVerifyAuth } from '#providers/VerifyAuthProvider.tsx'
 
 type ConfigSection = 'profile' | 'security' | 'notifications' | 'appearance' | 'help'
@@ -13,14 +13,11 @@ export default function Configuration() {
     const [notifyStatusChange, setNotifyStatusChange] = useState(true)
     const [notifyReminders, setNotifyReminders] = useState(true)
     const [notifyAnnouncements, setNotifyAnnouncements] = useState(false)
-    const [language, setLanguage] = useState('es')
-    const [theme, setTheme] = useState('light')
 
     const sections = [
         { id: 'profile' as ConfigSection, label: 'Perfil', icon: <User size={20} /> },
         { id: 'security' as ConfigSection, label: 'Seguridad', icon: <Shield size={20} /> },
         { id: 'notifications' as ConfigSection, label: 'Notificaciones', icon: <Bell size={20} /> },
-        { id: 'appearance' as ConfigSection, label: 'Apariencia', icon: <Palette size={20} /> },
         { id: 'help' as ConfigSection, label: 'Ayuda', icon: <HelpCircle size={20} /> },
     ]
 
@@ -71,14 +68,6 @@ export default function Configuration() {
                                 setNotifyAnnouncements={setNotifyAnnouncements}
                             />
                         )}
-                        {activeSection === 'appearance' && (
-                            <AppearanceSection
-                                language={language}
-                                setLanguage={setLanguage}
-                                theme={theme}
-                                setTheme={setTheme}
-                            />
-                        )}
                         {activeSection === 'help' && <HelpSection />}
                     </main>
                 </div>
@@ -92,20 +81,6 @@ function ProfileSection({ user, phoneNumber, setPhoneNumber }: { user: any; phon
     return (
         <div>
             <h2 className="text-2xl font-bold text-onsurface mb-6">Gestión de Perfil</h2>
-
-            {/* Foto de perfil */}
-            <div className="mb-8">
-                <label className="block text-sm font-semibold text-gray-700 mb-3">Foto de Perfil</label>
-                <div className="flex items-center gap-4">
-                    <div className="w-24 h-24 bg-gray-300 rounded-full flex items-center justify-center">
-                        <User size={40} className="text-gray-500" />
-                    </div>
-                    <button className="flex items-center gap-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">
-                        <Camera size={18} />
-                        Cambiar foto
-                    </button>
-                </div>
-            </div>
 
             {/* Información Personal (Solo lectura) */}
             <div className="mb-8">
@@ -348,78 +323,6 @@ function NotificationsSection({
                         </div>
                     </label>
                 </div>
-            </div>
-        </div>
-    )
-}
-
-// Sección de Apariencia
-function AppearanceSection({ language, setLanguage, theme, setTheme }: any) {
-    return (
-        <div>
-            <h2 className="text-2xl font-bold text-onsurface mb-6">Preferencias de Apariencia</h2>
-
-            {/* Idioma */}
-            <div className="mb-8">
-                <h3 className="text-lg font-semibold text-onsurface mb-4">Idioma</h3>
-                <div className="relative">
-                    <Globe size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-                    <select
-                        value={language}
-                        onChange={(e) => setLanguage(e.target.value)}
-                        className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none bg-white"
-                    >
-                        <option value="es">Español</option>
-                        <option value="en">English</option>
-                    </select>
-                </div>
-            </div>
-
-            {/* Tema */}
-            <div>
-                <h3 className="text-lg font-semibold text-onsurface mb-4">Tema (Apariencia)</h3>
-                <div className="grid grid-cols-3 gap-4">
-                    <button
-                        onClick={() => setTheme('light')}
-                        className={`p-6 border-2 rounded-lg transition-all ${
-                            theme === 'light'
-                                ? 'border-blue-500 bg-blue-50'
-                                : 'border-gray-200 hover:border-gray-300'
-                        }`}
-                    >
-                        <Sun size={32} className={`mx-auto mb-3 ${theme === 'light' ? 'text-blue-600' : 'text-gray-600'}`} />
-                        <p className="font-medium text-center">Claro</p>
-                    </button>
-
-                    <button
-                        onClick={() => setTheme('dark')}
-                        className={`p-6 border-2 rounded-lg transition-all ${
-                            theme === 'dark'
-                                ? 'border-blue-500 bg-blue-50'
-                                : 'border-gray-200 hover:border-gray-300'
-                        }`}
-                    >
-                        <Moon size={32} className={`mx-auto mb-3 ${theme === 'dark' ? 'text-blue-600' : 'text-gray-600'}`} />
-                        <p className="font-medium text-center">Oscuro</p>
-                    </button>
-
-                    <button
-                        onClick={() => setTheme('auto')}
-                        className={`p-6 border-2 rounded-lg transition-all ${
-                            theme === 'auto'
-                                ? 'border-blue-500 bg-blue-50'
-                                : 'border-gray-200 hover:border-gray-300'
-                        }`}
-                    >
-                        <Monitor size={32} className={`mx-auto mb-3 ${theme === 'auto' ? 'text-blue-600' : 'text-gray-600'}`} />
-                        <p className="font-medium text-center">Automático</p>
-                    </button>
-                </div>
-                <p className="text-sm text-gray-600 mt-3">
-                    {theme === 'auto' && 'El tema se ajustará según la configuración de tu sistema'}
-                    {theme === 'light' && 'La aplicación usará el tema claro'}
-                    {theme === 'dark' && 'La aplicación usará el tema oscuro'}
-                </p>
             </div>
         </div>
     )
