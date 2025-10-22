@@ -166,7 +166,8 @@ export default function Request() {
                                     {stepStatus.step2Pending && <Clock size={20} className="text-warning" />}
                                     {!stepStatus.step2Complete && !stepStatus.step2Pending && !stepStatus.isRejected && <div className="w-5 h-5 rounded-full border-2 border-gray-300" />}
                                     {stepStatus.isRejected && <XCircle size={20} className="text-error" />}
-                                    {stepStatus.needsGestionHumana && !stepStatus.isRejected && (
+                                    {/* Línea conectora: siempre mostrar si no está rechazado y hay un paso siguiente */}
+                                    {!stepStatus.isRejected && (request?.status === 'approved' || stepStatus.needsGestionHumana) && (
                                         <div className={`w-0.5 h-10 mt-2 ${
                                             stepStatus.step2Complete ? 'bg-success' : 
                                             stepStatus.step2Pending ? 'bg-warning' : 

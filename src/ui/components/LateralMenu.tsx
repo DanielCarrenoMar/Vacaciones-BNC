@@ -100,8 +100,9 @@ export default function LateralMenu({ role }: LateralMenuProps) {
             {/* Overlay para móvil */}
             {isMobileMenuOpen && (
                 <div
-                    className="md:hidden fixed inset-0 bg-black bg-opacity-50 z-30"
+                    className="md:hidden fixed inset-0 bg-black/50 z-30"
                     onClick={() => setIsMobileMenuOpen(false)}
+                    style={{ touchAction: 'none' }}
                 />
             )}
 
@@ -155,7 +156,7 @@ export default function LateralMenu({ role }: LateralMenuProps) {
             </aside>:
             <aside
                 className={`
-                    ${isCollapsed ? 'w-0 opacity-0' : 'w-80 opacity-100'}
+                    ${isCollapsed ? 'w-0 opacity-0' : 'w-[85vw] md:w-80 opacity-100'}
                     ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
                     fixed md:relative z-40 md:z-auto
                     bg-background border-r border-gray-200 p-5 h-full 
