@@ -7,7 +7,7 @@ import type { Request } from '#domain/models.ts';
 import MyRequestsSection from '#ui/components/dashboard/MyRequestsSection.tsx';
 
 export default function DashBoardNivel2() {
-    const { user } = useVerifyAuth()
+    const { user, userRole } = useVerifyAuth()
     const [vacationDays, setVacationDays] = useState<number>(0)
     const [userRequests, setUserRequests] = useState<Request[]>([])
     const [pendingReviewRequests, setPendingReviewRequests] = useState<number>(0)
@@ -55,7 +55,7 @@ export default function DashBoardNivel2() {
 
                 {/* Tarjeta de Peticiones Pendientes */}
                 <Link
-                    to="/nivel2/review"
+                    to={userRole === 'nivel2' ? "/nivel2/review" : "/nivel1/review"}
                     className={`${
                         pendingReviewRequests > 0 
                             ? 'bg-[#FF6B6B] hover:bg-[#EE5A5A]' 
