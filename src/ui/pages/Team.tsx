@@ -184,9 +184,9 @@ export default function Team() {
     const membersAtRisk = teamMembers.filter(m => m.vacationDays > 20)
 
     return (
-        <div className="h-full bg-background" style={{ fontFamily: 'Poppins, sans-serif' }}>
+        <div className="h-full bg-background p-4 md:p-6 pt-16 md:pt-6" style={{ fontFamily: 'Poppins, sans-serif' }}>
             {/* Header */}
-            <div className="mb-6">
+            <div className="mb-4 md:mb-6">
                 <h1 className="text-2xl font-semibold text-onsurface mb-2">Gestión de Equipo</h1>
                 <p className="text-sm text-gray-600">Administra las vacaciones y disponibilidad de tu equipo</p>
             </div>
