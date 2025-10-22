@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom'
 const logger = pino()
 
 export default function CreateRequest(){
-    const { user } = useVerifyAuth()
+    const { user, userRole } = useVerifyAuth()
     const navigate = useNavigate()
     const [currentMonth, setCurrentMonth] = useState(new Date(2025, 5)) // Junio 2025
     const [selectedDates, setSelectedDates] = useState<number[]>([])
@@ -93,17 +93,19 @@ export default function CreateRequest(){
     }
 
     const handleCreate = async () => {
+        if (userRole === null) return
+        console.log("Cr", userRole === "nivel1");
         const {data:requestData, error:requestError} = await requestRepo.create({
             senderID: user!.employedID,
             receiverID: user!.reportTo,
             status: 'waiting',
-            message: `Solicitud de vacaciones desde el día ${startDate} hasta el día ${endDate}`
+            message: `Solicitud de vacaciones desde el día ${startDate} hasta el día ${endDate}`,
+            finalApprove: userRole === "nivel1"
         })
         if (requestError) {
             logger.error('Error creating request:', requestError)
             return
         }
-        console.log('Request created:', requestData)
         const {error} = await requestRangeRepo.create({
             requestID: requestData!.requestID,
             startDate: new Date(currentMonth.getFullYear(), currentMonth.getMonth(), startDate!).toDateString(),

@@ -13,7 +13,7 @@ export default function MyRequest() {
     useEffect(() => {
             async function fetchUserRequests() {
                 if (!user) return;
-                const { data, error } = await requestRepo.getBySenderId(user.employedID)
+                const { data, error } = await requestRepo.getWithFinalApprovedBySenderId(user.employedID)
                 if (error) throw error
                 if (data) setUserRequests(data)
             }
