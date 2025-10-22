@@ -74,7 +74,6 @@ export default function Statistics() {
                     // Obtener días disponibles
                     const { data: balance } = await userRepo.getVacationBalance(member.employedID)
                     const vacDays = balance?.totalAvailable || 0
-                    console.log('Vacation days for', member.name, vacDays)
 
                     stats.push({
                         user: member,
@@ -82,9 +81,7 @@ export default function Statistics() {
                     })
 
                     // Obtener solicitudes
-                    console.log('Fetching requests for', member.name, member.employedID)
                     const { data: requests } = await requestRepo.getBySenderId(member.employedID)
-                    console.log('Requests for', member.name, requests)
 
                     if (requests) {
                         for (const request of requests) {
