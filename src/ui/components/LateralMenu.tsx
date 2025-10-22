@@ -118,7 +118,9 @@ export default function LateralMenu({ role }: LateralMenuProps) {
                     {isCollapsed ? <ChevronRight size={20} /> : <ChevronLeft size={20} />}
                 </button>
 
-                <div className="mb-6 text-xs font-semibold text-gray-400">P</div>
+                <div className="mb-6 text-xs font-semibold text-gray-400">
+                    <img src="/logo.jpg" alt="Logo" className="w-8 h-auto mx-auto mb-1" />
+                </div>
                 <nav className="flex flex-col gap-2 items-center flex-1">
                     {principalItems.map((item) => (
                         <MenuItem
@@ -170,7 +172,9 @@ export default function LateralMenu({ role }: LateralMenuProps) {
                 </button>
                 {/* Header */}
                 <div className="mb-6 flex items-center gap-3">
-                    <div className="w-12 h-12 bg-gray-300 rounded-full"></div>
+                    <div className="w-12 h-12 rounded-full overflow-clip p-1 flex items-center justify-center">
+                        <img src="/logo.jpg" alt="Logo" className="w-full h-full aspect-square mx-auto mb-1" />
+                    </div>
                     <span className="text-onsurface font-medium">Bienestar BNC</span>
                 </div>
 
