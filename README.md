@@ -4,7 +4,7 @@
 
 # ![React](https://img.shields.io/badge/-React-45b8d8?style=flat-square&logo=react&logoColor=white) Bienestar BNC. Gestión de peticiones para vacaciones.
 
-Crea y administra las solicitudes de vacaciones en tu empresa desde cualquier sitio de manera rápida y sencilla. Proyecto desarrollado en 48 horas como parte del hackatón de Aulab, realizado en la UCAB Caracas en colaboración con [@Diego Garrido](https://github.com/ByteWizzardd) y [Bloodbay8](https://github.com/Bloodbay8).
+Crea y administra las solicitudes de vacaciones en tu empresa desde cualquier sitio de manera rápida y sencilla. Proyecto desarrollado en 48 horas como parte del hackatón de SolucionaLab, realizado en la UCAB Caracas en colaboración con [@Diego Garrido](https://github.com/ByteWizzardd) y [Bloodbay8](https://github.com/Bloodbay8).
 > [!TIP]
 > Video pitch explicativo https://youtu.be/bYCPEpvKHbs
 
